@@ -1,5 +1,5 @@
-date: 2013-11-10 19:32:48.165
-argv: node /home/ubuntu/.nvm/v0.10.21/bin/hexo server --debug
+date: 2013-11-10 23:43:40.302
+argv: node /home/ubuntu/.nvm/v0.10.21/bin/hexo server
 os: Linux 3.2.0-23-generic-pae linux ia32
 version:
   hexo: 2.3.0
@@ -13,32 +13,78 @@ version:
   openssl: 1.0.1e
 ---
 
-[debug] 19:32:48.177 Configuration file load successfully
-[debug] 19:32:48.182 Version info checked successfully
-[debug] 19:32:48.183 Loading the database...
-[debug] 19:32:48.386 Theme layout loaded
-[debug] 19:32:48.387 Start watching theme layout...
-[debug] 19:32:48.398 Theme source loaded
-[debug] 19:32:48.402 Theme configuration loaded
-[debug] 19:32:48.403 Start watching theme source...
-[debug] 19:32:48.412 Theme i18n loaded
-[debug] 19:32:48.419 Processed: _posts/hello-world.md
-[debug] 19:32:48.421 Processed: _posts/my_first_deploy.md
-[debug] 19:32:48.430 Cache saved
-[info] 19:32:48.434 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
-[debug] 19:32:49.521 Render index: 
-[debug] 19:33:45.229 Render index: 
-[debug] 19:38:30.116 Render index: 
-[debug] 19:38:36.798 Render index: 
-[debug] 19:38:48.826 Render index: 
-[debug] 19:41:07.665 Render index: 
-[debug] 19:44:48.153 Render index: 
-[debug] 19:45:24.914 Render index: 
-[debug] 19:46:19.640 Render index: 
-[debug] 19:46:54.598 Render index: 
-[debug] 19:46:56.673 Render post: 2013/11/10/my_first_deploy/
-[debug] 19:47:23.399 Render post: 2013/11/10/my_first_deploy/
-[debug] 19:48:15.677 Render post: 2013/11/10/my_first_deploy/
-[debug] 19:48:18.300 Render index: 
-[debug] 19:48:20.761 Render post: 2013/11/10/my_first_deploy/
-[debug] 19:48:21.972 Render index: 
+[debug] 23:00:30.227 Configuration file load successfully
+[debug] 23:00:30.229 Version info checked successfully
+[debug] 23:00:30.229 Loading the database...
+[debug] 23:00:30.428 Theme layout loaded
+[debug] 23:00:30.429 Start watching theme layout...
+[debug] 23:00:30.444 Theme source loaded
+[debug] 23:00:30.446 Theme configuration loaded
+[debug] 23:00:30.446 Start watching theme source...
+[debug] 23:00:30.456 Theme i18n loaded
+[debug] 23:00:30.468 Processed: _posts/hello-world.md
+[debug] 23:00:30.469 Processed: _posts/my_first_deploy.md
+[debug] 23:00:30.512 Processed: _posts/test1.md
+[debug] 23:00:30.512 Processed: _posts/test2.md
+[debug] 23:00:30.513 Processed: _posts/test3.md
+[debug] 23:00:30.513 Processed: _posts/test4.md
+[debug] 23:00:30.513 Processed: _posts/test5.md
+[debug] 23:00:30.513 Processed: _posts/test6.md
+[debug] 23:00:30.514 Processed: _posts/test7.md
+[debug] 23:00:30.514 Processed: _posts/test8.md
+[debug] 23:00:30.514 Processed: _posts/test9.md
+[debug] 23:00:30.547 Cache saved
+[info] 23:00:30.551 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
+[debug] 23:00:32.465 Render index: 
+[debug] 23:16:39.217 Render index: 
+[debug] 23:17:16.335 Render index: 
+[debug] 23:18:05.018 Render index: 
+[debug] 23:18:16.489 Render index: 
+[debug] 23:18:36.945 Render index: 
+[debug] 23:19:10.892 Render index: 
+[debug] 23:19:32.110 Render index: 
+[debug] 23:19:50.262 Render index: 
+[debug] 23:38:33.352 Render index: 
+[debug] 23:38:37.450 Render archive: archives/
+[update] 23:39:06.467 Source: _posts/test1.md
+[debug] 23:39:06.579 Processed: _posts/test1.md
+[debug] 23:39:06.598 Cache saved
+[update] 23:39:09.470 Source: _posts/test3.md
+[debug] 23:39:09.573 Processed: _posts/test3.md
+[debug] 23:39:09.593 Cache saved
+[update] 23:39:13.473 Source: _posts/test6.md
+[debug] 23:39:13.611 Processed: _posts/test6.md
+[debug] 23:39:13.632 Cache saved
+[debug] 23:39:18.222 Render archive: archives/
+[debug] 23:39:25.200 Render archive: archives/page/2/
+[debug] 23:40:21.938 Render index: 
+[debug] 23:40:23.983 Render post: 2013/11/10/test9/
+[debug] 23:41:13.513 Render index: 
+[debug] 23:41:22.153 Render post: 2013/11/10/test9/
+[debug] 23:42:05.107 Render index: 
+[debug] 23:42:09.900 Render post: 2013/11/10/test9/
+[debug] 23:42:12.757 Render post: 2013/11/10/test9/
+[debug] 23:42:14.221 Render index: 
+[debug] 23:42:16.137 Render index: page/2/
+[debug] 23:42:46.045 Render index: page/3/
+[debug] 23:42:49.443 Render index: page/2/
+[debug] 23:42:54.604 Render index: 
+[update] 23:43:40.182 Source: _posts/test3.md
+[update] 23:43:40.184 Source: _posts/test4.md
+[update] 23:43:40.185 Source: _posts/test5.md
+[update] 23:43:40.186 Source: _posts/test6.md
+[update] 23:43:40.186 Source: _posts/test7.md
+[update] 23:43:40.186 Source: _posts/test8.md
+[update] 23:43:40.187 Source: _posts/test9.md
+[error] 23:43:40.296 { rawMessage: 'Unable to parse.',
+  parsedLine: 3,
+  snippet: 'tags:1234',
+  parsedFile: null,
+  message: 'Unable to parse.',
+  domain: 
+   { domain: null,
+     _events: { error: [Function] },
+     _maxListeners: 10,
+     members: [],
+     _disposed: true },
+  domainThrown: true }

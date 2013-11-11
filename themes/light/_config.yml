@@ -17,20 +17,24 @@ twitter:
 addthis:
   enable: true
   pubid:
-  facebook: true
-  twitter: true
+  facebook:
+  twitter:
   google: true
-  pinterest: true
+  pinterest:
 
 fancybox: true
 
 google_analytics:
 rss:
 
-comment_provider: facebook
+comment_provider: duoshuo
 # Facebook comment
 facebook:
   appid: 123456789012345
   comment_count: 5
   comment_width: 840
   comment_colorscheme: light
+
+# Duoshuo comment
+duoshuo:
+  short_name: moo123
