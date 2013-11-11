@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b3f8829a-676a-4eec-a15e-903c086cbc44" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/themes/light/source/css/img/bg.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/themes/light/source/css/img/sprite-pagination.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_config.yml" afterPath="$PROJECT_DIR$/_config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/article.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/article.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/comment.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/comment.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.json" afterPath="$PROJECT_DIR$/db.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/footer.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/footer.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/header.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/header.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/hello-world.md" afterPath="$PROJECT_DIR$/source/_posts/hello-world.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/index.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/index.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_base/layout.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_base/layout.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/my_first_deploy.md" afterPath="$PROJECT_DIR$/source/_posts/my_first_deploy.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/sidebar.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/sidebar.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_base/variable.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_base/variable.styl" />
-    </list>
+    <list default="true" id="b3f8829a-676a-4eec-a15e-903c086cbc44" name="Default" comment="" />
     <ignored path="yunlzheng.github.com.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -95,7 +80,7 @@
       <file leaf-file-name="comment.styl" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/themes/light/source/css/_partial/comment.styl">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="22" selection-start="150" selection-end="150" vertical-scroll-proportion="0.24094203" vertical-offset="0" max-vertical-offset="552">
+            <state line="7" column="18" selection-start="146" selection-end="146" vertical-scroll-proportion="0.24094203" vertical-offset="0" max-vertical-offset="552">
               <folding />
             </state>
           </provider>
@@ -392,7 +377,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -534,7 +519,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/themes/light/source/css/_partial/comment.styl">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="22" selection-start="150" selection-end="150" vertical-scroll-proportion="0.24094203" vertical-offset="0" max-vertical-offset="552">
+        <state line="7" column="18" selection-start="146" selection-end="146" vertical-scroll-proportion="0.24094203" vertical-offset="0" max-vertical-offset="552">
           <folding />
         </state>
       </provider>
