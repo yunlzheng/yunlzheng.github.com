@@ -1,11 +1,14 @@
 menu:
-  Home: /
-  Archives: /archives
+  博客: /
+  存档: /archives
+  关于: /about
 
 widgets:
 - search
+- recent_posts
 - category
 - tag
+
 
 excerpt_link: Read More
 
@@ -45,3 +48,7 @@ society:
   github: https://github.com/yunlzheng
   weibo: http://weibo.com/503error
   google_plug: http://www.google.com
+
+#About Page
+about:
+  name:
