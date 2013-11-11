@@ -2,9 +2,76 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3f8829a-676a-4eec-a15e-903c086cbc44" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/themes/light/layout/about.ejs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/themes/light/layout/_partial/about.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/_config.yml" afterPath="$PROJECT_DIR$/themes/light/_config.yml" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\README.md" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\_config.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\languages\de.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\languages\default.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\languages\es.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\languages\ru.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\languages\zh-CN.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\languages\zh-TW.yml" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\about.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\after_footer.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\archive.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\article.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\comment.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\duoshuo_comment.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\facebook_comment.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\footer.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\google_analytics.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\head.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\header.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\pagination.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\post\category.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\post\gallery.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\post\share.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\post\tag.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\post\title.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_partial\sidebar.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_widget\category.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_widget\recent_posts.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_widget\search.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_widget\tag.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\_widget\tagcloud.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\about.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\archive.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\category.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\index.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\layout.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\page.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\post.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\layout\tag.ejs" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_base\layout.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_base\utils.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_base\variable.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\archive.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\article.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\comment.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\footer.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\header.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\index.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\sidebar.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\_partial\syntax.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\font\fontawesome-webfont.eot" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\font\fontawesome-webfont.svg" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\font\fontawesome-webfont.ttf" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\font\fontawesome-webfont.woff" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\img\bg.jpg" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\img\sprite-pagination.png" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\css\style.styl" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\blank.gif" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\fancybox_loading.gif" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\fancybox_loading@2x.gif" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\fancybox_overlay.png" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\fancybox_sprite.png" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\fancybox_sprite@2x.png" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\jquery.fancybox.css" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\fancybox\jquery.fancybox.pack.js" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\favicon.ico" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\js\gallery.js" afterPath="" />
+      <change type="DELETED" beforePath="Z:\yunlzheng.github.com\themes\light\source\js\jquery.imagesloaded.min.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_config.yml" afterPath="$PROJECT_DIR$/_config.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.json" afterPath="$PROJECT_DIR$/db.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -28,101 +95,7 @@
     <favorites_list name="yunlzheng.github.com" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="about.ejs" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/about.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="23" selection-start="23" selection-end="23" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="550">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/index.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="190">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="layout.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/layout.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="342">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="post.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/post.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="62" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="114">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_config.yml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/_config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="12" selection-start="265" selection-end="265" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1121">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_config.yml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="0" selection-start="1746" selection-end="1746" vertical-scroll-proportion="0.0" vertical-offset="416" max-vertical-offset="1729">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="about.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/about.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="12" selection-start="12" selection-end="12" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="114">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="archive.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/archive.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="855">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="duoshuo_comment.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/duoshuo_comment.ejs">
-          <provider editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="361">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="comment.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="63" selection-start="234" selection-end="239" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="418">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -206,6 +179,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="yunlzheng.github.com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yunlzheng.github.com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="yunlzheng.github.com" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -393,15 +380,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2962121" sideWeight="0.67111856" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2962121" sideWeight="0.67111856" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32888147" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -486,7 +473,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="63" selection-start="234" selection-end="239" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="418">
+        <state line="6" column="63" selection-start="234" selection-end="239" vertical-scroll-proportion="0.1993007" vertical-offset="0" max-vertical-offset="572">
           <folding />
         </state>
       </provider>
@@ -503,14 +490,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/_config.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="0" selection-start="1746" selection-end="1746" vertical-scroll-proportion="0.0" vertical-offset="1157" max-vertical-offset="1729">
+        <state line="78" column="0" selection-start="1746" selection-end="1746" vertical-scroll-proportion="1.8636364" vertical-offset="416" max-vertical-offset="1729">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/themes/light/_config.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="12" selection-start="265" selection-end="265" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1121">
+        <state line="25" column="12" selection-start="265" selection-end="265" vertical-scroll-proportion="0.8304196" vertical-offset="0" max-vertical-offset="1121">
           <folding />
         </state>
       </provider>
