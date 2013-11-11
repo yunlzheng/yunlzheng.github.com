@@ -69,7 +69,7 @@ per_page: 5
 pagination_dir: page
 
 # Disqus
-disqus_shortname: pdflabs
+disqus_shortname:
 
 # Extensions
 ## Plugins: https://github.com/tommy351/hexo/wiki/Plugins

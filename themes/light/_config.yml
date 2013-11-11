@@ -28,6 +28,7 @@ google_analytics:
 rss:
 
 comment_provider: duoshuo
+
 # Facebook comment
 facebook:
   appid: 123456789012345
@@ -38,3 +39,9 @@ facebook:
 # Duoshuo comment
 duoshuo:
   short_name: moo123
+
+society:
+  enable: true
+  github: https://github.com/yunlzheng
+  weibo: http://weibo.com/503error
+  google_plug: http://www.google.com

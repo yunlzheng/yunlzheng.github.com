@@ -2,21 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3f8829a-676a-4eec-a15e-903c086cbc44" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/themes/light/layout/_partial/duoshuo_comment.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.deploy" afterPath="$PROJECT_DIR$/.deploy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/themes/light/source/favicon.ico" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/_config.yml" afterPath="$PROJECT_DIR$/_config.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/_config.yml" afterPath="$PROJECT_DIR$/themes/light/_config.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs" afterPath="$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.json" afterPath="$PROJECT_DIR$/db.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/debug.log" afterPath="$PROJECT_DIR$/debug.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/layout/_partial/post/share.ejs" afterPath="$PROJECT_DIR$/themes/light/layout/_partial/post/share.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test1.md" afterPath="$PROJECT_DIR$/source/_posts/test1.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test3.md" afterPath="$PROJECT_DIR$/source/_posts/test3.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test4.md" afterPath="$PROJECT_DIR$/source/_posts/test4.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test5.md" afterPath="$PROJECT_DIR$/source/_posts/test5.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test6.md" afterPath="$PROJECT_DIR$/source/_posts/test6.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test7.md" afterPath="$PROJECT_DIR$/source/_posts/test7.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test8.md" afterPath="$PROJECT_DIR$/source/_posts/test8.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/_posts/test9.md" afterPath="$PROJECT_DIR$/source/_posts/test9.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/layout/_partial/footer.ejs" afterPath="$PROJECT_DIR$/themes/light/layout/_partial/footer.ejs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/source/css/_partial/footer.styl" afterPath="$PROJECT_DIR$/themes/light/source/css/_partial/footer.styl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/themes/light/layout/_partial/head.ejs" afterPath="$PROJECT_DIR$/themes/light/layout/_partial/head.ejs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="yunlzheng.github.com.iws" />
@@ -39,62 +30,7 @@
     <favorites_list name="yunlzheng.github.com" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="article.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/article.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="28" selection-start="136" selection-end="136" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="893">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_config.yml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/_config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="0" selection-start="435" selection-end="435" vertical-scroll-proportion="0.0" vertical-offset="207" max-vertical-offset="855">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="comment.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="59" selection-start="375" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="418">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="facebook_comment.ejs" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/facebook_comment.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="87" selection-start="272" selection-end="272" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="duoshuo_comment.ejs" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/duoshuo_comment.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="28" selection-start="493" selection-end="493" vertical-scroll-proportion="0.4318182" vertical-offset="0" max-vertical-offset="572">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_config.yml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_config.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="171" max-vertical-offset="1729">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -112,10 +48,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/themes/light/source/css/_partial/index.styl" />
-        <option value="$PROJECT_DIR$/themes/light/source/css/_partial/comment.styl" />
-        <option value="$PROJECT_DIR$/themes/light/source/css/_partial/header.styl" />
-        <option value="$PROJECT_DIR$/themes/light/source/css/_base/layout.styl" />
         <option value="$PROJECT_DIR$/source/_posts/test1.md" />
         <option value="$PROJECT_DIR$/source/_posts/test3.md" />
         <option value="$PROJECT_DIR$/source/_posts/test5.md" />
@@ -127,7 +59,11 @@
         <option value="$PROJECT_DIR$/themes/light/layout/_partial/post/share.ejs" />
         <option value="$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs" />
         <option value="$PROJECT_DIR$/themes/light/layout/_partial/duoshuo_comment.ejs" />
+        <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/themes/light/_config.yml" />
+        <option value="$PROJECT_DIR$/themes/light/layout/_partial/footer.ejs" />
+        <option value="$PROJECT_DIR$/themes/light/source/css/_partial/footer.styl" />
+        <option value="$PROJECT_DIR$/themes/light/layout/_partial/head.ejs" />
       </list>
     </option>
   </component>
@@ -181,72 +117,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yunlzheng.github.com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yunlzheng.github.com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="light" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yunlzheng.github.com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yunlzheng.github.com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="light" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yunlzheng.github.com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="yunlzheng.github.com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="themes" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="light" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="_partial" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -263,6 +133,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="Z:\yunlzheng.github.com\themes\light\source\css\img" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="Z:\yunlzheng.github.com\themes\light\source" />
     </key>
   </component>
   <component name="RunManager">
@@ -429,14 +302,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22424242" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2962121" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -463,65 +336,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/source/_posts/test7.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="12" selection-start="51" selection-end="51" vertical-scroll-proportion="0.066433564" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/test9.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="6" selection-start="45" selection-end="45" vertical-scroll-proportion="0.066433564" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/test8.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="12" selection-start="51" selection-end="51" vertical-scroll-proportion="0.066433564" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/test6.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="10" selection-start="49" selection-end="49" vertical-scroll-proportion="0.066433564" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/test4.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="6" selection-start="45" selection-end="45" vertical-scroll-proportion="0.066433564" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/test2.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/test1.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="3" selection-start="53" selection-end="53" vertical-scroll-proportion="0.10363636" vertical-offset="0" max-vertical-offset="550">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/my_first_deploy.md">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="572">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1729">
           <folding />
         </state>
       </provider>
@@ -533,37 +350,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/post/share.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="46" selection-start="799" selection-end="799" vertical-scroll-proportion="0.6311189" vertical-offset="0" max-vertical-offset="646">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/article.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="28" selection-start="136" selection-end="136" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="893">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="59" selection-start="375" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="418">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/facebook_comment.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="87" selection-start="272" selection-end="272" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/themes/light/_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="0" selection-start="435" selection-end="435" vertical-scroll-proportion="0.0" vertical-offset="207" max-vertical-offset="855">
+        <state line="6" column="87" selection-start="272" selection-end="272" vertical-scroll-proportion="0.2039356" vertical-offset="0" max-vertical-offset="559">
           <folding />
         </state>
       </provider>
@@ -571,6 +360,90 @@
     <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/duoshuo_comment.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="28" selection-start="493" selection-end="493" vertical-scroll-proportion="0.4318182" vertical-offset="0" max-vertical-offset="572">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="78" column="0" selection-start="1746" selection-end="1746" vertical-scroll-proportion="0.5681818" vertical-offset="1157" max-vertical-offset="1729">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/article.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="28" selection-start="136" selection-end="136" vertical-scroll-proportion="-0.37388194" vertical-offset="285" max-vertical-offset="893">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/after_footer.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="608">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/post/share.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="46" selection-start="799" selection-end="799" vertical-scroll-proportion="0.6311189" vertical-offset="0" max-vertical-offset="646">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/comment.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="78" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="418">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/source/css/font/fontawesome-webfont.svg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="127" column="24" selection-start="50501" selection-end="50509" vertical-scroll-proportion="0.0" vertical-offset="2109" max-vertical-offset="4940">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="13" selection-start="586" selection-end="597" vertical-scroll-proportion="0.0" vertical-offset="416" max-vertical-offset="988">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/footer.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="19" selection-start="256" selection-end="256" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="361">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/source/css/_partial/footer.styl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="21" selection-start="184" selection-end="205" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/index.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="550">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/_partial/head.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="16" selection-start="1534" selection-end="1534" vertical-scroll-proportion="0.49534452" vertical-offset="399" max-vertical-offset="969">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/light/layout/layout.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="572">
           <folding />
         </state>
       </provider>
