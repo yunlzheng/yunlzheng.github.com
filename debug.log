@@ -1,5 +1,5 @@
-date: 2013-11-11 23:59:39.899
-argv: node /home/ubuntu/.nvm/v0.10.21/bin/hexo server --debug
+date: 2013-11-12 00:40:22.177
+argv: node /home/ubuntu/.nvm/v0.10.21/bin/hexo server
 os: Linux 3.2.0-23-generic-pae linux ia32
 version:
   hexo: 2.3.0
@@ -13,68 +13,67 @@ version:
   openssl: 1.0.1e
 ---
 
-[debug] 23:59:39.913 Configuration file load successfully
-[debug] 23:59:39.919 Version info checked successfully
-[debug] 23:59:39.920 Loading the database...
-[debug] 23:59:40.140 Theme layout loaded
-[debug] 23:59:40.143 Start watching theme layout...
-[debug] 23:59:40.164 Theme source loaded
-[debug] 23:59:40.168 Theme configuration loaded
-[debug] 23:59:40.170 Start watching theme source...
-[debug] 23:59:40.181 Theme i18n loaded
-[debug] 23:59:40.192 Processed: _posts/11234.md
-[debug] 23:59:40.194 Processed: _posts/12345.md
-[debug] 23:59:40.196 Processed: _posts/23456.md
-[debug] 23:59:40.197 Processed: _posts/34567.md
-[debug] 23:59:40.198 Processed: _posts/78910.md
-[debug] 23:59:40.201 Processed: _posts/hello-world.md
-[debug] 23:59:40.203 Processed: _posts/test10.md
-[debug] 23:59:40.204 Processed: _posts/test11.md
-[debug] 23:59:40.205 Processed: _posts/test12.md
-[debug] 23:59:40.206 Processed: _posts/test13.md
-[debug] 23:59:40.208 Processed: _posts/test2.md
-[debug] 23:59:40.209 Processed: _posts/test3.md
-[debug] 23:59:40.210 Processed: _posts/test4.md
-[debug] 23:59:40.211 Processed: _posts/test5.md
-[debug] 23:59:40.211 Processed: _posts/test6.md
-[debug] 23:59:40.212 Processed: _posts/test7.md
-[debug] 23:59:40.213 Processed: _posts/test8.md
-[debug] 23:59:40.213 Processed: _posts/test9.md
-[debug] 23:59:40.254 Cache saved
-[info] 23:59:40.261 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
-[debug] 23:59:42.634 Render index: 
-[debug] 00:01:31.748 Render index: 
-[delete] 00:04:24.523 Source: _posts/11234.md
-[delete] 00:04:24.528 Source: _posts/12345.md
-[delete] 00:04:24.530 Source: _posts/23456.md
-[delete] 00:04:24.532 Source: _posts/34567.md
-[delete] 00:04:24.532 Source: _posts/78910.md
-[delete] 00:04:24.534 Source: _posts/test10.md
-[delete] 00:04:24.535 Source: _posts/test11.md
-[delete] 00:04:24.536 Source: _posts/test12.md
-[delete] 00:04:24.536 Source: _posts/test13.md
-[delete] 00:04:24.537 Source: _posts/test2.md
-[delete] 00:04:24.538 Source: _posts/test3.md
-[delete] 00:04:24.539 Source: _posts/test4.md
-[delete] 00:04:24.540 Source: _posts/test5.md
-[delete] 00:04:24.541 Source: _posts/test6.md
-[delete] 00:04:24.542 Source: _posts/test7.md
-[delete] 00:04:24.543 Source: _posts/test8.md
-[delete] 00:04:24.544 Source: _posts/test9.md
-[debug] 00:04:25.202 Cache saved
-[debug] 00:04:25.203 Cache saved
-[debug] 00:04:25.203 Cache saved
-[debug] 00:04:25.204 Cache saved
-[debug] 00:04:25.205 Cache saved
-[debug] 00:04:25.205 Cache saved
-[debug] 00:04:25.206 Cache saved
-[debug] 00:04:25.206 Cache saved
-[debug] 00:04:25.206 Cache saved
-[debug] 00:04:25.207 Cache saved
-[debug] 00:04:25.207 Cache saved
-[debug] 00:04:25.207 Cache saved
-[debug] 00:04:25.208 Cache saved
-[debug] 00:04:25.209 Cache saved
-[debug] 00:04:25.209 Cache saved
-[debug] 00:04:25.209 Cache saved
-[debug] 00:04:25.210 Cache saved
+[debug] 00:18:26.964 Configuration file load successfully
+[debug] 00:18:26.966 Version info checked successfully
+[debug] 00:18:26.966 Loading the database...
+[debug] 00:18:27.168 Theme layout loaded
+[debug] 00:18:27.168 Start watching theme layout...
+[debug] 00:18:27.183 Theme source loaded
+[debug] 00:18:27.185 Theme configuration loaded
+[debug] 00:18:27.185 Start watching theme source...
+[debug] 00:18:27.194 Theme i18n loaded
+[debug] 00:18:27.202 Processed: _posts/hello-world.md
+[debug] 00:18:27.209 Cache saved
+[info] 00:18:27.212 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
+[debug] 00:18:29.118 Render index: 
+[debug] 00:19:31.039 Render index: 
+[debug] 00:22:56.676 Render index: 
+[debug] 00:23:18.546 Render index: 
+[debug] 00:23:47.782 Render index: 
+[debug] 00:23:57.274 Render index: 
+[create] 00:30:10.211 Source: _posts/begin-jenkins.md
+[debug] 00:30:10.321 Processed: _posts/begin-jenkins.md
+[debug] 00:30:10.337 Cache saved
+[update] 00:30:47.272 Source: _posts/begin-jenkins.md
+[debug] 00:30:47.393 Processed: _posts/begin-jenkins.md
+[debug] 00:30:47.408 Cache saved
+[update] 00:30:58.281 Source: _posts/begin-jenkins.md
+[debug] 00:30:58.390 Processed: _posts/begin-jenkins.md
+[debug] 00:30:58.403 Cache saved
+[update] 00:31:05.288 Source: _posts/begin-jenkins.md
+[debug] 00:31:05.398 Processed: _posts/begin-jenkins.md
+[debug] 00:31:05.414 Cache saved
+[update] 00:32:41.416 Source: _posts/begin-jenkins.md
+[debug] 00:32:41.524 Processed: _posts/begin-jenkins.md
+[debug] 00:32:41.540 Cache saved
+[update] 00:33:47.509 Source: _posts/begin-jenkins.md
+[debug] 00:33:47.615 Processed: _posts/begin-jenkins.md
+[debug] 00:33:47.633 Cache saved
+[create] 00:34:50.587 Source: _posts/tomcat-cgi.md
+[debug] 00:34:50.692 Processed: _posts/tomcat-cgi.md
+[debug] 00:34:50.710 Cache saved
+[create] 00:35:35.646 Source: _posts/javascript-property.md
+[debug] 00:35:35.754 Processed: _posts/javascript-property.md
+[debug] 00:35:35.774 Cache saved
+[create] 00:35:55.682 Source: _posts/net-snmp.md
+[debug] 00:35:55.787 Processed: _posts/net-snmp.md
+[debug] 00:35:55.806 Cache saved
+[create] 00:36:15.705 Source: _posts/ubuntu-bind9.md
+[debug] 00:36:15.810 Processed: _posts/ubuntu-bind9.md
+[debug] 00:36:15.840 Cache saved
+[create] 00:39:31.996 Source: _posts/play-tumblr.md
+[debug] 00:39:32.102 Processed: _posts/play-tumblr.md
+[debug] 00:39:32.127 Cache saved
+[update] 00:40:22.061 Source: _posts/play-tumblr.md
+[error] 00:40:22.168 { rawMessage: 'Unable to parse.',
+  parsedLine: 3,
+  snippet: 'trkdown支持代码高亮，但是实际上算是一片对tumblr倒腾的记录吧。',
+  parsedFile: null,
+  message: 'Unable to parse.',
+  domain: 
+   { domain: null,
+     _events: { error: [Function] },
+     _maxListeners: 10,
+     members: [],
+     _disposed: true },
+  domainThrown: true }
