@@ -74,7 +74,7 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/tommy351/hexo/wiki/Plugins
 ## Themes: https://github.com/tommy351/hexo/wiki/Themes
-theme: feather
+theme: writing
 exclude_generator:
 
 # Deployment
