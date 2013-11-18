@@ -1,79 +1,63 @@
-date: 2013-11-12 00:40:22.177
-argv: node /home/ubuntu/.nvm/v0.10.21/bin/hexo server
-os: Linux 3.2.0-23-generic-pae linux ia32
+date: 2013-11-18 23:39:56.367
+argv: node /Users/apple/.nvm/v0.10.22/bin/hexo server
+os: Darwin 12.4.0 darwin x64
 version:
   hexo: 2.3.0
   http_parser: 1.0
-  node: 0.10.21
+  node: 0.10.22
   v8: 3.14.5.9
   ares: 1.9.0-DEV
-  uv: 0.10.18
+  uv: 0.10.19
   zlib: 1.2.3
   modules: 11
   openssl: 1.0.1e
 ---
 
-[debug] 00:18:26.964 Configuration file load successfully
-[debug] 00:18:26.966 Version info checked successfully
-[debug] 00:18:26.966 Loading the database...
-[debug] 00:18:27.168 Theme layout loaded
-[debug] 00:18:27.168 Start watching theme layout...
-[debug] 00:18:27.183 Theme source loaded
-[debug] 00:18:27.185 Theme configuration loaded
-[debug] 00:18:27.185 Start watching theme source...
-[debug] 00:18:27.194 Theme i18n loaded
-[debug] 00:18:27.202 Processed: _posts/hello-world.md
-[debug] 00:18:27.209 Cache saved
-[info] 00:18:27.212 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
-[debug] 00:18:29.118 Render index: 
-[debug] 00:19:31.039 Render index: 
-[debug] 00:22:56.676 Render index: 
-[debug] 00:23:18.546 Render index: 
-[debug] 00:23:47.782 Render index: 
-[debug] 00:23:57.274 Render index: 
-[create] 00:30:10.211 Source: _posts/begin-jenkins.md
-[debug] 00:30:10.321 Processed: _posts/begin-jenkins.md
-[debug] 00:30:10.337 Cache saved
-[update] 00:30:47.272 Source: _posts/begin-jenkins.md
-[debug] 00:30:47.393 Processed: _posts/begin-jenkins.md
-[debug] 00:30:47.408 Cache saved
-[update] 00:30:58.281 Source: _posts/begin-jenkins.md
-[debug] 00:30:58.390 Processed: _posts/begin-jenkins.md
-[debug] 00:30:58.403 Cache saved
-[update] 00:31:05.288 Source: _posts/begin-jenkins.md
-[debug] 00:31:05.398 Processed: _posts/begin-jenkins.md
-[debug] 00:31:05.414 Cache saved
-[update] 00:32:41.416 Source: _posts/begin-jenkins.md
-[debug] 00:32:41.524 Processed: _posts/begin-jenkins.md
-[debug] 00:32:41.540 Cache saved
-[update] 00:33:47.509 Source: _posts/begin-jenkins.md
-[debug] 00:33:47.615 Processed: _posts/begin-jenkins.md
-[debug] 00:33:47.633 Cache saved
-[create] 00:34:50.587 Source: _posts/tomcat-cgi.md
-[debug] 00:34:50.692 Processed: _posts/tomcat-cgi.md
-[debug] 00:34:50.710 Cache saved
-[create] 00:35:35.646 Source: _posts/javascript-property.md
-[debug] 00:35:35.754 Processed: _posts/javascript-property.md
-[debug] 00:35:35.774 Cache saved
-[create] 00:35:55.682 Source: _posts/net-snmp.md
-[debug] 00:35:55.787 Processed: _posts/net-snmp.md
-[debug] 00:35:55.806 Cache saved
-[create] 00:36:15.705 Source: _posts/ubuntu-bind9.md
-[debug] 00:36:15.810 Processed: _posts/ubuntu-bind9.md
-[debug] 00:36:15.840 Cache saved
-[create] 00:39:31.996 Source: _posts/play-tumblr.md
-[debug] 00:39:32.102 Processed: _posts/play-tumblr.md
-[debug] 00:39:32.127 Cache saved
-[update] 00:40:22.061 Source: _posts/play-tumblr.md
-[error] 00:40:22.168 { rawMessage: 'Unable to parse.',
-  parsedLine: 3,
-  snippet: 'trkdown支持代码高亮，但是实际上算是一片对tumblr倒腾的记录吧。',
-  parsedFile: null,
-  message: 'Unable to parse.',
-  domain: 
-   { domain: null,
-     _events: { error: [Function] },
-     _maxListeners: 10,
-     members: [],
-     _disposed: true },
-  domainThrown: true }
+[debug] 23:27:23.672 Configuration file load successfully
+[debug] 23:27:23.673 Version info checked successfully
+[debug] 23:27:23.674 Loading the database...
+[debug] 23:27:23.924 Theme layout loaded
+[debug] 23:27:23.925 Start watching theme layout...
+[debug] 23:27:23.954 Theme source loaded
+[debug] 23:27:23.958 Theme configuration loaded
+[debug] 23:27:23.960 Start watching theme source...
+[debug] 23:27:23.973 Theme i18n loaded
+[debug] 23:27:24.185 Processed: _posts/chengdu-rock.md
+[debug] 23:27:24.224 Processed: _posts/code-chat.md
+[debug] 23:27:24.225 Processed: _posts/hello-world.md
+[debug] 23:27:24.227 Processed: _posts/javascript-property-learn.md
+[debug] 23:27:24.228 Processed: _posts/linux-bind9.md
+[debug] 23:27:24.228 Processed: _posts/linux-tmux.md
+[debug] 23:27:24.229 Processed: _posts/tomcat7-cgi-awstats.md
+[debug] 23:27:24.230 Processed: about/index.md
+[debug] 23:27:24.230 Processed: works/index.md
+[debug] 23:27:24.251 Cache saved
+[info] 23:27:24.255 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
+[debug] 23:27:27.849 Render page: works/index.html
+[debug] 23:27:35.454 Render archive: archives/
+[debug] 23:27:36.758 Render index: 
+[debug] 23:27:37.936 Render page: works/index.html
+[debug] 23:27:39.102 Render page: about/index.html
+[create] 23:35:21.765 Theme source: images/work/work-pdflabs.png
+[create] 23:35:21.766 Theme source: images/work/work-pdflabs.png
+[debug] 23:37:08.071 Render page: works/index.html
+[create] 23:38:32.937 Source: work-pdflabs.png
+[create] 23:38:32.938 Source: work-pdflabs.png
+[debug] 23:38:33.042 Processed: work-pdflabs.png
+[debug] 23:38:33.057 Processed: work-pdflabs.png
+[debug] 23:38:33.073 Cache saved
+[debug] 23:38:33.073 Cache saved
+[delete] 23:38:45.941 Theme source: images/work/work-pdflabs.png
+[delete] 23:38:45.941 Theme source: images/work/work-pdflabs.png
+[create] 23:39:41.988 Source: images/work-pdflabs.png
+[create] 23:39:41.988 Source: images/work-pdflabs.png
+[debug] 23:39:42.090 Processed: images/work-pdflabs.png
+[debug] 23:39:42.105 Processed: images/work-pdflabs.png
+[debug] 23:39:42.117 Cache saved
+[debug] 23:39:42.118 Cache saved
+[delete] 23:39:49.992 Source: work-pdflabs.png
+[delete] 23:39:49.992 Source: work-pdflabs.png
+[debug] 23:39:50.123 Cache saved
+[debug] 23:39:50.123 Cache saved
+[error] 23:39:56.366 Error: ENOENT, open '/Users/apple/Workspace/yunlzheng.github.com/source/work-pdflabs.png'
+Error: ENOENT, open '/Users/apple/Workspace/yunlzheng.github.com/source/work-pdflabs.png'
