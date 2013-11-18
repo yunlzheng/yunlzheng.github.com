@@ -77,3 +77,44 @@ version:
 [debug] 01:25:44.920 Render archive: archives/
 [debug] 01:25:48.036 Render archive: archives/page/2/
 [debug] 01:25:51.135 Render archive: archives/page/3/
+[create] 01:28:27.528 Source: _posts/begin-jenkins.md
+[debug] 01:28:27.634 Processed: _posts/begin-jenkins.md
+[debug] 01:28:27.659 Cache saved
+[update] 01:29:49.597 Source: _posts/begin-jenkins.md
+[debug] 01:29:49.707 Processed: _posts/begin-jenkins.md
+[debug] 01:29:49.727 Cache saved
+[debug] 01:29:57.667 Render archive: archives/page/3/
+[debug] 01:30:00.237 Render post: 2012/07/02/begin-jenkins/
+[update] 01:31:04.664 Source: _posts/begin-jenkins.md
+[debug] 01:31:04.772 Processed: _posts/begin-jenkins.md
+[debug] 01:31:04.796 Cache saved
+[debug] 01:31:10.051 Render post: 2012/07/02/begin-jenkins/
+[update] 01:34:19.865 Source: _posts/begin-jenkins.md
+[debug] 01:34:19.971 Processed: _posts/begin-jenkins.md
+[debug] 01:34:19.990 Cache saved
+[update] 01:35:34.936 Source: _posts/begin-jenkins.md
+[debug] 01:35:35.040 Processed: _posts/begin-jenkins.md
+[debug] 01:35:35.059 Cache saved
+[debug] 01:35:39.516 Render post: 2012/07/02/begin-jenkins/
+[debug] 01:35:45.728 Render index: 
+[debug] 01:35:46.950 Render archive: archives/
+[debug] 01:35:50.701 Render archive: archives/page/2/
+[debug] 01:35:54.291 Render post: 2013/03/26/linux-bind9/
+[create] 01:36:51.293 Source: _posts/jenkins-plugin.md
+[debug] 01:36:51.399 Processed: _posts/jenkins-plugin.md
+[debug] 01:36:51.422 Cache saved
+[update] 01:37:39.338 Source: _posts/jenkins-plugin.md
+[debug] 01:37:39.484 Processed: _posts/jenkins-plugin.md
+[debug] 01:37:39.507 Cache saved
+[debug] 01:37:44.404 Render archive: archives/page/2/
+[debug] 01:37:47.713 Render archive: archives/page/3/
+[debug] 01:37:53.975 Render archive: archives/
+[update] 01:43:47.683 Source: _posts/jenkins-plugin.md
+[debug] 01:43:47.888 Processed: _posts/jenkins-plugin.md
+[debug] 01:43:47.908 Cache saved
+[debug] 01:43:51.654 Render archive: archives/
+[debug] 01:43:59.038 Render archive: archives/page/2/
+[debug] 01:44:02.756 Render archive: archives/page/3/
+[debug] 01:44:06.405 Render archive: archives/page/4/
+[debug] 01:44:08.382 Render archive: archives/page/3/
+[debug] 01:44:10.419 Render post: 2012/07/02/jenkins-plugin/
