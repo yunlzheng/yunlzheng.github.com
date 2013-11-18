@@ -1,5 +1,5 @@
-date: 2013-11-18 23:39:56.367
-argv: node /Users/apple/.nvm/v0.10.22/bin/hexo server
+date: 2013-11-19 01:15:09.666
+argv: node /Users/apple/.nvm/v0.10.22/bin/hexo server --debug
 os: Darwin 12.4.0 darwin x64
 version:
   hexo: 2.3.0
@@ -13,51 +13,67 @@ version:
   openssl: 1.0.1e
 ---
 
-[debug] 23:27:23.672 Configuration file load successfully
-[debug] 23:27:23.673 Version info checked successfully
-[debug] 23:27:23.674 Loading the database...
-[debug] 23:27:23.924 Theme layout loaded
-[debug] 23:27:23.925 Start watching theme layout...
-[debug] 23:27:23.954 Theme source loaded
-[debug] 23:27:23.958 Theme configuration loaded
-[debug] 23:27:23.960 Start watching theme source...
-[debug] 23:27:23.973 Theme i18n loaded
-[debug] 23:27:24.185 Processed: _posts/chengdu-rock.md
-[debug] 23:27:24.224 Processed: _posts/code-chat.md
-[debug] 23:27:24.225 Processed: _posts/hello-world.md
-[debug] 23:27:24.227 Processed: _posts/javascript-property-learn.md
-[debug] 23:27:24.228 Processed: _posts/linux-bind9.md
-[debug] 23:27:24.228 Processed: _posts/linux-tmux.md
-[debug] 23:27:24.229 Processed: _posts/tomcat7-cgi-awstats.md
-[debug] 23:27:24.230 Processed: about/index.md
-[debug] 23:27:24.230 Processed: works/index.md
-[debug] 23:27:24.251 Cache saved
-[info] 23:27:24.255 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
-[debug] 23:27:27.849 Render page: works/index.html
-[debug] 23:27:35.454 Render archive: archives/
-[debug] 23:27:36.758 Render index: 
-[debug] 23:27:37.936 Render page: works/index.html
-[debug] 23:27:39.102 Render page: about/index.html
-[create] 23:35:21.765 Theme source: images/work/work-pdflabs.png
-[create] 23:35:21.766 Theme source: images/work/work-pdflabs.png
-[debug] 23:37:08.071 Render page: works/index.html
-[create] 23:38:32.937 Source: work-pdflabs.png
-[create] 23:38:32.938 Source: work-pdflabs.png
-[debug] 23:38:33.042 Processed: work-pdflabs.png
-[debug] 23:38:33.057 Processed: work-pdflabs.png
-[debug] 23:38:33.073 Cache saved
-[debug] 23:38:33.073 Cache saved
-[delete] 23:38:45.941 Theme source: images/work/work-pdflabs.png
-[delete] 23:38:45.941 Theme source: images/work/work-pdflabs.png
-[create] 23:39:41.988 Source: images/work-pdflabs.png
-[create] 23:39:41.988 Source: images/work-pdflabs.png
-[debug] 23:39:42.090 Processed: images/work-pdflabs.png
-[debug] 23:39:42.105 Processed: images/work-pdflabs.png
-[debug] 23:39:42.117 Cache saved
-[debug] 23:39:42.118 Cache saved
-[delete] 23:39:49.992 Source: work-pdflabs.png
-[delete] 23:39:49.992 Source: work-pdflabs.png
-[debug] 23:39:50.123 Cache saved
-[debug] 23:39:50.123 Cache saved
-[error] 23:39:56.366 Error: ENOENT, open '/Users/apple/Workspace/yunlzheng.github.com/source/work-pdflabs.png'
-Error: ENOENT, open '/Users/apple/Workspace/yunlzheng.github.com/source/work-pdflabs.png'
+[debug] 01:15:09.681 Configuration file load successfully
+[debug] 01:15:09.687 Version info checked successfully
+[debug] 01:15:09.688 Loading the database...
+[debug] 01:15:09.927 Theme layout loaded
+[debug] 01:15:09.928 Start watching theme layout...
+[debug] 01:15:09.955 Theme source loaded
+[debug] 01:15:09.959 Theme configuration loaded
+[debug] 01:15:09.960 Start watching theme source...
+[debug] 01:15:09.971 Theme i18n loaded
+[debug] 01:15:10.201 Processed: _posts/begin-hexo.md
+[debug] 01:15:10.204 Processed: _posts/chengdu-rock.md
+[debug] 01:15:10.236 Processed: _posts/code-chat.md
+[debug] 01:15:10.238 Processed: _posts/ember-begin.md
+[debug] 01:15:10.240 Processed: _posts/hello-world.md
+[debug] 01:15:10.241 Processed: _posts/javascript-property-learn.md
+[debug] 01:15:10.243 Processed: _posts/linux-bind9.md
+[debug] 01:15:10.252 Processed: _posts/linux-tmux.md
+[debug] 01:15:10.253 Processed: _posts/tomcat7-cgi-awstats.md
+[debug] 01:15:10.254 Processed: about/index.md
+[debug] 01:15:10.255 Processed: works/index.md
+[debug] 01:15:10.255 Processed: _posts/ember-begin-2.md
+[debug] 01:15:10.286 Cache saved
+[info] 01:15:10.290 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
+[debug] 01:15:14.110 Render post: 2012/12/23/ember-begin-2/
+[debug] 01:15:25.034 Render archive: archives/
+[debug] 01:15:30.244 Render archive: archives/page/2/
+[debug] 01:15:37.547 Render post: 2012/12/23/ember-begin-2/
+[delete] 01:15:52.676 Source: _posts/ember-begin-2.md
+[debug] 01:15:52.800 Cache saved
+[create] 01:17:42.779 Source: _posts/rabbitmq-2.md
+[debug] 01:17:42.884 Processed: _posts/rabbitmq-2.md
+[debug] 01:17:42.909 Cache saved
+[update] 01:18:22.812 Source: _posts/rabbitmq-2.md
+[debug] 01:18:22.994 Processed: _posts/rabbitmq-2.md
+[debug] 01:18:23.014 Cache saved
+[update] 01:21:29.982 Source: _posts/rabbitmq-2.md
+[debug] 01:21:30.176 Processed: _posts/rabbitmq-2.md
+[debug] 01:21:30.195 Cache saved
+[debug] 01:21:37.443 Render archive: archives/
+[debug] 01:21:40.154 Render archive: archives/page/2/
+[debug] 01:21:42.989 Render archive: archives/page/3/
+[debug] 01:21:46.114 Render post: 2012/08/09/rabbitmq-2/
+[update] 01:22:41.045 Source: _posts/rabbitmq-2.md
+[debug] 01:22:41.223 Processed: _posts/rabbitmq-2.md
+[debug] 01:22:41.245 Cache saved
+[update] 01:22:58.062 Source: _posts/rabbitmq-2.md
+[debug] 01:22:58.239 Processed: _posts/rabbitmq-2.md
+[debug] 01:22:58.257 Cache saved
+[update] 01:23:05.068 Source: _posts/rabbitmq-2.md
+[debug] 01:23:05.249 Processed: _posts/rabbitmq-2.md
+[debug] 01:23:05.267 Cache saved
+[update] 01:23:12.074 Source: _posts/rabbitmq-2.md
+[debug] 01:23:12.256 Processed: _posts/rabbitmq-2.md
+[debug] 01:23:12.275 Cache saved
+[debug] 01:23:14.285 Render post: 2012/08/09/rabbitmq-2/
+[debug] 01:23:33.028 Render index: 
+[debug] 01:23:38.242 Render post: 2013/10/19/code-chat/
+[update] 01:23:46.106 Source: _posts/rabbitmq-2.md
+[debug] 01:23:46.289 Processed: _posts/rabbitmq-2.md
+[debug] 01:23:46.307 Cache saved
+[debug] 01:24:51.376 Render post: 2013/10/19/code-chat/
+[debug] 01:25:44.920 Render archive: archives/
+[debug] 01:25:48.036 Render archive: archives/page/2/
+[debug] 01:25:51.135 Render archive: archives/page/3/
