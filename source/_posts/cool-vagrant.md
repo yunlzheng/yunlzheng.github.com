@@ -7,7 +7,7 @@ tags:
 Vargant一个属于程序猿的虚拟机。
 
 
-![](vagrant/vagrant.png)
+![](/vagrant/vagrant.png)
 
 “这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”，
 
@@ -24,15 +24,17 @@ Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可
 
 ```
 
-cd $WORKSPACE
+cd WORKSPACE
 
 ```
 
 ```
+
 vagrant init
+
 ```
 
-![](vagrant/03.png)
+![](/vagrant/03.png)
 
 完成初始化后将在工作目录创建Vagrantfile文件
 
@@ -45,7 +47,7 @@ vagrant init
 vagrant box add precise32  http://files.vagrantup.com/precise32.box
 ```
 
-![](vagrant/04.png)
+![](/vagrant/04.png)
 
 * 使用BOX
  
@@ -87,7 +89,7 @@ vargant ssh
 
 windows下直接使用cmd会报错如下
 
-![](vagrant/06.png)
+![](/vagrant/06.png)
 
 如果windows本机安装了git客户端，可以在git-bash中使用**vagrant ssh**,也可以使用Putty等SSH客户端,链接地址如下
 
@@ -107,7 +109,7 @@ vagrant内置对自动化部署的支持，使用该特性可以在**vagrant up*
 
 * 安装软件
 
-在$WORKSPACE目录下新建**bootstrap.sh**文件
+在**WORKSPACE**目录下新建**bootstrap.sh**文件
 
 ```
 #/usr/bin/env bash
@@ -117,7 +119,7 @@ apt-get install vim
 
 ```
 
-修改$WORKSPACE/Vagrantfile文件
+修改**WORKSPACE/Vagrantfile**文件
 
 ```
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -129,7 +131,7 @@ end
 ```
 
 该配置让Vagrant知道在虚拟机启动时，运行**bootstrap.sh**文件
-文件路径$WORKSPACE目录的相对路径
+文件路径**$WORKSPACE**目录的相对路径
 
 ## 网络
 
@@ -138,7 +140,7 @@ end
 使用该特性， 可以将虚拟机的端口映射到主机的特定端口上。 
 
 
-使用该特性需要修改**$WORKSPACE/Vagrantfile**文件
+使用该特性需要修改**WORKSPACE/Vagrantfile**文件
 
 ```
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -152,35 +154,8 @@ end
 
 修改文件后重新启动**Vagrant** 重新启动虚拟机
 
-![](vagrant/07.png)
+![](/vagrant/07.png)
 
 如图所示对本机8080端口的请求都将转发到虚拟机的80端口
 
-## Vagrant命令行
-
-* 打包虚拟机 **package**
-
-将当前的虚拟机打包为box
-
-```
-vagrant package
-```
-
-* 暂停虚拟机 **suspend**
-
-```
-vagrant suspend
-```
-
-* 关闭虚拟机 **halt**
-
-```
-vagrant halt
-```
-
-* 关闭虚拟机 *destroy*
-
-```
-vagrant destroy 
-```
 
