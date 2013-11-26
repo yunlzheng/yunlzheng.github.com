@@ -1,120 +1,59 @@
-date: 2013-11-19 01:15:09.666
-argv: node /Users/apple/.nvm/v0.10.22/bin/hexo server --debug
-os: Darwin 12.4.0 darwin x64
+date: 2013-11-26 12:35:20.030
+argv: node /usr/local/bin/hexo server
+os: Linux 3.2.0-23-generic-pae linux ia32
 version:
   hexo: 2.3.0
   http_parser: 1.0
-  node: 0.10.22
-  v8: 3.14.5.9
-  ares: 1.9.0-DEV
-  uv: 0.10.19
+  node: 0.11.10-pre
+  v8: 3.22.24.5
+  uv: 0.11.15
   zlib: 1.2.3
-  modules: 11
+  modules: 13
   openssl: 1.0.1e
 ---
 
-[debug] 01:15:09.681 Configuration file load successfully
-[debug] 01:15:09.687 Version info checked successfully
-[debug] 01:15:09.688 Loading the database...
-[debug] 01:15:09.927 Theme layout loaded
-[debug] 01:15:09.928 Start watching theme layout...
-[debug] 01:15:09.955 Theme source loaded
-[debug] 01:15:09.959 Theme configuration loaded
-[debug] 01:15:09.960 Start watching theme source...
-[debug] 01:15:09.971 Theme i18n loaded
-[debug] 01:15:10.201 Processed: _posts/begin-hexo.md
-[debug] 01:15:10.204 Processed: _posts/chengdu-rock.md
-[debug] 01:15:10.236 Processed: _posts/code-chat.md
-[debug] 01:15:10.238 Processed: _posts/ember-begin.md
-[debug] 01:15:10.240 Processed: _posts/hello-world.md
-[debug] 01:15:10.241 Processed: _posts/javascript-property-learn.md
-[debug] 01:15:10.243 Processed: _posts/linux-bind9.md
-[debug] 01:15:10.252 Processed: _posts/linux-tmux.md
-[debug] 01:15:10.253 Processed: _posts/tomcat7-cgi-awstats.md
-[debug] 01:15:10.254 Processed: about/index.md
-[debug] 01:15:10.255 Processed: works/index.md
-[debug] 01:15:10.255 Processed: _posts/ember-begin-2.md
-[debug] 01:15:10.286 Cache saved
-[info] 01:15:10.290 Hexo is running at localhost:4000/. Press Ctrl+C to stop.
-[debug] 01:15:14.110 Render post: 2012/12/23/ember-begin-2/
-[debug] 01:15:25.034 Render archive: archives/
-[debug] 01:15:30.244 Render archive: archives/page/2/
-[debug] 01:15:37.547 Render post: 2012/12/23/ember-begin-2/
-[delete] 01:15:52.676 Source: _posts/ember-begin-2.md
-[debug] 01:15:52.800 Cache saved
-[create] 01:17:42.779 Source: _posts/rabbitmq-2.md
-[debug] 01:17:42.884 Processed: _posts/rabbitmq-2.md
-[debug] 01:17:42.909 Cache saved
-[update] 01:18:22.812 Source: _posts/rabbitmq-2.md
-[debug] 01:18:22.994 Processed: _posts/rabbitmq-2.md
-[debug] 01:18:23.014 Cache saved
-[update] 01:21:29.982 Source: _posts/rabbitmq-2.md
-[debug] 01:21:30.176 Processed: _posts/rabbitmq-2.md
-[debug] 01:21:30.195 Cache saved
-[debug] 01:21:37.443 Render archive: archives/
-[debug] 01:21:40.154 Render archive: archives/page/2/
-[debug] 01:21:42.989 Render archive: archives/page/3/
-[debug] 01:21:46.114 Render post: 2012/08/09/rabbitmq-2/
-[update] 01:22:41.045 Source: _posts/rabbitmq-2.md
-[debug] 01:22:41.223 Processed: _posts/rabbitmq-2.md
-[debug] 01:22:41.245 Cache saved
-[update] 01:22:58.062 Source: _posts/rabbitmq-2.md
-[debug] 01:22:58.239 Processed: _posts/rabbitmq-2.md
-[debug] 01:22:58.257 Cache saved
-[update] 01:23:05.068 Source: _posts/rabbitmq-2.md
-[debug] 01:23:05.249 Processed: _posts/rabbitmq-2.md
-[debug] 01:23:05.267 Cache saved
-[update] 01:23:12.074 Source: _posts/rabbitmq-2.md
-[debug] 01:23:12.256 Processed: _posts/rabbitmq-2.md
-[debug] 01:23:12.275 Cache saved
-[debug] 01:23:14.285 Render post: 2012/08/09/rabbitmq-2/
-[debug] 01:23:33.028 Render index: 
-[debug] 01:23:38.242 Render post: 2013/10/19/code-chat/
-[update] 01:23:46.106 Source: _posts/rabbitmq-2.md
-[debug] 01:23:46.289 Processed: _posts/rabbitmq-2.md
-[debug] 01:23:46.307 Cache saved
-[debug] 01:24:51.376 Render post: 2013/10/19/code-chat/
-[debug] 01:25:44.920 Render archive: archives/
-[debug] 01:25:48.036 Render archive: archives/page/2/
-[debug] 01:25:51.135 Render archive: archives/page/3/
-[create] 01:28:27.528 Source: _posts/begin-jenkins.md
-[debug] 01:28:27.634 Processed: _posts/begin-jenkins.md
-[debug] 01:28:27.659 Cache saved
-[update] 01:29:49.597 Source: _posts/begin-jenkins.md
-[debug] 01:29:49.707 Processed: _posts/begin-jenkins.md
-[debug] 01:29:49.727 Cache saved
-[debug] 01:29:57.667 Render archive: archives/page/3/
-[debug] 01:30:00.237 Render post: 2012/07/02/begin-jenkins/
-[update] 01:31:04.664 Source: _posts/begin-jenkins.md
-[debug] 01:31:04.772 Processed: _posts/begin-jenkins.md
-[debug] 01:31:04.796 Cache saved
-[debug] 01:31:10.051 Render post: 2012/07/02/begin-jenkins/
-[update] 01:34:19.865 Source: _posts/begin-jenkins.md
-[debug] 01:34:19.971 Processed: _posts/begin-jenkins.md
-[debug] 01:34:19.990 Cache saved
-[update] 01:35:34.936 Source: _posts/begin-jenkins.md
-[debug] 01:35:35.040 Processed: _posts/begin-jenkins.md
-[debug] 01:35:35.059 Cache saved
-[debug] 01:35:39.516 Render post: 2012/07/02/begin-jenkins/
-[debug] 01:35:45.728 Render index: 
-[debug] 01:35:46.950 Render archive: archives/
-[debug] 01:35:50.701 Render archive: archives/page/2/
-[debug] 01:35:54.291 Render post: 2013/03/26/linux-bind9/
-[create] 01:36:51.293 Source: _posts/jenkins-plugin.md
-[debug] 01:36:51.399 Processed: _posts/jenkins-plugin.md
-[debug] 01:36:51.422 Cache saved
-[update] 01:37:39.338 Source: _posts/jenkins-plugin.md
-[debug] 01:37:39.484 Processed: _posts/jenkins-plugin.md
-[debug] 01:37:39.507 Cache saved
-[debug] 01:37:44.404 Render archive: archives/page/2/
-[debug] 01:37:47.713 Render archive: archives/page/3/
-[debug] 01:37:53.975 Render archive: archives/
-[update] 01:43:47.683 Source: _posts/jenkins-plugin.md
-[debug] 01:43:47.888 Processed: _posts/jenkins-plugin.md
-[debug] 01:43:47.908 Cache saved
-[debug] 01:43:51.654 Render archive: archives/
-[debug] 01:43:59.038 Render archive: archives/page/2/
-[debug] 01:44:02.756 Render archive: archives/page/3/
-[debug] 01:44:06.405 Render archive: archives/page/4/
-[debug] 01:44:08.382 Render archive: archives/page/3/
-[debug] 01:44:10.419 Render post: 2012/07/02/jenkins-plugin/
+[debug] 12:35:19.265 Configuration file load successfully
+[debug] 12:35:19.269 Version info checked successfully
+[debug] 12:35:19.269 Loading the database...
+[debug] 12:35:19.514 Theme layout loaded
+[debug] 12:35:19.516 Start watching theme layout...
+[debug] 12:35:19.572 Processed: _drafts/around-this-year.md
+[debug] 12:35:19.601 Theme configuration loaded
+[debug] 12:35:19.609 Processed: vagrant/01.png
+[debug] 12:35:19.610 Processed: vagrant/02.png
+[debug] 12:35:19.610 Processed: vagrant/03.png
+[debug] 12:35:19.610 Processed: vagrant/04.png
+[debug] 12:35:19.610 Processed: vagrant/05.png
+[debug] 12:35:19.611 Processed: vagrant/06.png
+[debug] 12:35:19.611 Processed: vagrant/07.png
+[debug] 12:35:19.611 Processed: vagrant/vagrant.png
+[debug] 12:35:19.653 Theme source loaded
+[debug] 12:35:19.654 Theme i18n loaded
+[debug] 12:35:19.654 Start watching theme source...
+[debug] 12:35:19.663 Processed: _posts/begin-hexo.md
+[debug] 12:35:19.664 Processed: _posts/begin-jenkins.md
+[debug] 12:35:19.697 Processed: _posts/chengdu-rock.md
+[debug] 12:35:19.746 Processed: _posts/code-chat.md
+[debug] 12:35:19.779 Processed: _posts/ember-begin.md
+[debug] 12:35:19.781 Processed: _posts/hello-world.md
+[debug] 12:35:19.812 Processed: _posts/javascript-property-learn.md
+[debug] 12:35:19.909 Processed: _posts/jenkins-plugin.md
+[debug] 12:35:19.923 Processed: _posts/linux-bind9.md
+[debug] 12:35:19.923 Processed: _posts/linux-tmux.md
+[debug] 12:35:19.981 Processed: _posts/rabbitmq-2.md
+[debug] 12:35:19.985 Processed: _posts/talk-about-mvc.md
+[debug] 12:35:20.017 Processed: _posts/tomcat7-cgi-awstats.md
+[debug] 12:35:20.019 Processed: about/index.md
+[debug] 12:35:20.019 Processed: works/index.md
+[error] 12:35:20.024 TypeError: Cannot read property '1' of undefined
+TypeError: Cannot read property '1' of undefined
+    at /usr/local/lib/node_modules/hexo/lib/plugins/filter/backtick_code_block.js:32:27
+    at String.replace (native)
+    at module.exports (/usr/local/lib/node_modules/hexo/lib/plugins/filter/backtick_code_block.js:13:31)
+    at /usr/local/lib/node_modules/hexo/lib/post/render.js:73:9
+    at iterate (/usr/local/lib/node_modules/hexo/node_modules/async/lib/async.js:131:13)
+    at Object.async.eachSeries (/usr/local/lib/node_modules/hexo/node_modules/async/lib/async.js:147:9)
+    at async.series.data.content.data.content.replace.tabs (/usr/local/lib/node_modules/hexo/lib/post/render.js:72:13)
+    at /usr/local/lib/node_modules/hexo/node_modules/async/lib/async.js:548:21
+    at /usr/local/lib/node_modules/hexo/node_modules/async/lib/async.js:224:13
+    at iterate (/usr/local/lib/node_modules/hexo/node_modules/async/lib/async.js:131:13)
