@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Jenkins安装与配置 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="Jenkins安装与配置
+安装jenkins
+地址http://mirrors.jenkins-ci.org/war/选择合适的Jenkins版本下载
+将下载的jenkins.war包直接放到tomcat下，启动tomcat即可安装完成
+图表 1 Jenkins初始化界面
+配置Jenkins
+插件安">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Jenkins安装与配置"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">Jenkins安装与配置</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Jenkins安装与配置</p>
+<p>安装jenkins</p>
+<p>地址<a href="http://mirrors.jenkins-ci.org/war/选择合适的Jenkins版本下载" target="_blank">http://mirrors.jenkins-ci.org/war/选择合适的Jenkins版本下载</a></p>
+<p>将下载的jenkins.war包直接放到tomcat下，启动tomcat即可安装完成</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174713_juh7_553747.jpg" alt=""><br>图表 1 Jenkins初始化界面</p>
+<p>配置Jenkins</p>
+<p>插件安装</p>
+<p>在jenkins界面中选择“系统管理——插件管理”进入jenkins插件管理界面。代码仓库我们机可能需要使用SVN也可能使用git作为代码仓库，这里安装git plugin</p>
+<p>安装完成插件后我们还需要去jenkins进行全局配置：“系统管理——系统设置”</p>
+<p>Git配置</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174728_BPlJ_553747.jpg" alt=""></p>
+<p>图表 2 Git配置</p>
+<p>Name我们采用默认设置即可</p>
+<p>Path to Git executable是执行git的程序路径，根据git安装目录即可，这里注意目录分隔符使用”/”</p>
+<p>Maven配置</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174739_UNw4_553747.jpg" alt=""><br>图表 3 Maven配置</p>
+<p>Name：自己随便取一个名字即可</p>
+<p>MAVEN_HOME：就是你本机Maven的安装路径，根据实际情况配置即可</p>
+<p>全局MAVEN_OPTS：设置Maven运行时参数</p>
+<p>Local Maven Repository：Maven的本地仓库默认即可</p>
+<p>新建Job</p>
+<p>在安装插件以及配置好Jenkins参数后即可新建Job测试配置效果，由于暂时未安装git服务器所以就直接使用github做测试，这里提供一个maven的java-web项目作为例子地址：<a href="https://github.com/yunlzheng/Hello-World" target="_blank">https://github.com/yunlzheng/Hello-World</a></p>
+<p>点击”新Job”</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174759_DTik_553747.jpg" alt=""><br>图表 4 新建Job 步骤1</p>
+<p>任务名字根据实际情况输入即可，这里我输入的是”TestJob”，选择构建一个maven2/3项目单击OK即可进入Job的详细配置页面</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174810_87jE_553747.jpg" alt=""><br>源码管理</p>
+<p>即配置编译时的源码仓库</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174838_nfXw_553747.jpg" alt=""></p>
+<p>这里我们选择Git作为源码管理，在Repository URL中输入对应的git仓库地址即可<a href="https://github.com/yunlzheng/Hello-World.git" target="_blank">https://github.com/yunlzheng/Hello-World.git</a></p>
+<p>构建触发器<br>Jenkins支持基于事件的构建代码机制，如按照时间周期构建，也可选择当检测到代码仓库发生变化时进行构建</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174854_XFJ9_553747.jpg" alt=""></p>
+<p>这里作为测试默认选择即可。</p>
+<p>Pre Steps</p>
+<p>即构建前需要执行的工作这里不需要配置</p>
+<p>Build</p>
+<p>由于测试时建立的是Maven2/3项目所以这里需要告诉Jenkins服务器构建maven项目所需的pom.xml文件所在的位置即项目项目根路径位置,根据项目实际情况设置即可</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174902_3qp1_553747.jpg" alt=""></p>
+<p>现在单击保存即可。保存后页面将跳转到Job页面点击立即构建即可</p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0702/174910_IBDC_553747.jpg" alt=""></p>
+<p>图表 5 Jenkins构建控制台输出</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

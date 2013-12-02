@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ubuntu Bind9泛域名解析配置 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="Bind9简介
+BIND (Berkeley Internet Name Domain)是Domain Name System (DNS) 协议的一个实现，提供了DNS主要功能的开放实现，包括
+域名服务器 (named)DNS解析库函数DNS服务器运行调试所用的工具是一款开放源码的DNS服务器软件，">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Ubuntu Bind9泛域名解析配置"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">Ubuntu Bind9泛域名解析配置</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1>Bind9简介</h1>
+<p>BIND (Berkeley Internet Name Domain)是Domain Name System (DNS) 协议的一个实现，提供了DNS主要功能的开放实现，包括</p>
+<p>域名服务器 (named)<br>DNS解析库函数<br>DNS服务器运行调试所用的工具<br>是一款开放源码的DNS服务器软件，由美国加州大学Berkeley分校开发和维护的，</p>
+<p>按照ISC的调查报告，BIND是世界上使用最多最广泛的域名服务系统。不论你的邮件服务器，WEB服务器或者其他的services如何的安全可靠，DNS的故障会给你带来用户根本无法访问这些服务。</p>
+<p>BIND，也是我们常说的named，由于多数网络应用程序使用其功能，所以在很多BIND的弱点及时被发现。主要分为三个版本：</p>
+<h2>v4</h2>
+<p>1998年多数UNIX捆绑的是BIND4，已经被多数厂商抛弃了，除了OpenBSD还在使用。OpenBSD核心人为BIND8过于复杂和不安全，所以继续使用BIND4。这样一来BIND8/9的很多优点都不包括在v4中。</p>
+<h2>v8</h2>
+<p>就是如今使用最多最广的版本。</p>
+<h2>v9</h2>
+<p>最新版本的BIND，全部重新写过，免费（但是由商业公司资助），也添加了许多新的功能（但是安全上也可能有更多的问题）。BIND9在2000年十月份推出，现在稳定版本是9.3.2。</p>
+<p>————————————————————-废话的分割线———————————————————————-</p>
+<p>————————————————————-主题的开始————————————————————————-</p>
+<h1>安装bind9</h1>
+<pre><code>su<span class="operator"><span class="keyword">do</span> apt-<span class="keyword">get</span> install bind9 bind9-doc dnsutils</code></pre>
+<p>bind9将默认安装在/etc/bind/目录下</p>
+<h2>rndc授权</h2>
+<p>修改/etc/bind/named.conf.options,在未授权的情况下，将会出现</p>
+<p>错误信息：rndc: connect failed: 127.0.0.1#953: connection</p>
+<pre><code>su<span class="operator"><span class="keyword">do</span> vim /etc/bind/named.conf.options</code></pre>
+<p>添加文件内容与/etc/bind/rndc.key相同<br>例如rnfc.key的文件内容为：</p>
+<pre><code>key <span class="string">"rndc-key"</span> {
+        algorithm hmac-md5<span class="comment">;</span>
+        secret <span class="string">"vfmD0+yvxhgW0wa8FQ54EQ=="</span><span class="comment">;</span>
+}<span class="comment">;</span></code></pre>
+<p>则在named.conf.options 中添加一下内容</p>
+<pre><code>key <span class="string">"rndc-key"</span> {
+        algorithm hmac-md5<span class="comment">;</span>
+        secret <span class="string">"vfmD0+yvxhgW0wa8FQ54EQ=="</span><span class="comment">;</span>
+}<span class="comment">;</span>
+
+controls {
+        inet <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> port <span class="number">953</span>
+                allow { <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="comment">; } keys { "rndc-key"; };</span>
+}<span class="comment">;</span></code></pre>
+<p>到此为止Bind9的基本安装配置就算完成了。<br>接下来是如何配置域名解析的问题</p>
+<h2>添加本地区域文件</h2>
+<p>创建文件 /etc/bind/zones.zheng</p>
+<pre><code><span class="title">zone</span> <span class="string">"zheng.dev"</span>  { <span class="typedef"><span class="keyword">type</span> master; file "/etc/bind/db.zheng.dev"; };</span></code></pre>
+<p>这里master表示DNS为主服务器<br>file则是只想该域的具体配置文件</p>
+<p>创建文件/etc/bind/db.zheng.dev</p>
+<p>添加一下内容</p>
+<pre><code>$TTL    <span class="number">86400</span>
+@   <span class="keyword">IN</span>  SOA localhost. root<span class="preprocessor">.localhost</span>. (
+                  <span class="number">1</span>     <span class="comment">; Serial</span>
+             <span class="number">604800</span>     <span class="comment">; Refresh</span>
+              <span class="number">86400</span>     <span class="comment">; Retry</span>
+            <span class="number">2419200</span>     <span class="comment">; Expire</span>
+              <span class="number">86400</span> )   <span class="comment">; Negative Cache TTL</span>
+<span class="comment">;</span>
+@   <span class="keyword">IN</span>  NS  localhost.
+*<span class="preprocessor">.zheng</span><span class="preprocessor">.dev</span>.    <span class="keyword">IN</span> A    <span class="number">192.168</span><span class="number">.146</span><span class="number">.129</span></code></pre>
+<p>注意这里的 域名后缀也必须是与本地域配置文件中定义的zone相同。 *.zheng.dev. 表示匹配所有的以zheng.dev结尾的访问请求，这些请求都将会转发到192.168.146.129这台服务器。</p>
+<h2>重启bind9</h2>
+<pre><code>su<span class="operator"><span class="keyword">do</span> /etc/init.d/bind9 restart</code></pre>
+<p>这样一个最基本的基于bind9的泛域名配置即可完成</p>
+<p>————————————————————-再次废话的分割线——————————————————————-</p>
+<p>感觉已经好久没写博客了。不负责任的讲是工作太多没时间，自己偷懒</p>
+<p>马上就到毕业设计了，毕业设计没完，老是觉得有道坎。老是有种只有毕业设计搞完，自己才可以毫无负担的凭爱好学习各种东西。悲催的是之前工作确实太忙了。还有差不多只有一个月的时间来准备毕业设计。 而我却基本才开始整理架构设计。</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ember.js(一):一个最基本的Ember应用程序 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="一个构建野心勃勃的web应用框架
+一个最小的Ember应用程序
+一个最小可能性的Ember应用程序可以像下面描述的这样：
+var App = Ember.Application.create();
+
+App.ApplicationView = Ember.View.extend({
+
+  templ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Ember.js(一):一个最基本的Ember应用程序"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">Ember.js(一):一个最基本的Ember应用程序</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <pre><code>一个构建野心勃勃的web应用框架</code></pre>
+<h1>一个最小的Ember应用程序</h1>
+<p>一个最小可能性的Ember应用程序可以像下面描述的这样：</p>
+<pre><code>var App = <span class="transposed_variable">Ember.</span><span class="transposed_variable">Application.</span>create();
+
+<span class="transposed_variable">App.</span>ApplicationView = <span class="transposed_variable">Ember.</span><span class="transposed_variable">View.</span>extend(<span class="cell">{
+
+  templateName: <span class="string">'application'</span>
+
+}</span>);
+
+<span class="transposed_variable">App.</span>ApplicationController = <span class="transposed_variable">Ember.</span><span class="transposed_variable">Controller.</span>extend();
+
+
+<span class="transposed_variable">App.</span>Router = <span class="transposed_variable">Ember.</span><span class="transposed_variable">Router.</span>extend(<span class="cell">{
+
+  root: Ember.Route.extend({
+
+    index: Ember.Route.extend({
+
+      route: <span class="string">'/'</span>
+
+    }</span>)
+
+  })
+
+});
+
+<span class="transposed_variable">App.</span>initialize();</code></pre>
+<p>现在介绍该应用程序的每一部分</p>
+<pre><code>App = Ember<span class="preprocessor">.Application</span><span class="preprocessor">.create</span>()<span class="comment">;</span></code></pre>
+<p>这句话创建了一个新的Ember.Application的实例，这里完成了两件重要的事情</p>
+<ul>
+<li><p>为你的应用程序提供了一个统一的命名空间</p>
+</li>
+<li><p>创建了一个对用户时间的监听器和事件代理控制器</p>
+</li>
+</ul>
+<pre><code><span class="transposed_variable">App.</span>ApplicationView = <span class="transposed_variable">Ember.</span><span class="transposed_variable">View.</span>extend(<span class="cell">{
+
+  templateName: <span class="string">'application'</span>
+
+}</span>);</code></pre>
+<p>在Ember中视图主要负责：</p>
+<ul>
+<li>决定应用程序的每一部分如何在HTML中进行渲染</li>
+<li>响应用户事件委托</li>
+</ul>
+<p>在视图之上我们只能通过改变视图模版来改变页面结构。</p>
+<p>你的应用程序必须包含一个ApplicationView的属性，这个类将会为你创建一个视图并插入插入到视图结构中并作为根视图。</p>
+<pre><code>App<span class="preprocessor">.ApplicationController</span> = Ember<span class="preprocessor">.Controller</span><span class="preprocessor">.extend</span>()<span class="comment">;</span></code></pre>
+<p>每一个视图都关联了一个上下文环境，这个上下文环境就是Handlebars模板引擎获取关联属性的对象，所以如果你的模版像下面这种结构：</p>
+<pre><code>
+</code></pre>
+<p>并且这个模版的上下文环境包含一个name的属性，那么这个模版将为显示这个值，如果没有则什么都不会显示。</p>
+<p>一个单独的ApplicationController实例创建时将会自动关联到ApplicationView的上下文环境中。这里有一个简单并且明显的问题是。你的应用程序必须包含一个ApplicationController属性，否则应用程序的根视图将会无法关联上下文并且 Ember将会显示的抛出响应的异常信息</p>
+<pre><code>App<span class="preprocessor">.Router</span> = Ember<span class="preprocessor">.Router</span><span class="preprocessor">.extend</span>({
+
+  root: Ember<span class="preprocessor">.Route</span><span class="preprocessor">.extend</span>({
+
+    index: Ember<span class="preprocessor">.Route</span><span class="preprocessor">.extend</span>({
+
+      route: <span class="string">'/'</span>
+
+    })
+
+  })
+
+})<span class="comment">;</span></code></pre>
+<p>Ember的Router与你平时所使用的其它JavaScript类库的’router’标签的行为有着显著的区别，Ember的Router的子类有一个更加一般的目标StateManager。大多数浏览器的路由实现知识简单的模仿与服务器端技术。但是HTTP协议是一个特殊的无状态的协议栈，服务器端的路由技术缺少了一个重要的特定：如何将浏览器中的应用程序变成有状态的。</p>
+<p>状态是作为Ember应用程序的一个核心功能模块。当然属性和视图的双向绑定与自动更新时十分便利的，但是如果这就是Ember的全部的话，它只会成为严肃和健壮开发中的一小部分。</p>
+<pre><code><span class="attribute">root</span>: <span class="string">Ember.Route.extend({</span>
+
+<span class="http">    <span class="attribute">index</span>: <span class="string">Ember.Route.extend({</span>
+
+<span class="http">      <span class="attribute">route</span>: <span class="string">'/'</span>
+
+<span class="undefined">    })
+
+  })</span></span></span></code></pre>
+<p>你的router至少必须包含两个路由。首先，root作为所有子路由的容器。你可以把它作为一个路由的路径设置，而不是路由本身。Index的名字可以使任何值，它的关键是它必须包含一个值为’/’的route属性。当应用程序开始加载的时候Ember会自动搜索它的路由并获取一个与url想匹配的路由。如果你从url’/’进入应用程序，你的路由将会自动装换到该状态。</p>
+<pre><code>App<span class="preprocessor">.initialize</span>()<span class="comment">;</span></code></pre>
+<p>最后调用initialize,你的应用程序将会启动路由处理程序，并根据配置创建基本的结构，并且插入ApplicationView到页面中</p>
+<p>本文翻译至：<a href="http://trek.github.com/。为了避免由于蹩脚英语对大家造成误导，还是强烈建议学习原版文章，本文尽作为个人笔记" target="_blank">http://trek.github.com/。为了避免由于蹩脚英语对大家造成误导，还是强烈建议学习原版文章，本文尽作为个人笔记</a></p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

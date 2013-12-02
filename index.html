@@ -1,0 +1,571 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2013/12/02/writing-with-md/">使用markdown写作</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2>我为什么使用Markdown</h2>
+<ul>
+<li>跨平台</li>
+</ul>
+<p>首先我觉得使用Markdown编写文档语法更简洁，而且由于本身是文本文件，所以在任何平台都能找到一个适合的工具，甚至最简单的文本编辑器就可以了。特别是对程序猿来说，经常需要在各种环境下工作,所以跨平台性显得尤为重要。</p>
+<ul>
+<li>良好的版本控制</li>
+</ul>
+<p>其次也是由于是简单文本的缘故所以，具有更好的版本控制性，可以使用<strong>git diff</strong>进行版本对比，当然doc和pdf想做到这点基本上除了不停更新文档编号外别无他法。</p>
+<h2>让编写Markdown更有趣</h2>
+<h3>1, OmniMarkupPreviewer</h3>
+<p>这款插件的作者就在我旁边位子，技术大牛。直接甩掉Markdown Preview好几条大街，提供了多种格式文档的实时编辑预览功能。 具体详情，请移步<a href="https://github.com/timonwong/OmniMarkupPreviewer/blob/master/README.md" target="_blank">README.md</a></p>
+<p>在编写md是的快捷键</p>
+<p><strong>Windows, Linux:</strong></p>
+<ul>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>O</kbd>: Preview Markup in Browser.</li>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>: Export Markup as HTML.</li>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd>: Copy Markup as HTML.</li>
+</ul>
+<p><strong>OSX:</strong></p>
+<ul>
+<li><kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>O</kbd>: Preview Markup in Browser.</li>
+<li><kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>X</kbd>: Export Markup as HTML.</li>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd>: Copy Markup as HTML.</li>
+</ul>
+<h3>2, 万能的pandoc</h3>
+<blockquote>
+<p>Pandoc是一个用于从一种标记格式转换为另一种的Haskell库，是把文件从一种标记语言格式转换到另一种格式的瑞士军刀。 </p>
+</blockquote>
+<p>关于pandoc有多麽牛B这件事，请参考官网上的那个图片<a href="http://johnmacfarlane.net/pandoc/" target="_blank">官网地址</a></p>
+<p>安装过程就直接忽略不计了</p>
+<p>下面是几个使用示例</p>
+<ul>
+<li>将md转换为doc文件</li>
+</ul>
+<pre><code><span class="comment">pandoc</span> <span class="literal">-</span><span class="comment">s</span> <span class="literal">-</span><span class="comment">S</span> <span class="comment">doc</span>.<span class="comment">md</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">doc</span>.<span class="comment">docx</code></pre>
+<ul>
+<li>将md转换为pdf文件</li>
+</ul>
+<pre><code><span class="comment">pandoc</span> <span class="literal">-</span><span class="comment">s</span> <span class="literal">-</span><span class="comment">S</span> <span class="comment">doc</span>.<span class="comment">md</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">doc</span>.<span class="comment">pdf</code></pre>
+<h2>markdown基础语法</h2>
+<h3>1, 重点短语</h3>
+<p><code>*斜体*  _斜体_</code></p>
+<p><em>斜体</em></p>
+<p><code>**加粗**  __加粗__</code> </p>
+<p><strong>加粗</strong> </p>
+<p><code>***混合***  ___混合___</code>  </p>
+<p><strong><em>混合</em></strong></p>
+<h3>2, 链接</h3>
+<p>段内链接: </p>
+<p><code>[示例](http://google.com  &quot;链接标题&quot;)</code> </p>
+<p>参考式</p>
+<pre><code class="lang-[example][id]```">
+`<span class="javascript"></span>``<span class="javascript">[id]: http:<span class="comment">//google.com  "Link Title"</span></span></code></pre>
+<h3>3, 图片</h3>
+<p>段内:</p>
+<p><code>![alt text](http://www.google.com/images/nav_logo6.png &quot;Title&quot;)</code></p>
+<p>引用:</p>
+<p><code>![alt text][id]</code></p>
+<p><code>[id]: http://www.google.com/images/nav_logo6.png &quot;Title&quot;</code></p>
+<h3>4, 标题</h3>
+<p>Setext风格:</p>
+<pre><code>标题一
+<span class="header">====================</span></code></pre>
+<pre><code><span class="comment">标题二</span>
+<span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span></code></pre>
+<p>Atx风格:</p>
+<pre><code><span class="preprocessor"># 标题一</span>
+<span class="preprocessor">### 标题三</span>
+<span class="preprocessor">###### 标题六</span></code></pre>
+<h3>5, 列表:</h3>
+<h4>有序列表:</h4>
+<ul>
+<li>有序列表 序号.空格 </li>
+</ul>
+<pre><code><span class="number">1.</span> Ordered <span class="type">list</span> <span class="property">item</span>
+<span class="number">2.</span> Ordered <span class="type">list</span> <span class="property">item</span>
+<span class="number">3.</span> Ordered <span class="type">list</span> <span class="property">item</span></code></pre>
+<h4>无序列表:</h4>
+<p>三种等价的无序列表</p>
+<pre><code>- Dashed <span class="type">list</span> <span class="property">item</span>
+- Dashed <span class="type">list</span> <span class="property">item</span>
+- Dashed <span class="type">list</span> <span class="property">item</span></code></pre>
+<pre><code>+ Plus <span class="type">list</span> <span class="property">item</span>
++ Plus <span class="type">list</span> <span class="property">item</span>
++ Plus <span class="type">list</span> <span class="property">item</span></code></pre>
+<pre><code>* Bulleted <span class="type">list</span> <span class="property">item</span>
+* Bulleted <span class="type">list</span> <span class="property">item</span>
+* Bulleted <span class="type">list</span> <span class="property">item</span></code></pre>
+<h3>6, 引用文字</h3>
+<pre><code><span class="blockquote">&gt; Email-style angle brackets</span>
+<span class="blockquote">&gt; are used for blockquotes.</span>
+<span class="blockquote">&gt;   
+&gt;&gt; And, they can be nested.</span>
+<span class="blockquote">&gt;
+&gt; ## Headers in blockquotes</span>
+<span class="blockquote">&gt; 
+&gt; * You can quote a list.</span>
+<span class="blockquote">&gt; * Etc.</span></code></pre>
+<h3>7, 代码段</h3>
+<p>在文章中使用代码段使用<code>code</code>标记</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">helloword</span><span class="params">()</span>{</span>
+   <span class="transposed_variable">console.</span><span class="built_in">log</span>(<span class="string">'hello'</span>); 
+}</code></pre>
+<h3>8, 分割符</h3>
+<p>markdown有三种符号表示换行符</p>
+<p>语法</p>
+<pre><code><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>
+
+<span class="comment">*</span> <span class="comment">*</span> <span class="comment">*</span>
+
+<span class="literal">-</span> <span class="literal">-</span> <span class="literal">-</span> <span class="literal">-</span></code></pre>
+<h3>9, 手动换行</h3>
+<p>手动换行使用1个以上回车</p>
+<h2>结束</h2>
+<p>最近我还在ipad上找了一款免费的markdown <strong>writedown lite</strong>写作工具，基本可以随时随地的写文章而不受时间限制.</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/12/02/writing-with-md/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2013/12/02/writing-with-md/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2013/11/26/cool-vagrant/">Vargant一个属于程序员的虚拟机</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Vargant一个属于程序猿的虚拟机。</p>
+<p><img src="/vagrant/vagrant.png" alt=""></p>
+<p>“这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”，</p>
+<p>“我这儿都能运行，肯定是你机器的问题”。</p>
+<p>在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题<br>Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫BOX的东西来进行分发，下面主要记录一些Vagrant的基本使用方式和方法</p>
+<h2>安装Vargant</h2>
+<p><a href="http://hc-vagrant-files.s3.amazonaws.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi" target="_blank">下载地址</a></p>
+<h2>初始化工作目录</h2>
+<pre><code>
+<span class="title">cd</span> WORKSPACE</code></pre>
+<pre><code>
+va<span class="operator"><span class="keyword">grant</span> init</code></pre>
+<p><img src="/vagrant/03.png" alt=""></p>
+<p>完成初始化后将在工作目录创建Vagrantfile文件</p>
+<h2>BOXES</h2>
+<ul>
+<li>添加BOX <strong>vargant box add</strong></li>
+</ul>
+<pre><code>vagrant box <span class="keyword">add</span> precise32  http://files<span class="preprocessor">.vagrantup</span><span class="preprocessor">.com</span>/precise32<span class="preprocessor">.box</span></code></pre>
+<p><img src="/vagrant/04.png" alt=""></p>
+<ul>
+<li>使用BOX</li>
+</ul>
+<p>查看Vagrant文件如下，Vagrant默认使用名为base的BOX</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"base"</span>
+
+<span class="keyword">end</span></code></pre>
+<p>修改<strong>config.vm.box</strong>,让vagrant使用新添加的BOX</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"precise32"</span>
+
+<span class="keyword">end</span></code></pre>
+<h2>启动和SSH登录</h2>
+<ul>
+<li>启动Vargant</li>
+</ul>
+<pre><code>va<span class="operator"><span class="keyword">grant</span> up</code></pre>
+<p><img src="vagrant/05.png" alt=""></p>
+<ul>
+<li>SSH登录Vagrant虚拟机</li>
+</ul>
+<pre><code><span class="title">vargant</span> ssh</code></pre>
+<p>windows下直接使用cmd会报错如下</p>
+<p><img src="/vagrant/06.png" alt=""></p>
+<p>如果windows本机安装了git客户端，可以在git-bash中使用<strong>vagrant ssh</strong>,也可以使用Putty等SSH客户端,链接地址如下</p>
+<pre><code><span class="attribute">Host</span>: <span class="string">127.0.0.1</span>
+<span class="attribute">Port</span>: <span class="string">2222</span>
+<span class="attribute">Username</span>: <span class="string">vagrant</span></code></pre>
+<ul>
+<li>文件同步</li>
+</ul>
+<p>默认情况下虚拟机 /vagrant目录下则自动同步了当前工作区下的所有内容</p>
+<h2>自动化部署</h2>
+<p>vagrant内置对自动化部署的支持，使用该特性可以在<strong>vagrant up</strong>时自动安装所需要的软件</p>
+<ul>
+<li>安装软件</li>
+</ul>
+<p>在<strong>WORKSPACE</strong>目录下新建<strong>bootstrap.sh</strong>文件</p>
+<pre><code><span class="preprocessor">#/usr/bin/env bash</span>
+
+apt-<span class="keyword">get</span> update
+apt-<span class="keyword">get</span> install vim</code></pre>
+<p>修改<strong>WORKSPACE/Vagrantfile</strong>文件</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"precise32"</span>
+    config<span class="variable">.vm</span><span class="variable">.provision</span> :shell, :path =&gt; <span class="string">"bootstrap.sh"</span>
+
+<span class="keyword">end</span></code></pre>
+<p>该配置让Vagrant知道在虚拟机启动时，运行<strong>bootstrap.sh</strong>文件<br>文件路径<strong>$WORKSPACE</strong>目录的相对路径</p>
+<h2>网络</h2>
+<ul>
+<li>端口转发</li>
+</ul>
+<p>使用该特性， 可以将虚拟机的端口映射到主机的特定端口上。 </p>
+<p>使用该特性需要修改<strong>WORKSPACE/Vagrantfile</strong>文件</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"precise32"</span>
+    config<span class="variable">.vm</span><span class="variable">.provision</span> :shell, :path =&gt; <span class="string">"bootstrap.sh"</span>
+    config<span class="variable">.vm</span><span class="variable">.network</span> :forwarded_port, guest: <span class="number">80</span>, host: <span class="number">8080</span>
+
+<span class="keyword">end</span></code></pre>
+<p>修改文件后重新启动<strong>Vagrant</strong> 重新启动虚拟机</p>
+<p><img src="/vagrant/07.png" alt=""></p>
+<p>如图所示对本机8080端口的请求都将转发到虚拟机的80端口</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/11/26/cool-vagrant/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2013/11/26/cool-vagrant/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2013/11/21/talk-about-mvc/">谈谈关于前端的MVC</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>记得最早说前端的MVC时，在大学里面教我们HTML老师是这样解释的， 在很早以前制作网页时充斥则诸如dreamware的网页制作（非开发）工具， 大部分的网页中都混杂了大量的嵌套在标签中的样式， css的片段，以及各种javascript脚本的片段。 所以在学校期间时的前端mvc就是html负责数据的展示，关于样式的控制全都交给css来处理，而页面中的逻辑处理，都交给javascript来完成。 这应该算是最早的关于前端的mvc的解释了。不过其实那个时候大部分web系统的逻辑处理还是交给服务器端程序来处理的。</p>
+<p> 再过了一段时间，SOA的概念慢慢盛行起来webservice,restful各种关于这些服务的开发框架如apache cxf慢慢入侵到曾经股如磐石的SSH解决方案当中，而随之而来的就是大量的逻辑代码都转移到了前端开发者的手中，记得那个是否领导是这样说的，用SOA的东西，我们可以只做一个后端服务，而客户端的形式可以随着需求不断的改变，不管是浏览器还是移动端都可以得到支持，当然这到现在也是算正确的。</p>
+<p>  而真正接触前端MVC是一年前看的那本叫做<a href="http://book.douban.com/subject/10733304/" target="_blank">《基于MVC的JavaScript Web富应用开发》</a>的书，那时候才发现原来前端开发还可以这样结构化和层次化，当然那个时候也已经有了诸如Backbone和Ember的解决方案，而那时候由于公司也刚成立不久，研发工作还处在极其混乱的过程中，像我这样的年轻程序员和老一辈的程序员在一起工作，由于我自己的开发习惯更加注重前端和用户体验的东西所以开发系统时如上面说的喜欢把后端做的更接口化，而大量工作是放在前端来做的，而稍大的程序员则更喜欢诸如SSH式的解决方案，也更习惯把前端的逻辑控制放在JSP中，所以那时候有一段时间大家都在讨论如何让公司的研发工作更加统一一点，无论是以java为主的后端开发，还是js系的前端开发。 当然java企业级开发的解决方案特别多，无论是自己搭建还是找一套现成的解决方案都是比较容易的， 但是前端开发要找到一个合适的解决方案就不是那么容易的一件事情，可能每一个做web软件开发的人都会写那么点js代码，甚至完全不动javascript的人也能比较轻松的通过在网上copy实现一段js功能，但是由于大量逻辑工作转移到前端，而每个人的前端开发水平有参差不齐，所以每个人写出来的代码基本都只有他自己能看懂。 也就是说一个项目有10个人做前端开发，就有10种完全不同的编码方式， 可以预见随着系统越来越复杂和庞大的情况下，在不久的将来系统将变得越来越不可维护。当然这种情况都是发生在这样的初创公司里， 所以为了能解决这种问题那时候就开始对前端MVC框架有了一些接触，而那个时候是选择的ember.js作为解决方案。 不幸的是由于那个时候大部分做前端开发的都是即做后端也做前端的人， 而ember.js的开发方式又显的过于超前了一点，所以做了一段预研后，公司并没有使用这一解决方案， 而是稍微规范了前端开发的编码风格。</p>
+<p>  不过也是由于上面的原因，我开始重新审视过去所做的前端开发工作。</p>
+<ul>
+<li>代码臃肿</li>
+<li>缺乏可测试性</li>
+<li>协同开发能力弱</li>
+<li>可维护性极差</li>
+<li>由于jquery导致的大量事件绑定与回调</li>
+<li>业务逻辑与dom操作混杂….</li>
+</ul>
+<p>  所以一句话就感觉就像是一陀狗屎一样。</p>
+<p>  如果是ember.js算是对前端mvc的一次初识，那么Backbone.js算是第一次的实践，这两个前端MVC框架中Backbone感觉更轻量级一点，而且由于和jquery的搭配使用所以更容易上手一点。两个框架都可以通过浏览器的hash实现路由功能，也可以使用html5的pushstate来实现，不过需要后端配合。 两个框架都使用前端模板引擎来绑定视图和数据，不过在这方面感觉ember.js的能力更加牛B一点，它是双向的数据绑定，Backbone则需要自己实现对model的监听来更新视图。例如如下的这种形式的代码片段一样，完整代码<a href="https://github.com/yunlzheng/backbone-sample/blob/master/static/js/views/todos.js" target="_blank">在这</a></p>
+<pre><code>    initialize: <span class="keyword">function</span>() {
+      <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'change'</span>, <span class="keyword">this</span>.render);
+      <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'destroy'</span>, <span class="keyword">this</span>.remove);        <span class="comment">// NEW</span>
+      <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'visible'</span>, <span class="keyword">this</span>.toggleVisible); <span class="comment">// NEW</span>
+    }</code></pre>
+<p>在模板引擎方面两个框架分别使用了第三方的前端模板系统Handlebars和Underscor。其它的如model层两个框架都做了对浏览器本地存储和rest接口的适配。总的来说两个框架大部分东西都大同小异。</p>
+<p>这里我说说我觉得这两个前端MVC框架带来的一些好处， 代码层次更加清晰，协同开发性更好， 代码更加面向对象，当然可维护性也得到的很大的提高， 统一了每一个开发人员的编码风格等等， 但是却并没有解决所有的问题，如可测试性，依然不是很高， 部分代码中依然会混杂部分的dom操作。 不好的方面则在于在一些小的功能块显的有点大才小用了， 反而增加了一些复杂度， 所以说前端的MVC框架也并不是万能的解决方案， 更适合那些CRUD的系统实现同时后端应该是rest风格的接口设计。</p>
+<p>上面部分算是对之前学习Ember和Backbone的一些总结，在学习这两个框架的过程中，学到了许多新的是思想</p>
+<p>下面要说的主题，我们先来看一个例子:</p>
+<iframe width="100%" height="300" src="http://jsfiddle.net/yunlzheng/8N64v/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+<p>这个例子实现了一个简单的购物车。 查看实际运行效果我们大概可以得出一下几个结论：</p>
+<ul>
+<li>模块化命名空间，依赖关系组织</li>
+<li>自动的数据双向绑定， 这该较少多少代码量</li>
+<li>业务逻辑完全不包含dom操作，意味着可测试行</li>
+<li>非侵入的事件绑定</li>
+<li>UI区分与Controller的职责划分</li>
+<li>代码量更少了，因为只关注了业务逻辑</li>
+</ul>
+<p>这就是来自Google的前端JS框架Angular，当然今天写这边博客时，我也只算是对Angular有一个初步的认识， 但是当第一次看到它时，我就深深的被它这种简洁性吸引，同时它的核心特性如：MVC，模块化，依赖注入， 自动化双向数据绑定， 语义化标签等特性都显的那么个性鲜明。 用别人的一句话：编写web的应用的过程应该更像是创作，Angular就给了我这样的感觉。</p>
+<p>而且最重要的一种感觉就像是开篇文章所说的老师在上课时教我们的那样，在“制作网页”中html负责数据展示，CSS控制页面的样式， 而javascript则实现页面的逻辑。 当然现在的网页制作有了一个更专业的名字叫前端开发。 从最初的mvc概念到后面的Ember和Backbone，再到Angular给我的感觉就像是一种 从简单到复杂再到简单的一个过程 </p>
+<p>这篇文章算是对我Angular深入学习的一份开篇</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/11/21/talk-about-mvc/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2013/11/21/talk-about-mvc/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2013/11/19/begin-hexo/">迁移到Hexo</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>话说我本身并不是一个十分勤奋的人，博客也是偶尔热血沸腾的时候写写，想想以前在大学的时候第一次看到别人用wordpress，那时感到无比的神奇与羡慕，所以一直依赖我都想拥有一个自己的独立博客，但是碍于囊中羞涩，独立域名那些什么的都没考虑了，而且一直没发现一个又帅有苦的域名（冷）。</p>
+<p>之前写博客陆陆续续的在oschina上，oschina上唯一让我感觉比较爽的是，如果你的文章稍微有点内容就很容易能上推荐页。所以偶尔也能带来一些其他的满足感，但是它的页面设计真心不敢恭维，最终坚持了几个月以后还是就荒废了。</p>
+<p>后面又发现了tumblr本来对我来说是一个足够理想和强大的博客落户地，它有非常牛B的自定义能力，而且文章编辑同时支持富文本和markdown,所以花了好一段时间去捣鼓tumblr的自定义。就像是找到了一个新奇的玩具一样。可以。。 唯有感叹墙内墙外。</p>
+<p>最近，大概一周前吧，在v2ex上论坛上有看到一篇关于静态博客搭建求助的帖子，大部分人都是提的jelly之类的，但是不大感冒。最后有人提到hexo,顺藤摸瓜算是对hexo有个初识，好吧。我感觉有时候我真的就像个孩子一样。 每次发现一个新奇好玩的玩具就会开始不断的捣鼓，博客也好，技术也好。看了hexo wiki里的几个主题，一个个都看了，都没什么感觉于是乎又自己捣鼓了一个新的主题，不过鉴于时间原因就直接在hexo默认主题上做了一些修改，并且让它跟本土化（china），在默认的disus的基础上添加了多说评论的支持。 总的来说自己感觉效果还不错吧，把默认主题里的 wiget什么的都是砍掉了，毕竟我只需要一个足够简单的能让我写东西的地方就行了。 唯一让我困扰的是hexo的图片处理问题， 虽说直接将图片放在source下是可以的，但是我怕将来会不会出现source下全是图片组织过于难看的尴尬境地，如果自己人工组织图片又显得太麻烦了。<a href="http://weibotuchuang.sinaapp.com" target="_blank">微博图床</a>算是一个解决方案，但是也担心图片的丢失问题。这个问题算是唯一觉得hexo做的不太好的地方。</p>
+<p>最后，感觉还是应该鼓励一下自己一定要坚持更新博客，后面会陆陆续续把以前写的东西都搬到github上.</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/11/19/begin-hexo/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2013/11/19/begin-hexo/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+<nav id="pagination">
+  
+  
+    <a href="/page/2/" class="alignright next">下一页</a>
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

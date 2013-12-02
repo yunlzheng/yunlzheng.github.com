@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用markdown写作 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="我为什么使用Markdown
+
+跨平台
+
+首先我觉得使用Markdown编写文档语法更简洁，而且由于本身是文本文件，所以在任何平台都能找到一个适合的工具，甚至最简单的文本编辑器就可以了。特别是对程序猿来说，经常需要在各种环境下工作,所以跨平台性显得尤为重要。
+
+良好的版本控制
+
+其次也是由于是简单文">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="使用markdown写作"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">使用markdown写作</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2>我为什么使用Markdown</h2>
+<ul>
+<li>跨平台</li>
+</ul>
+<p>首先我觉得使用Markdown编写文档语法更简洁，而且由于本身是文本文件，所以在任何平台都能找到一个适合的工具，甚至最简单的文本编辑器就可以了。特别是对程序猿来说，经常需要在各种环境下工作,所以跨平台性显得尤为重要。</p>
+<ul>
+<li>良好的版本控制</li>
+</ul>
+<p>其次也是由于是简单文本的缘故所以，具有更好的版本控制性，可以使用<strong>git diff</strong>进行版本对比，当然doc和pdf想做到这点基本上除了不停更新文档编号外别无他法。</p>
+<h2>让编写Markdown更有趣</h2>
+<h3>1, OmniMarkupPreviewer</h3>
+<p>这款插件的作者就在我旁边位子，技术大牛。直接甩掉Markdown Preview好几条大街，提供了多种格式文档的实时编辑预览功能。 具体详情，请移步<a href="https://github.com/timonwong/OmniMarkupPreviewer/blob/master/README.md" target="_blank">README.md</a></p>
+<p>在编写md是的快捷键</p>
+<p><strong>Windows, Linux:</strong></p>
+<ul>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>O</kbd>: Preview Markup in Browser.</li>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>X</kbd>: Export Markup as HTML.</li>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd>: Copy Markup as HTML.</li>
+</ul>
+<p><strong>OSX:</strong></p>
+<ul>
+<li><kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>O</kbd>: Preview Markup in Browser.</li>
+<li><kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>X</kbd>: Export Markup as HTML.</li>
+<li><kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd>: Copy Markup as HTML.</li>
+</ul>
+<h3>2, 万能的pandoc</h3>
+<blockquote>
+<p>Pandoc是一个用于从一种标记格式转换为另一种的Haskell库，是把文件从一种标记语言格式转换到另一种格式的瑞士军刀。 </p>
+</blockquote>
+<p>关于pandoc有多麽牛B这件事，请参考官网上的那个图片<a href="http://johnmacfarlane.net/pandoc/" target="_blank">官网地址</a></p>
+<p>安装过程就直接忽略不计了</p>
+<p>下面是几个使用示例</p>
+<ul>
+<li>将md转换为doc文件</li>
+</ul>
+<pre><code><span class="comment">pandoc</span> <span class="literal">-</span><span class="comment">s</span> <span class="literal">-</span><span class="comment">S</span> <span class="comment">doc</span>.<span class="comment">md</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">doc</span>.<span class="comment">docx</code></pre>
+<ul>
+<li>将md转换为pdf文件</li>
+</ul>
+<pre><code><span class="comment">pandoc</span> <span class="literal">-</span><span class="comment">s</span> <span class="literal">-</span><span class="comment">S</span> <span class="comment">doc</span>.<span class="comment">md</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">doc</span>.<span class="comment">pdf</code></pre>
+<h2>markdown基础语法</h2>
+<h3>1, 重点短语</h3>
+<p><code>*斜体*  _斜体_</code></p>
+<p><em>斜体</em></p>
+<p><code>**加粗**  __加粗__</code> </p>
+<p><strong>加粗</strong> </p>
+<p><code>***混合***  ___混合___</code>  </p>
+<p><strong><em>混合</em></strong></p>
+<h3>2, 链接</h3>
+<p>段内链接: </p>
+<p><code>[示例](http://google.com  &quot;链接标题&quot;)</code> </p>
+<p>参考式</p>
+<pre><code class="lang-[example][id]```">
+`<span class="javascript"></span>``<span class="javascript">[id]: http:<span class="comment">//google.com  "Link Title"</span></span></code></pre>
+<h3>3, 图片</h3>
+<p>段内:</p>
+<p><code>![alt text](http://www.google.com/images/nav_logo6.png &quot;Title&quot;)</code></p>
+<p>引用:</p>
+<p><code>![alt text][id]</code></p>
+<p><code>[id]: http://www.google.com/images/nav_logo6.png &quot;Title&quot;</code></p>
+<h3>4, 标题</h3>
+<p>Setext风格:</p>
+<pre><code>标题一
+<span class="header">====================</span></code></pre>
+<pre><code><span class="comment">标题二</span>
+<span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span></code></pre>
+<p>Atx风格:</p>
+<pre><code><span class="preprocessor"># 标题一</span>
+<span class="preprocessor">### 标题三</span>
+<span class="preprocessor">###### 标题六</span></code></pre>
+<h3>5, 列表:</h3>
+<h4>有序列表:</h4>
+<ul>
+<li>有序列表 序号.空格 </li>
+</ul>
+<pre><code><span class="number">1.</span> Ordered <span class="type">list</span> <span class="property">item</span>
+<span class="number">2.</span> Ordered <span class="type">list</span> <span class="property">item</span>
+<span class="number">3.</span> Ordered <span class="type">list</span> <span class="property">item</span></code></pre>
+<h4>无序列表:</h4>
+<p>三种等价的无序列表</p>
+<pre><code>- Dashed <span class="type">list</span> <span class="property">item</span>
+- Dashed <span class="type">list</span> <span class="property">item</span>
+- Dashed <span class="type">list</span> <span class="property">item</span></code></pre>
+<pre><code>+ Plus <span class="type">list</span> <span class="property">item</span>
++ Plus <span class="type">list</span> <span class="property">item</span>
++ Plus <span class="type">list</span> <span class="property">item</span></code></pre>
+<pre><code>* Bulleted <span class="type">list</span> <span class="property">item</span>
+* Bulleted <span class="type">list</span> <span class="property">item</span>
+* Bulleted <span class="type">list</span> <span class="property">item</span></code></pre>
+<h3>6, 引用文字</h3>
+<pre><code><span class="blockquote">&gt; Email-style angle brackets</span>
+<span class="blockquote">&gt; are used for blockquotes.</span>
+<span class="blockquote">&gt;   
+&gt;&gt; And, they can be nested.</span>
+<span class="blockquote">&gt;
+&gt; ## Headers in blockquotes</span>
+<span class="blockquote">&gt; 
+&gt; * You can quote a list.</span>
+<span class="blockquote">&gt; * Etc.</span></code></pre>
+<h3>7, 代码段</h3>
+<p>在文章中使用代码段使用<code>code</code>标记</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">helloword</span><span class="params">()</span>{</span>
+   <span class="transposed_variable">console.</span><span class="built_in">log</span>(<span class="string">'hello'</span>); 
+}</code></pre>
+<h3>8, 分割符</h3>
+<p>markdown有三种符号表示换行符</p>
+<p>语法</p>
+<pre><code><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>
+
+<span class="comment">*</span> <span class="comment">*</span> <span class="comment">*</span>
+
+<span class="literal">-</span> <span class="literal">-</span> <span class="literal">-</span> <span class="literal">-</span></code></pre>
+<h3>9, 手动换行</h3>
+<p>手动换行使用1个以上回车</p>
+<h2>结束</h2>
+<p>最近我还在ipad上找了一款免费的markdown <strong>writedown lite</strong>写作工具，基本可以随时随地的写文章而不受时间限制.</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

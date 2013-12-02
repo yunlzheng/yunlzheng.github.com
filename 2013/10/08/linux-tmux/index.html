@@ -1,0 +1,295 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tmux Linux会话管理神器 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="邂逅Tmux
+   今天突然觉得每天背着自己的笔记本去公司上班是件活受罪不讨好的事情，于是还是决定在公司的Windows机器上重新弄一套开发环境，关于会话管理的东西之前有听领导介绍但却一直没有机会尝试一下，刚好今天又闲着没什么事情做，就尝试了一下Tmux
+初体验
+ “高端大气上档次,低调奢华有内涵”">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Tmux Linux会话管理神器"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">Tmux Linux会话管理神器</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2>邂逅Tmux</h2>
+<p>   今天突然觉得每天背着自己的笔记本去公司上班是件活受罪不讨好的事情，于是还是决定在公司的Windows机器上重新弄一套开发环境，关于会话管理的东西之前有听领导介绍但却一直没有机会尝试一下，刚好今天又闲着没什么事情做，就尝试了一下Tmux</p>
+<h2>初体验</h2>
+<p> “高端大气上档次,低调奢华有内涵”，估计只有这话能形容一下使用的感受。会话管理那套东西就不多少说了，大家都懂。 给我感觉最牛B的还是它的多面板控制</p>
+<p><img src="http://media.tumblr.com/a134acdee31402e4d91b147397e6ae21/tumblr_inline_mucqivJE881sosno0.png" alt=""></p>
+<h2>安装</h2>
+<ul>
+<li>环境Ubuntu 12.04</li>
+</ul>
+<pre><code class="lang-bash">sudo apt-get install tmux</code></pre>
+<h2>需要知道的概念</h2>
+<ul>
+<li>server    服务器。输入tmux命令时就开启了一个服务器。</li>
+<li>session   会话。一个服务器可以包含多个会话。</li>
+<li>window    窗口。一个会话可以包含多个窗口。</li>
+<li>pane  面板。一个窗口可以包含多个面板。</li>
+</ul>
+<h2>一些实用常用的命令</h2>
+<h3>基本命令</h3>
+<ul>
+<li>开启一个新的会话</li>
+</ul>
+<pre><code class="lang-bash">tmux</code></pre>
+<ul>
+<li>显示当前系统的所有会话</li>
+</ul>
+<pre><code class="lang-bash">tmux ls</code></pre>
+<p><img src="http://media.tumblr.com/ac9589bb921c65c0af88aae420012470/tumblr_inline_mucr4n5eWw1sosno0.png" alt=""></p>
+<ul>
+<li>重新链接到特定会话</li>
+</ul>
+<pre><code class="lang-bash">tmux attach -t &lt;会话编号&gt;</code></pre>
+<p><img src="http://media.tumblr.com/f3cfb99e5105aa5398a6f1f518d3072d/tumblr_inline_mucrc8Yakl1sosno0.png" alt=""></p>
+<h3>控制台命令</h3>
+<p>进入tmux后使用 ctrl+b 进入tmux控制台</p>
+<h4>系统操作</h4>
+<ul>
+<li>？ 列出所有快捷键；按q返回</li>
+<li>d 脱离当前会话；这样可以暂时返回Shell界面，输入tmux attach能够重新进入之前的会话</li>
+<li>ctrl+z 挂起当前会话</li>
+<li>: 进入命令行模式；此时可以输入支持的命令，例如kill-server可以关闭服务器</li>
+</ul>
+<h4>面板操作</h4>
+<ul>
+<li>% 将当前面板平分为左右两块</li>
+</ul>
+<p><img src="http://media.tumblr.com/b71f6d2f90c2a40b8d05cc1ca52e2f2d/tumblr_inline_mucrhc05gU1sosno0.png" alt=""></p>
+<ul>
+<li>“ 将当前面板平分为上下两块</li>
+</ul>
+<p><img src="http://media.tumblr.com/c527cce15b93d562f501b34574ac5765/tumblr_inline_mucre7xHJb1sosno0.png" alt=""></p>
+<ul>
+<li>x 关闭当前面板</li>
+</ul>
+<p><img src="http://media.tumblr.com/1d0eb920858a50863f2551b7adbdf859/tumblr_inline_mucribO2iM1sosno0.png" alt=""></p>
+<ul>
+<li>ctrl+方向键 以1个单元格为单位移动边缘以调整当前面板大小</li>
+<li>o 在当前窗口中选择下一面板</li>
+<li>方向键 移动光标以选择面板</li>
+<li>{ / } 向前/后置换当前面板 </li>
+</ul>
+<h2>更多的东西还需要你自己去试试！</h2>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 3 页 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2013/03/26/linux-bind9/">Ubuntu Bind9泛域名解析配置</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1>Bind9简介</h1>
+<p>BIND (Berkeley Internet Name Domain)是Domain Name System (DNS) 协议的一个实现，提供了DNS主要功能的开放实现，包括</p>
+<p>域名服务器 (named)<br>DNS解析库函数<br>DNS服务器运行调试所用的工具<br>是一款开放源码的DNS服务器软件，由美国加州大学Berkeley分校开发和维护的，</p>
+<p>按照ISC的调查报告，BIND是世界上使用最多最广泛的域名服务系统。不论你的邮件服务器，WEB服务器或者其他的services如何的安全可靠，DNS的故障会给你带来用户根本无法访问这些服务。</p>
+<p>BIND，也是我们常说的named，由于多数网络应用程序使用其功能，所以在很多BIND的弱点及时被发现。主要分为三个版本：</p>
+<h2>v4</h2>
+<p>1998年多数UNIX捆绑的是BIND4，已经被多数厂商抛弃了，除了OpenBSD还在使用。OpenBSD核心人为BIND8过于复杂和不安全，所以继续使用BIND4。这样一来BIND8/9的很多优点都不包括在v4中。</p>
+<h2>v8</h2>
+<p>就是如今使用最多最广的版本。</p>
+<h2>v9</h2>
+<p>最新版本的BIND，全部重新写过，免费（但是由商业公司资助），也添加了许多新的功能（但是安全上也可能有更多的问题）。BIND9在2000年十月份推出，现在稳定版本是9.3.2。</p>
+<p>————————————————————-废话的分割线———————————————————————-</p>
+<p>————————————————————-主题的开始————————————————————————-</p>
+<h1>安装bind9</h1>
+<pre><code>su<span class="operator"><span class="keyword">do</span> apt-<span class="keyword">get</span> install bind9 bind9-doc dnsutils</code></pre>
+<p>bind9将默认安装在/etc/bind/目录下</p>
+<h2>rndc授权</h2>
+<p>修改/etc/bind/named.conf.options,在未授权的情况下，将会出现</p>
+<p>错误信息：rndc: connect failed: 127.0.0.1#953: connection</p>
+<pre><code>su<span class="operator"><span class="keyword">do</span> vim /etc/bind/named.conf.options</code></pre>
+<p>添加文件内容与/etc/bind/rndc.key相同<br>例如rnfc.key的文件内容为：</p>
+<pre><code>key <span class="string">"rndc-key"</span> {
+        algorithm hmac-md5<span class="comment">;</span>
+        secret <span class="string">"vfmD0+yvxhgW0wa8FQ54EQ=="</span><span class="comment">;</span>
+}<span class="comment">;</span></code></pre>
+<p>则在named.conf.options 中添加一下内容</p>
+<pre><code>key <span class="string">"rndc-key"</span> {
+        algorithm hmac-md5<span class="comment">;</span>
+        secret <span class="string">"vfmD0+yvxhgW0wa8FQ54EQ=="</span><span class="comment">;</span>
+}<span class="comment">;</span>
+
+controls {
+        inet <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> port <span class="number">953</span>
+                allow { <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="comment">; } keys { "rndc-key"; };</span>
+}<span class="comment">;</span></code></pre>
+<p>到此为止Bind9的基本安装配置就算完成了。<br>接下来是如何配置域名解析的问题</p>
+<h2>添加本地区域文件</h2>
+<p>创建文件 /etc/bind/zones.zheng</p>
+<pre><code><span class="title">zone</span> <span class="string">"zheng.dev"</span>  { <span class="typedef"><span class="keyword">type</span> master; file "/etc/bind/db.zheng.dev"; };</span></code></pre>
+<p>这里master表示DNS为主服务器<br>file则是只想该域的具体配置文件</p>
+<p>创建文件/etc/bind/db.zheng.dev</p>
+<p>添加一下内容</p>
+<pre><code>$TTL    <span class="number">86400</span>
+@   <span class="keyword">IN</span>  SOA localhost. root<span class="preprocessor">.localhost</span>. (
+                  <span class="number">1</span>     <span class="comment">; Serial</span>
+             <span class="number">604800</span>     <span class="comment">; Refresh</span>
+              <span class="number">86400</span>     <span class="comment">; Retry</span>
+            <span class="number">2419200</span>     <span class="comment">; Expire</span>
+              <span class="number">86400</span> )   <span class="comment">; Negative Cache TTL</span>
+<span class="comment">;</span>
+@   <span class="keyword">IN</span>  NS  localhost.
+*<span class="preprocessor">.zheng</span><span class="preprocessor">.dev</span>.    <span class="keyword">IN</span> A    <span class="number">192.168</span><span class="number">.146</span><span class="number">.129</span></code></pre>
+<p>注意这里的 域名后缀也必须是与本地域配置文件中定义的zone相同。 *.zheng.dev. 表示匹配所有的以zheng.dev结尾的访问请求，这些请求都将会转发到192.168.146.129这台服务器。</p>
+<h2>重启bind9</h2>
+<pre><code>su<span class="operator"><span class="keyword">do</span> /etc/init.d/bind9 restart</code></pre>
+<p>这样一个最基本的基于bind9的泛域名配置即可完成</p>
+<p>————————————————————-再次废话的分割线——————————————————————-</p>
+<p>感觉已经好久没写博客了。不负责任的讲是工作太多没时间，自己偷懒</p>
+<p>马上就到毕业设计了，毕业设计没完，老是觉得有道坎。老是有种只有毕业设计搞完，自己才可以毫无负担的凭爱好学习各种东西。悲催的是之前工作确实太忙了。还有差不多只有一个月的时间来准备毕业设计。 而我却基本才开始整理架构设计。</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2013/03/26/linux-bind9/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2013/03/26/linux-bind9/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2012/12/23/ember-begin/">Ember.js(一):一个最基本的Ember应用程序</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <pre><code>一个构建野心勃勃的web应用框架</code></pre>
+<h1>一个最小的Ember应用程序</h1>
+<p>一个最小可能性的Ember应用程序可以像下面描述的这样：</p>
+<pre><code>var App = <span class="transposed_variable">Ember.</span><span class="transposed_variable">Application.</span>create();
+
+<span class="transposed_variable">App.</span>ApplicationView = <span class="transposed_variable">Ember.</span><span class="transposed_variable">View.</span>extend(<span class="cell">{
+
+  templateName: <span class="string">'application'</span>
+
+}</span>);
+
+<span class="transposed_variable">App.</span>ApplicationController = <span class="transposed_variable">Ember.</span><span class="transposed_variable">Controller.</span>extend();
+
+
+<span class="transposed_variable">App.</span>Router = <span class="transposed_variable">Ember.</span><span class="transposed_variable">Router.</span>extend(<span class="cell">{
+
+  root: Ember.Route.extend({
+
+    index: Ember.Route.extend({
+
+      route: <span class="string">'/'</span>
+
+    }</span>)
+
+  })
+
+});
+
+<span class="transposed_variable">App.</span>initialize();</code></pre>
+<p>现在介绍该应用程序的每一部分</p>
+<pre><code>App = Ember<span class="preprocessor">.Application</span><span class="preprocessor">.create</span>()<span class="comment">;</span></code></pre>
+<p>这句话创建了一个新的Ember.Application的实例，这里完成了两件重要的事情</p>
+<ul>
+<li><p>为你的应用程序提供了一个统一的命名空间</p>
+</li>
+<li><p>创建了一个对用户时间的监听器和事件代理控制器</p>
+</li>
+</ul>
+<pre><code><span class="transposed_variable">App.</span>ApplicationView = <span class="transposed_variable">Ember.</span><span class="transposed_variable">View.</span>extend(<span class="cell">{
+
+  templateName: <span class="string">'application'</span>
+
+}</span>);</code></pre>
+<p>在Ember中视图主要负责：</p>
+<ul>
+<li>决定应用程序的每一部分如何在HTML中进行渲染</li>
+<li>响应用户事件委托</li>
+</ul>
+<p>在视图之上我们只能通过改变视图模版来改变页面结构。</p>
+<p>你的应用程序必须包含一个ApplicationView的属性，这个类将会为你创建一个视图并插入插入到视图结构中并作为根视图。</p>
+<pre><code>App<span class="preprocessor">.ApplicationController</span> = Ember<span class="preprocessor">.Controller</span><span class="preprocessor">.extend</span>()<span class="comment">;</span></code></pre>
+<p>每一个视图都关联了一个上下文环境，这个上下文环境就是Handlebars模板引擎获取关联属性的对象，所以如果你的模版像下面这种结构：</p>
+<pre><code>
+</code></pre>
+<p>并且这个模版的上下文环境包含一个name的属性，那么这个模版将为显示这个值，如果没有则什么都不会显示。</p>
+<p>一个单独的ApplicationController实例创建时将会自动关联到ApplicationView的上下文环境中。这里有一个简单并且明显的问题是。你的应用程序必须包含一个ApplicationController属性，否则应用程序的根视图将会无法关联上下文并且 Ember将会显示的抛出响应的异常信息</p>
+<pre><code>App<span class="preprocessor">.Router</span> = Ember<span class="preprocessor">.Router</span><span class="preprocessor">.extend</span>({
+
+  root: Ember<span class="preprocessor">.Route</span><span class="preprocessor">.extend</span>({
+
+    index: Ember<span class="preprocessor">.Route</span><span class="preprocessor">.extend</span>({
+
+      route: <span class="string">'/'</span>
+
+    })
+
+  })
+
+})<span class="comment">;</span></code></pre>
+<p>Ember的Router与你平时所使用的其它JavaScript类库的’router’标签的行为有着显著的区别，Ember的Router的子类有一个更加一般的目标StateManager。大多数浏览器的路由实现知识简单的模仿与服务器端技术。但是HTTP协议是一个特殊的无状态的协议栈，服务器端的路由技术缺少了一个重要的特定：如何将浏览器中的应用程序变成有状态的。</p>
+<p>状态是作为Ember应用程序的一个核心功能模块。当然属性和视图的双向绑定与自动更新时十分便利的，但是如果这就是Ember的全部的话，它只会成为严肃和健壮开发中的一小部分。</p>
+<pre><code><span class="attribute">root</span>: <span class="string">Ember.Route.extend({</span>
+
+<span class="http">    <span class="attribute">index</span>: <span class="string">Ember.Route.extend({</span>
+
+<span class="http">      <span class="attribute">route</span>: <span class="string">'/'</span>
+
+<span class="undefined">    })
+
+  })</span></span></span></code></pre>
+<p>你的router至少必须包含两个路由。首先，root作为所有子路由的容器。你可以把它作为一个路由的路径设置，而不是路由本身。Index的名字可以使任何值，它的关键是它必须包含一个值为’/’的route属性。当应用程序开始加载的时候Ember会自动搜索它的路由并获取一个与url想匹配的路由。如果你从url’/’进入应用程序，你的路由将会自动装换到该状态。</p>
+<pre><code>App<span class="preprocessor">.initialize</span>()<span class="comment">;</span></code></pre>
+<p>最后调用initialize,你的应用程序将会启动路由处理程序，并根据配置创建基本的结构，并且插入ApplicationView到页面中</p>
+<p>本文翻译至：<a href="http://trek.github.com/。为了避免由于蹩脚英语对大家造成误导，还是强烈建议学习原版文章，本文尽作为个人笔记" target="_blank">http://trek.github.com/。为了避免由于蹩脚英语对大家造成误导，还是强烈建议学习原版文章，本文尽作为个人笔记</a></p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/12/23/ember-begin/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2012/12/23/ember-begin/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2012/10/08/tomcat7-cgi-awstats/">Tomcat7 开启CGI，并配置awstats日志监控</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <pre><code>  原文最初写与我的<span class="link_label">[OSCHINA博客]</span>(<span class="link_url">http://my.oschina.net/fhck/blog/85773</span>)</code></pre>
+<h1>搭建环境</h1>
+<p>Apache Tomcat 7.x<br>JDK 1.6+<br>Perl 5.2+<br>Ubuntu</p>
+<p>1，下载<a href="http://www.fayea.com/apache-mirror/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.tar.gz" target="_blank">Tomcat</a>并解压到特定目录</p>
+<p>2,修改<Tomcat_HOME>\conf\web.xml配置文件，取消cgi servlet和对应的mapping注释</p>
+<pre><code><span class="tag">&lt;<span class="title">servlet</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">servlet-name</span>&gt;</span>cgi<span class="tag">&lt;/<span class="title">servlet-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">servlet-class</span>&gt;</span>org.apache.catalina.servlets.CGIServlet<span class="tag">&lt;/<span class="title">servlet-class</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>debug<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>0<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>cgiPathPrefix<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>WEB-INF/cgi<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>passShellEnvironment<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">load-on-startup</span>&gt;</span>5<span class="tag">&lt;/<span class="title">load-on-startup</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">servlet</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">servlet-mapping</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">servlet-name</span>&gt;</span>cgi<span class="tag">&lt;/<span class="title">servlet-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/cgi-bin/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">servlet-mapping</span>&gt;</span></code></pre>
+<p>3，修改<Tomcat_HOME>\conf\context.xml配置文件，在Context上添加privileged属性</p>
+<pre><code><span class="tag">&lt;<span class="title">Context</span> <span class="attribute">privileged</span>=<span class="value">"true"</span>&gt;</span>
+<span class="comment">&lt;!--其他部分--&gt;</span>
+<span class="tag">&lt;/<span class="title">Context</span>&gt;</span></code></pre>
+<p>4，安装Perl，window<a href="http://strawberry-perl.googlecode.com/files/strawberry-perl-5.16.1.1-32bit.msi" target="_blank">点击下载</a></p>
+<p>5，测试，在<Tomcat_HOME>\webapps\ROOT\WEB-INF\cgi\下创建cgi脚本文件test1.cgi</p>
+<pre><code><span class="title">print</span> <span class="string">"Content-type: text/html\n\n"</span>;
+<span class="title">print</span> <span class="string">"Hello, world!\n"</span></code></pre>
+<p>6，启动Tomcat,并访问URL:<a href="http:localhost:8080/cgi-bin/test1.cgi">http:localhost:8080/cgi-bin/test1.cgi</a></p>
+<p>7,下载awstats日志分析工具,并解压到特定目录</p>
+<p>8，在<Tomcat_HOME>/webapps/下创建awstats目录以及相应的WEB-INF目录</p>
+<p>9，将<AWSTATS_HOME>/wwwroot/目录下css/,icon/,js/目录拷贝到<Tomcat_HOME>/webapps/awstats/目录下</p>
+<p>10,将<AWSTAS_HOME>/wwwroot/cgi-bin/下的所有文件拷贝到<TOMCAT_HOME>/webapps/awstats/WEB-INF/cgi目录下</p>
+<p>11，重命名<Tomcat_HOME>/webapps/awstats/cgi/awstats.model.conf 为awstats.localhost.conf</p>
+<pre><code><span class="xml"></span><span class="comment">#对应日志文件所在位置</span><span class="xml">
+LogFile="/home/test/server/apache-tomcat-</span><span class="number">7.0</span><span class="xml"></span><span class="number">.29</span><span class="xml">/logs/localhost_access_log.%yyyy-%mm-%dd.txt"
+</span><span class="comment">#站点域名</span><span class="xml">
+SiteDomain="localhost"
+</span><span class="comment">#图标所在目录</span><span class="xml">
+DirIcons="../icon"
+</span><span class="comment">#国际化所使用的语言，默认为"auto"</span><span class="xml">
+Lang="cn"
+</span><span class="comment">#国际化文件所在目录</span><span class="xml">
+DirLang="./lang"
+</span><span class="comment">#在生成页面头部所要加入的HTML</span><span class="xml">
+HTMLHeadSection="<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"header"</span>&gt;</span>Head Example<span class="tag">&lt;/<span class="title">div</span>&gt;</span>"
+</span><span class="comment">#在生成页面尾部索要加入的HTML</span><span class="xml">
+HTMLEndSection="<span class="tag">&lt;<span class="title">div</span> <span class="attribute">align</span>=<span class="value">'right'</span>&gt;</span>@company<span class="tag">&lt;/<span class="title">div</span>&gt;</span>"
+</span><span class="comment">#生成页面所使用的样式表，awstas提供了默认的样式表，可通过该项目自定义awstats样式</span><span class="xml">
+StyleSheet="../css/awstats_default.css"</span></code></pre>
+<p>12,修改<TOMCAT_HOME>/conf/server.xml</p>
+<pre><code><span class="tag">&lt;<span class="title">Service</span> <span class="attribute">name</span>=<span class="value">"Catalina"</span>&gt;</span> 
+  <span class="tag">&lt;<span class="title">Host</span> <span class="attribute">name</span>=<span class="value">"localhost"</span>  <span class="attribute">appBase</span>=<span class="value">"webapps"</span> <span class="attribute">unpackWARs</span>=<span class="value">"true"</span> <span class="attribute">autoDeploy</span>=<span class="value">"true"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">Valve</span> <span class="attribute">className</span>=<span class="value">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attribute">directory</span>=<span class="value">"logs"</span>
+               <span class="attribute">prefix</span>=<span class="value">"localhost_access_log."</span> <span class="attribute">suffix</span>=<span class="value">".txt"</span>
+               <span class="attribute">pattern</span>=<span class="value">"combined"</span> <span class="attribute">fileDateFormat</span>=<span class="value">"yyyy-MM-dd"</span> <span class="attribute">resolveHosts</span>=<span class="value">"false"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">Host</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">Service</span>&gt;</span></code></pre>
+<p>13，运行脚本 </p>
+<pre><code><span class="comment">awstats</span>.<span class="comment">pl</span> <span class="literal">-</span><span class="comment">config=localhost</span> <span class="literal">-</span><span class="comment">update</code></pre>
+<p>14,访问URL查看生成的日志页面：<a href="http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost" target="_blank"><a href="http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost">http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost</a></a></p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/10/08/tomcat7-cgi-awstats/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2012/10/08/tomcat7-cgi-awstats/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title"><a href="/2012/09/06/javascript-property-learn/">JavaScript学习笔记-原型继承</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <pre><code>  原文最初写与我的<span class="link_label">[OSCHINA博客]</span>(<span class="link_url">http://my.oschina.net/fhck/blog/77091</span>)</code></pre>
+<p>JavaScript基于原型的编程语言，本身并不包含内置的类实现。但是可以通过Javascript模拟出类</p>
+<h1>类</h1>
+<p>JavaScript中有构造函数和New运算符。构造函数用来实例对象和初始化属性。任何JavaScript函数都可以用作构造函数，构造函数必须使用new运算符作为前缀来创建新的实例</p>
+<p>JavaScript要模拟一个类可以直接使用函数function</p>
+<pre><code>
+<span class="keyword">var</span> Person = <span class="keyword">function</span>(name){
+   <span class="keyword">this</span>.name = name;
+}
+
+<span class="comment">//实例化Person</span>
+<span class="keyword">var</span> alice = <span class="keyword">new</span> Person(<span class="string">'alice'</span>);
+console.log(alice.name);</code></pre>
+<p>这里需要注意的this关键字， new运算符会改变函数的执行上下文，同时改变return的行为。当使用new运算符来调用构造函数时，执行上下文this从全局对象编程一个空的上下文，这个上下文代表新生成的实例。因此this指向当前创建的实例。</p>
+<p>所以一下代码执行会出现undefined</p>
+<pre><code>var bob = Person(<span class="string">'bob'</span>);
+<span class="transposed_variable">console.</span><span class="built_in">log</span>(<span class="transposed_variable">bob.</span>name);</code></pre>
+<h1>原型</h1>
+<p>JavaScript本身是基于原型的编程语言，原型的作用:区别类和实例</p>
+<pre><code><span class="keyword">var</span> Animal = <span class="keyword">function</span>(){}
+
+Animal.run = <span class="keyword">function</span>(){
+    console.log(<span class="string">'Animal run'</span>)
+}
+
+Animal.prototype.breath = <span class="keyword">function</span>(){
+   console.log(<span class="string">'animal breath'</span>);
+}
+
+Var Dog = <span class="keyword">function</span>(){}
+
+<span class="comment">//Dog继承自Animal</span>
+Dog.prototype = <span class="keyword">new</span> Animal();
+
+Dog.prototype.wag = <span class="keyword">function</span>(){
+   console.log(<span class="string">'dog wag'</span>);
+}
+
+<span class="keyword">var</span> dog = <span class="keyword">new</span> Dog();
+dog.wag();
+dog.breath();<span class="comment">//继承的属性</span></code></pre>
+<p>输出：</p>
+<pre><code><span class="title">dog</span> wag
+<span class="title">animal</span> breath</code></pre>
+<p>那么通过类的prototype定义的方法或者属性就可以叫做所有实例的方法或属性，而其他的方法和属性就是类本身的方法和属性类比java类中的静态变量</p>
+<p>这里对下面一些东西的叫法约定一下</p>
+<p>通常按照个人习惯</p>
+<p>构造函数/匿名函数</p>
+<pre><code><span class="keyword">var</span> Person = <span class="keyword">function</span>(name){
+  <span class="keyword">this</span>.name=name;
+}</code></pre>
+<p>函数/类</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">Person</span><span class="params">()</span><span class="comment">{}</span>
+对象/实例
+
+<span class="title">var</span> <span class="title">person</span> = <span class="comment">{ name:'zhangsan',sex:'male'}</span></code></pre>
+<h1>原型继承继承是的什么？</h1>
+<p>还是上面关于Animal和Dog的例子，我们做一些改造</p>
+<pre><code><span class="keyword">var</span>  animal = {
+        breath:<span class="keyword">function</span>(){console.log(<span class="string">'animal breath!'</span>)},
+};
+
+<span class="keyword">var</span> Dog = <span class="keyword">function</span>(){}
+
+<span class="comment">//Dog继承自animal</span>
+Dog.prototype = animal;
+
+Dog.prototype.wag = <span class="keyword">function</span>(){
+   console.log(<span class="string">'dog wag'</span>);
+}
+
+<span class="keyword">var</span> dog = <span class="keyword">new</span> Dog();
+dog.wag();
+dog.breath();<span class="comment">//继承的属性</span></code></pre>
+<p>结果和上面的一样</p>
+<p>在一个例子中我们使用 Dog.prototype = new Animail;   这个例子中我们使用的是Dog.prototype = animal</p>
+<p>区别在于第一个例子中的Animal是一个匿名类，通过调用new运算符调用其构造函数返回了一个animal实例，而第二个例子中animal本身就已经是一个实例/对象。这就是之前提到的new运算符的作用。</p>
+<p>所以一个类的如果要继承另一个类那么就需要继承那个类的实例而不是类本身（Function），当然我们可以试一下直接使用Dog.prototype=Animal，结果就是当调用dog.breath();时直接返回的是一个Function对象，无法达到共享属性的意义。</p>
+<p>原型对象就是一个“模板”，定义在原型上的属性被用来初始化一个新的对象。任何对象都可以作为一个对象的原型对象，以此来共享属性。</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/2012/09/06/javascript-property-learn/#more" class="more-link">Read More</a>
+        </div>
+        
+        
+          <div class="alignleft"> 
+            <span class="ds-thread-count" data-thread-key="/2012/09/06/javascript-property-learn/">&nbsp;
+            </span>
+          </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+
+
+<nav id="pagination">
+  
+    <a href="/page/2/" class="alignleft prev">上一页</a>
+  
+  
+    <a href="/page/4/" class="alignright next">下一页</a>
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

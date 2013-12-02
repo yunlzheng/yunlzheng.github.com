@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Vargant一个属于程序员的虚拟机 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="Vargant一个属于程序猿的虚拟机。
+
+“这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”，
+“我这儿都能运行，肯定是你机器的问题”。
+在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题Vagrant是用Ruby开发的，对虚拟机操">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Vargant一个属于程序员的虚拟机"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">Vargant一个属于程序员的虚拟机</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Vargant一个属于程序猿的虚拟机。</p>
+<p><img src="/vagrant/vagrant.png" alt=""></p>
+<p>“这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”，</p>
+<p>“我这儿都能运行，肯定是你机器的问题”。</p>
+<p>在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题<br>Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫BOX的东西来进行分发，下面主要记录一些Vagrant的基本使用方式和方法</p>
+<h2>安装Vargant</h2>
+<p><a href="http://hc-vagrant-files.s3.amazonaws.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi" target="_blank">下载地址</a></p>
+<h2>初始化工作目录</h2>
+<pre><code>
+<span class="title">cd</span> WORKSPACE</code></pre>
+<pre><code>
+va<span class="operator"><span class="keyword">grant</span> init</code></pre>
+<p><img src="/vagrant/03.png" alt=""></p>
+<p>完成初始化后将在工作目录创建Vagrantfile文件</p>
+<h2>BOXES</h2>
+<ul>
+<li>添加BOX <strong>vargant box add</strong></li>
+</ul>
+<pre><code>vagrant box <span class="keyword">add</span> precise32  http://files<span class="preprocessor">.vagrantup</span><span class="preprocessor">.com</span>/precise32<span class="preprocessor">.box</span></code></pre>
+<p><img src="/vagrant/04.png" alt=""></p>
+<ul>
+<li>使用BOX</li>
+</ul>
+<p>查看Vagrant文件如下，Vagrant默认使用名为base的BOX</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"base"</span>
+
+<span class="keyword">end</span></code></pre>
+<p>修改<strong>config.vm.box</strong>,让vagrant使用新添加的BOX</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"precise32"</span>
+
+<span class="keyword">end</span></code></pre>
+<h2>启动和SSH登录</h2>
+<ul>
+<li>启动Vargant</li>
+</ul>
+<pre><code>va<span class="operator"><span class="keyword">grant</span> up</code></pre>
+<p><img src="vagrant/05.png" alt=""></p>
+<ul>
+<li>SSH登录Vagrant虚拟机</li>
+</ul>
+<pre><code><span class="title">vargant</span> ssh</code></pre>
+<p>windows下直接使用cmd会报错如下</p>
+<p><img src="/vagrant/06.png" alt=""></p>
+<p>如果windows本机安装了git客户端，可以在git-bash中使用<strong>vagrant ssh</strong>,也可以使用Putty等SSH客户端,链接地址如下</p>
+<pre><code><span class="attribute">Host</span>: <span class="string">127.0.0.1</span>
+<span class="attribute">Port</span>: <span class="string">2222</span>
+<span class="attribute">Username</span>: <span class="string">vagrant</span></code></pre>
+<ul>
+<li>文件同步</li>
+</ul>
+<p>默认情况下虚拟机 /vagrant目录下则自动同步了当前工作区下的所有内容</p>
+<h2>自动化部署</h2>
+<p>vagrant内置对自动化部署的支持，使用该特性可以在<strong>vagrant up</strong>时自动安装所需要的软件</p>
+<ul>
+<li>安装软件</li>
+</ul>
+<p>在<strong>WORKSPACE</strong>目录下新建<strong>bootstrap.sh</strong>文件</p>
+<pre><code><span class="preprocessor">#/usr/bin/env bash</span>
+
+apt-<span class="keyword">get</span> update
+apt-<span class="keyword">get</span> install vim</code></pre>
+<p>修改<strong>WORKSPACE/Vagrantfile</strong>文件</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"precise32"</span>
+    config<span class="variable">.vm</span><span class="variable">.provision</span> :shell, :path =&gt; <span class="string">"bootstrap.sh"</span>
+
+<span class="keyword">end</span></code></pre>
+<p>该配置让Vagrant知道在虚拟机启动时，运行<strong>bootstrap.sh</strong>文件<br>文件路径<strong>$WORKSPACE</strong>目录的相对路径</p>
+<h2>网络</h2>
+<ul>
+<li>端口转发</li>
+</ul>
+<p>使用该特性， 可以将虚拟机的端口映射到主机的特定端口上。 </p>
+<p>使用该特性需要修改<strong>WORKSPACE/Vagrantfile</strong>文件</p>
+<pre><code>Vagrant<span class="variable">.configure</span>(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|
+
+    config<span class="variable">.vm</span><span class="variable">.box</span> = <span class="string">"precise32"</span>
+    config<span class="variable">.vm</span><span class="variable">.provision</span> :shell, :path =&gt; <span class="string">"bootstrap.sh"</span>
+    config<span class="variable">.vm</span><span class="variable">.network</span> :forwarded_port, guest: <span class="number">80</span>, host: <span class="number">8080</span>
+
+<span class="keyword">end</span></code></pre>
+<p>修改文件后重新启动<strong>Vagrant</strong> 重新启动虚拟机</p>
+<p><img src="/vagrant/07.png" alt=""></p>
+<p>如图所示对本机8080端口的请求都将转发到虚拟机的80端口</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

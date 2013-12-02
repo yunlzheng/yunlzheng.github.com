@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tomcat7 开启CGI，并配置awstats日志监控 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="原文最初写与我的[OSCHINA博客](http://my.oschina.net/fhck/blog/85773)
+搭建环境
+Apache Tomcat 7.xJDK 1.6+Perl 5.2+Ubuntu
+1，下载Tomcat并解压到特定目录
+2,修改\conf\web.xml配置文件，取消cg">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Tomcat7 开启CGI，并配置awstats日志监控"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">Tomcat7 开启CGI，并配置awstats日志监控</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <pre><code>  原文最初写与我的<span class="link_label">[OSCHINA博客]</span>(<span class="link_url">http://my.oschina.net/fhck/blog/85773</span>)</code></pre>
+<h1>搭建环境</h1>
+<p>Apache Tomcat 7.x<br>JDK 1.6+<br>Perl 5.2+<br>Ubuntu</p>
+<p>1，下载<a href="http://www.fayea.com/apache-mirror/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.tar.gz" target="_blank">Tomcat</a>并解压到特定目录</p>
+<p>2,修改<Tomcat_HOME>\conf\web.xml配置文件，取消cgi servlet和对应的mapping注释</p>
+<pre><code><span class="tag">&lt;<span class="title">servlet</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">servlet-name</span>&gt;</span>cgi<span class="tag">&lt;/<span class="title">servlet-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">servlet-class</span>&gt;</span>org.apache.catalina.servlets.CGIServlet<span class="tag">&lt;/<span class="title">servlet-class</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>debug<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>0<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>cgiPathPrefix<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>WEB-INF/cgi<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-name</span>&gt;</span>passShellEnvironment<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">load-on-startup</span>&gt;</span>5<span class="tag">&lt;/<span class="title">load-on-startup</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">servlet</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">servlet-mapping</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">servlet-name</span>&gt;</span>cgi<span class="tag">&lt;/<span class="title">servlet-name</span>&gt;</span>
+ <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/cgi-bin/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">servlet-mapping</span>&gt;</span></code></pre>
+<p>3，修改<Tomcat_HOME>\conf\context.xml配置文件，在Context上添加privileged属性</p>
+<pre><code><span class="tag">&lt;<span class="title">Context</span> <span class="attribute">privileged</span>=<span class="value">"true"</span>&gt;</span>
+<span class="comment">&lt;!--其他部分--&gt;</span>
+<span class="tag">&lt;/<span class="title">Context</span>&gt;</span></code></pre>
+<p>4，安装Perl，window<a href="http://strawberry-perl.googlecode.com/files/strawberry-perl-5.16.1.1-32bit.msi" target="_blank">点击下载</a></p>
+<p>5，测试，在<Tomcat_HOME>\webapps\ROOT\WEB-INF\cgi\下创建cgi脚本文件test1.cgi</p>
+<pre><code><span class="title">print</span> <span class="string">"Content-type: text/html\n\n"</span>;
+<span class="title">print</span> <span class="string">"Hello, world!\n"</span></code></pre>
+<p>6，启动Tomcat,并访问URL:<a href="http:localhost:8080/cgi-bin/test1.cgi">http:localhost:8080/cgi-bin/test1.cgi</a></p>
+<p>7,下载awstats日志分析工具,并解压到特定目录</p>
+<p>8，在<Tomcat_HOME>/webapps/下创建awstats目录以及相应的WEB-INF目录</p>
+<p>9，将<AWSTATS_HOME>/wwwroot/目录下css/,icon/,js/目录拷贝到<Tomcat_HOME>/webapps/awstats/目录下</p>
+<p>10,将<AWSTAS_HOME>/wwwroot/cgi-bin/下的所有文件拷贝到<TOMCAT_HOME>/webapps/awstats/WEB-INF/cgi目录下</p>
+<p>11，重命名<Tomcat_HOME>/webapps/awstats/cgi/awstats.model.conf 为awstats.localhost.conf</p>
+<pre><code><span class="xml"></span><span class="comment">#对应日志文件所在位置</span><span class="xml">
+LogFile="/home/test/server/apache-tomcat-</span><span class="number">7.0</span><span class="xml"></span><span class="number">.29</span><span class="xml">/logs/localhost_access_log.%yyyy-%mm-%dd.txt"
+</span><span class="comment">#站点域名</span><span class="xml">
+SiteDomain="localhost"
+</span><span class="comment">#图标所在目录</span><span class="xml">
+DirIcons="../icon"
+</span><span class="comment">#国际化所使用的语言，默认为"auto"</span><span class="xml">
+Lang="cn"
+</span><span class="comment">#国际化文件所在目录</span><span class="xml">
+DirLang="./lang"
+</span><span class="comment">#在生成页面头部所要加入的HTML</span><span class="xml">
+HTMLHeadSection="<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"header"</span>&gt;</span>Head Example<span class="tag">&lt;/<span class="title">div</span>&gt;</span>"
+</span><span class="comment">#在生成页面尾部索要加入的HTML</span><span class="xml">
+HTMLEndSection="<span class="tag">&lt;<span class="title">div</span> <span class="attribute">align</span>=<span class="value">'right'</span>&gt;</span>@company<span class="tag">&lt;/<span class="title">div</span>&gt;</span>"
+</span><span class="comment">#生成页面所使用的样式表，awstas提供了默认的样式表，可通过该项目自定义awstats样式</span><span class="xml">
+StyleSheet="../css/awstats_default.css"</span></code></pre>
+<p>12,修改<TOMCAT_HOME>/conf/server.xml</p>
+<pre><code><span class="tag">&lt;<span class="title">Service</span> <span class="attribute">name</span>=<span class="value">"Catalina"</span>&gt;</span> 
+  <span class="tag">&lt;<span class="title">Host</span> <span class="attribute">name</span>=<span class="value">"localhost"</span>  <span class="attribute">appBase</span>=<span class="value">"webapps"</span> <span class="attribute">unpackWARs</span>=<span class="value">"true"</span> <span class="attribute">autoDeploy</span>=<span class="value">"true"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">Valve</span> <span class="attribute">className</span>=<span class="value">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attribute">directory</span>=<span class="value">"logs"</span>
+               <span class="attribute">prefix</span>=<span class="value">"localhost_access_log."</span> <span class="attribute">suffix</span>=<span class="value">".txt"</span>
+               <span class="attribute">pattern</span>=<span class="value">"combined"</span> <span class="attribute">fileDateFormat</span>=<span class="value">"yyyy-MM-dd"</span> <span class="attribute">resolveHosts</span>=<span class="value">"false"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">Host</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">Service</span>&gt;</span></code></pre>
+<p>13，运行脚本 </p>
+<pre><code><span class="comment">awstats</span>.<span class="comment">pl</span> <span class="literal">-</span><span class="comment">config=localhost</span> <span class="literal">-</span><span class="comment">update</code></pre>
+<p>14,访问URL查看生成的日志页面：<a href="http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost" target="_blank"><a href="http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost">http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost</a></a></p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

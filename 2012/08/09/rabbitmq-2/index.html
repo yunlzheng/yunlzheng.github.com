@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>RabbitMQ之消息发布订阅与信息持久化技术 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="信息发布与订阅
+Rabbit的核心组件包含Queue(消息队列)和Exchanges两部分，Exchange的主要部分就是对信息进行路由，通过将消息队列绑定到Exchange上，则可以实现订阅形式的消息发布及Publish/Subscribe在这种模式下消息发布者只需要将信息发布到相应的Exchan">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="RabbitMQ之消息发布订阅与信息持久化技术"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">RabbitMQ之消息发布订阅与信息持久化技术</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1>信息发布与订阅</h1>
+<p>Rabbit的核心组件包含Queue(消息队列)和Exchanges两部分，Exchange的主要部分就是对信息进行路由，通过将消息队列绑定到Exchange上，则可以实现订阅形式的消息发布及Publish/Subscribe在这种模式下消息发布者只需要将信息发布到相应的Exchange中，而Exchange则自动将信息分发到不同的Queue当中。</p>
+<p>这种模式下Exchange充当的角色</p>
+<p>在命令行中可以使用</p>
+<pre><code>su<span class="operator"><span class="keyword">do</span> rabbitmqctl list_exchanges</code></pre>
+<pre><code>su<span class="operator"><span class="keyword">do</span> rabbitmqctl list_bindings</code></pre>
+<p>分别查看当前系统种存在的Exchange和Exchange上绑定的Queue信息。</p>
+<p>消息发布者EmitLog.java</p>
+<pre><code>import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Channel</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Connection</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.ConnectionFactory</span><span class="comment">;</span>
+
+public class EmitLog {
+
+    private static final String  EXCHANGE_NAME=<span class="string">"logs"</span><span class="comment">;</span>
+
+    public static void main(String[] args) throws java<span class="preprocessor">.io</span><span class="preprocessor">.IOException</span>{
+
+        //创建链接工厂
+        ConnectionFactory factory = new ConnectionFactory()<span class="comment">;</span>
+        factory<span class="preprocessor">.setHost</span>(<span class="string">"localhost"</span>)<span class="comment">;</span>
+        //创建链接
+        Connection connection = factory<span class="preprocessor">.newConnection</span>()<span class="comment">;</span>
+
+        //创建信息管道
+        Channel channel = connection<span class="preprocessor">.createChannel</span>()<span class="comment">;</span>
+
+        //生命Exchange 非持久化
+        channel<span class="preprocessor">.exchangeDeclare</span>(EXCHANGE_NAME, <span class="string">"fanout"</span>)<span class="comment">;</span>
+
+        String message = <span class="string">"Message "</span>+Math<span class="preprocessor">.random</span>()<span class="comment">;</span>
+
+        //第一个参数是对应的Exchange名称,如果为空则使用默认Exchange
+        channel<span class="preprocessor">.basicPublish</span>(EXCHANGE_NAME, <span class="string">""</span>, null, message<span class="preprocessor">.getBytes</span>())<span class="comment">;</span>
+        System<span class="preprocessor">.out</span><span class="preprocessor">.println</span>(<span class="string">"[x] Sent '"</span>+message+<span class="string">"'"</span>)<span class="comment">;</span>
+
+        //关闭链接
+        channel<span class="preprocessor">.close</span>()<span class="comment">;</span>
+        connection<span class="preprocessor">.close</span>()<span class="comment">;</span>
+
+    }
+
+}</code></pre>
+<p>消息消费者ReceiveLogs.java</p>
+<pre><code>import java<span class="preprocessor">.io</span><span class="preprocessor">.IOException</span><span class="comment">;</span>
+
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Channel</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Connection</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.ConnectionFactory</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.ConsumerCancelledException</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.QueueingConsumer</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.ShutdownSignalException</span><span class="comment">;</span>
+
+public class ReceiveLogs {
+
+    private static final String EXCHANGE_NAME = <span class="string">"logs"</span><span class="comment">;</span>
+
+    public static void main(String[] args) throws IOException, ShutdownSignalException, ConsumerCancelledException, InterruptedException {
+
+        //创建链接工厂
+        ConnectionFactory factory = new ConnectionFactory()<span class="comment">;</span>
+        factory<span class="preprocessor">.setHost</span>(<span class="string">"localhost"</span>)<span class="comment">;</span>
+        //创建链接
+        Connection connection = factory<span class="preprocessor">.newConnection</span>()<span class="comment">;</span>
+
+        //创建消息管道
+        Channel channel = connection<span class="preprocessor">.createChannel</span>()<span class="comment">;</span>
+
+        //声明Exchange
+        channel<span class="preprocessor">.exchangeDeclare</span>(EXCHANGE_NAME, <span class="string">"fanout"</span>)<span class="comment">;</span>
+
+        //利用系统自动声明一个非持久化的消息队列，并返回唯一的队列名称
+        String queueName = channel<span class="preprocessor">.queueDeclare</span>()<span class="preprocessor">.getQueue</span>()<span class="comment">;</span>
+
+        //将消息队列绑定到Exchange
+        channel<span class="preprocessor">.queueBind</span>(queueName, EXCHANGE_NAME, <span class="string">""</span>)<span class="comment">;</span>
+
+        System<span class="preprocessor">.out</span><span class="preprocessor">.println</span>(<span class="string">" [*] Waiting for messages. To exit press CTRL+C"</span>)<span class="comment">;</span>
+
+        //声明一个消费者
+        QueueingConsumer consumer = new QueueingConsumer(channel)<span class="comment">;</span>
+        channel<span class="preprocessor">.basicConsume</span>(queueName, true, consumer)<span class="comment">;</span>
+
+        while (true) {
+
+            //循环获取信息
+            QueueingConsumer<span class="preprocessor">.Delivery</span> delivery = consumer<span class="preprocessor">.nextDelivery</span>()<span class="comment">;</span>
+            String message = new String(delivery<span class="preprocessor">.getBody</span>())<span class="comment">;</span>
+            System<span class="preprocessor">.out</span><span class="preprocessor">.println</span>(<span class="string">" [x] Received '"</span> + message + <span class="string">"'"</span>)<span class="comment">;</span>
+
+        }
+
+    }
+
+}</code></pre>
+<p> 运行时启动一个EmitLog.java多个ReceiveLogs.java则可以看到发布者每次发布信息，只要绑定到了相应Exchange的消费者都可以获取到信息。</p>
+<h2>RabbitMQ信息持久化技术</h2>
+<p>上面的例子中我们实现了Publisher/Subscribe的消息分发方式，但是其中存在一些问题。比如当我们运行一个ReceiveLog都对应了一个特定的消息队列，可以利用list_queues进行查看，同时这些消息队列是帮到到名为logs的Exchange中，这是发布消息每个消费者都可以接收到，可以当关闭ReceiveLog程序后这些消息队列就都会自动销毁，因为他们是非持久化的。同样对于EmitLog程序也一样，每次关闭后之前生命的Exchange也将自动销毁。</p>
+<p>这就产生了一些问题。如果当ReceiveLog为运行时，此时就并没有一个消息队列是绑定到Exchange上的，在发布消息后再启动ReceiveLog程序是无法接受到之前发布的信息。这就是为什么要进行消息的持久化。</p>
+<p>通过持久化技术，我们可以生命一个持久化的Exchange，以及持久化的Queue这样，在把Queue绑定到Exchange后，即使没有消费者程序运行，信息依然能保存在Queue当中，当下次启动消费者程序时依然能获取到发布的所有信息。就好比当一个消费者程序在执行消息序列中的任务时，如果突然出现了异常那么重新启动后，依然能从上一次发生错误的位置继续运行，对于某些需要一个有序性和连续性的操作，这点显的尤为重要。</p>
+<p>下面还是给出一个例子，在持久化过程中，可以借助list_exchanges,list_bindings,list_queues来查看服务器中相关信息来帮组分析过程。</p>
+<p>Publisher.java</p>
+<pre><code>import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Channel</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Connection</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.ConnectionFactory</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.MessageProperties</span><span class="comment">;</span>
+
+public class Publisher {
+
+    private static final String  EXCHANGE_NAME=<span class="string">"persi"</span><span class="comment">;//定义Exchange名称</span>
+    private static final boolean durable = true<span class="comment">;//消息队列持久化</span>
+
+    public static void main(String[] args) throws java<span class="preprocessor">.io</span><span class="preprocessor">.IOException</span> {
+
+        ConnectionFactory factory = new ConnectionFactory()<span class="comment">;//创建链接工厂</span>
+        factory<span class="preprocessor">.setHost</span>(<span class="string">"localhost"</span>)<span class="comment">;</span>
+        Connection connection = factory<span class="preprocessor">.newConnection</span>()<span class="comment">;//创建链接</span>
+        Channel channel = connection<span class="preprocessor">.createChannel</span>()<span class="comment">;//创建信息通道</span>
+
+        channel<span class="preprocessor">.exchangeDeclare</span>(EXCHANGE_NAME, <span class="string">"fanout"</span>, durable)<span class="comment">;//创建交换机并生命持久化</span>
+
+        String message = <span class="string">"Hello Wrold "</span>+Math<span class="preprocessor">.random</span>()<span class="comment">;</span>
+                //消息的持久化
+        channel<span class="preprocessor">.basicPublish</span>(EXCHANGE_NAME, <span class="string">""</span>, MessageProperties<span class="preprocessor">.PERSISTENT</span>_TEXT_PLAIN, message<span class="preprocessor">.getBytes</span>())<span class="comment">;</span>
+
+        System<span class="preprocessor">.out</span><span class="preprocessor">.println</span>(<span class="string">"[x] Sent '"</span> + message + <span class="string">"'"</span>)<span class="comment">;</span>
+
+        channel<span class="preprocessor">.close</span>()<span class="comment">;</span>
+        connection<span class="preprocessor">.close</span>()<span class="comment">;</span>
+
+    }
+
+}</code></pre>
+<p>Subscriber.java</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Subscriber</span> {</span>
+
+
+    <span class="comment">//private static final String[] QUEUE_NAMES= {"que_001","que_002","que_003","que_004","que_005"};</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] QUEUE_NAMES= {<span class="string">"que_006"</span>,<span class="string">"que_007"</span>,<span class="string">"que_008"</span>,<span class="string">"que_009"</span>,<span class="string">"que_0010"</span>};
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args){
+
+        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;QUEUE_NAMES.length;i++){
+
+            SubscriberThead sub = <span class="keyword">new</span> SubscriberThead(QUEUE_NAMES[i]);
+            Thread t = <span class="keyword">new</span> Thread(sub);
+            t.start();
+
+        }
+
+    }
+}</code></pre>
+<p>SubscriberThead.java</p>
+<pre><code>import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Channel</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.Connection</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.ConnectionFactory</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.QueueingConsumer</span><span class="comment">;</span>
+import <span class="keyword">com</span><span class="preprocessor">.rabbitmq</span><span class="preprocessor">.client</span><span class="preprocessor">.AMQP</span><span class="preprocessor">.Queue</span><span class="preprocessor">.DeclareOk</span><span class="comment">;</span>
+
+public class SubscriberThead implements Runnable {
+
+    private String queue_name = null<span class="comment">;</span>
+    private static final String EXCHANGE_NAME = <span class="string">"persi"</span><span class="comment">;// 定义交换机名称</span>
+    private static final boolean durable = true<span class="comment">;//消息队列持久化</span>
+
+    public SubscriberThead(String queue_name) {
+
+        this<span class="preprocessor">.queue</span>_name = queue_name<span class="comment">;</span>
+
+    }
+
+    @Override
+    public void run() {
+
+        try{
+
+        ConnectionFactory factory = new ConnectionFactory()<span class="comment">;</span>
+        factory<span class="preprocessor">.setHost</span>(<span class="string">"localhost"</span>)<span class="comment">;</span>
+        Connection connection = factory<span class="preprocessor">.newConnection</span>()<span class="comment">;</span>
+        Channel channel = connection<span class="preprocessor">.createChannel</span>()<span class="comment">;</span>
+
+        channel<span class="preprocessor">.exchangeDeclare</span>(EXCHANGE_NAME, <span class="string">"fanout"</span>, durable)<span class="comment">;</span>
+
+        DeclareOk ok = channel<span class="preprocessor">.queueDeclare</span>(queue_name, durable, false,
+                false, null)<span class="comment">;</span>
+        String queueName = ok<span class="preprocessor">.getQueue</span>()<span class="comment">;</span>
+
+
+        channel<span class="preprocessor">.queueBind</span>(queueName, EXCHANGE_NAME, <span class="string">""</span>)<span class="comment">;</span>
+
+        System<span class="preprocessor">.out</span><span class="preprocessor">.println</span>(<span class="string">" ["</span>+queue_name+<span class="string">"] Waiting for messages. To exit press CTRL+C"</span>)<span class="comment">;</span>
+
+        channel<span class="preprocessor">.basicQos</span>(<span class="number">1</span>)<span class="comment">;//消息分发处理</span>
+        QueueingConsumer consumer = new QueueingConsumer(channel)<span class="comment">;</span>
+        channel<span class="preprocessor">.basicConsume</span>(queueName, false, consumer)<span class="comment">;</span>
+
+        while (true) {
+
+            Thread<span class="preprocessor">.sleep</span>(<span class="number">2000</span>)<span class="comment">;</span>
+            QueueingConsumer<span class="preprocessor">.Delivery</span> delivery = consumer<span class="preprocessor">.nextDelivery</span>()<span class="comment">;</span>
+            String message = new String(delivery<span class="preprocessor">.getBody</span>())<span class="comment">;</span>
+            System<span class="preprocessor">.out</span><span class="preprocessor">.println</span>(<span class="string">" ["</span>+queue_name+<span class="string">"] Received '"</span> + message + <span class="string">"'"</span>)<span class="comment">;</span>
+            channel<span class="preprocessor">.basicAck</span>(delivery<span class="preprocessor">.getEnvelope</span>()<span class="preprocessor">.getDeliveryTag</span>(), false)<span class="comment">;</span>
+
+        }
+        }catch(Exception e){
+
+            e<span class="preprocessor">.printStackTrace</span>()<span class="comment">;</span>
+        }
+
+
+    }
+
+}</code></pre>
+<p> 通过持久化处理后rabbitMQ将保存Exchange信息以及Queue信息，甚至在rabbitMQ服务器关闭后信息依然能保存，这样就提供了消息传递的可靠性</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

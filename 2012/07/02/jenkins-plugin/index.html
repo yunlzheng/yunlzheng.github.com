@@ -1,0 +1,488 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>jenkins插件开发 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="Jenkins插件开发简要介绍
+环境变量
+为了能开发插件，开发环境需安装Maven和JDK 6.0以上版本
+配置maven的settings.xml配置文件
+&lt;settings&gt;
+  &lt;pluginGroups&gt;
+    &lt;pluginGroup&gt;org.jenk">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="jenkins插件开发"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">jenkins插件开发</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1>Jenkins插件开发简要介绍</h1>
+<h2>环境变量</h2>
+<p>为了能开发插件，开发环境需安装Maven和JDK 6.0以上版本</p>
+<p>配置maven的settings.xml配置文件</p>
+<pre><code><span class="tag">&lt;<span class="title">settings</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">pluginGroups</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">pluginGroup</span>&gt;</span>org.jenkins-ci.tools<span class="tag">&lt;/<span class="title">pluginGroup</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">pluginGroups</span>&gt;</span>
+<span class="tag">&lt;<span class="title">profiles</span>&gt;</span>
+<span class="comment">&lt;!-- Give access to Jenkins plugins --&gt;</span>
+    <span class="tag">&lt;<span class="title">profile</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">id</span>&gt;</span>jenkins<span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">activation</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="title">activeByDefault</span>&gt;</span> <span class="comment">&lt;!-- change this to false, if you don't like to have it on per default --&gt;</span>
+      <span class="tag">&lt;/<span class="title">activation</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">repositories</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">repository</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="title">url</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">repository</span>&gt;</span>
+      <span class="tag">&lt;/<span class="title">repositories</span>&gt;</span>  
+      <span class="tag">&lt;<span class="title">pluginRepositories</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">pluginRepository</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="title">url</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">pluginRepository</span>&gt;</span>
+      <span class="tag">&lt;/<span class="title">pluginRepositories</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">profile</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">profiles</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">settings</span>&gt;</span></code></pre>
+<h2>创建新的插件</h2>
+<p>创建插件之前需运行以下Maven命令:</p>
+<pre><code>mvn -cpu hpi:<span class="operator"><span class="keyword">create</span></code></pre>
+<p>该操作需要你输入一些参数，比如说groupid,artifactid。之后会创建一个新的插件模板便于开发者之后的开发工作。确保你可以使用一下命令：</p>
+<pre><code><span class="title">cd</span> newly-create-directory 
+<span class="title">mvn</span> package</code></pre>
+<h2>设置Eclipse开发环境</h2>
+<pre><code><span class="title">mvn</span> -DdownloadSources=<span class="built_in">true</span> -DdownloadJavadocs=<span class="built_in">true</span> -DoutputDirectory=target/eclipse-classes eclipse:eclipse</code></pre>
+<p>或者 使用m2eclipse插件在Eclipse打开即可</p>
+<h2>插件目录结构</h2>
+<p>pom.xml：Maven的构建配置文件</p>
+<p>src/main/java：Java源文件目录</p>
+<p>src/main/resources：插件Jelly/Grovy视图</p>
+<p>src/main/webapps：插件的静态资源如images和html文件</p>
+<h2>插件调试</h2>
+<p>插件开发中在使用一下命令对插件进行调试</p>
+<p>Windows</p>
+<pre><code><span class="title">set</span> MAVEN_OPTS=-X<span class="built_in">debug</span> -Xrunjdwp:transport=dt_socket,server=y,address=<span class="number">8000</span>,suspend=n
+mvn hpi:run</code></pre>
+<p>Linux</p>
+<pre><code><span class="char">$ </span>export <span class="class">MAVEN_OPTS</span>=<span class="comment">"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n"</span>
+<span class="char">$ </span>mvn <span class="method">hpi:</span>run</code></pre>
+<p>改变端口</p>
+<pre><code><span class="title">mvn</span> hpi:run -Djetty.port=<span class="number">8090</span></code></pre>
+<p>设置comtext path</p>
+<pre><code><span class="title">mvn</span> hpi:run -Dhpi.prefix=/jenkins</code></pre>
+<p>插件发布</p>
+<pre><code><span class="title">mvn</span> package</code></pre>
+<h2>源码分析</h2>
+<pre><code><span class="keyword">import</span> hudson.Launcher;
+<span class="keyword">import</span> hudson.Extension;
+<span class="keyword">import</span> hudson.util.FormValidation;
+<span class="keyword">import</span> hudson.model.AbstractBuild;
+<span class="keyword">import</span> hudson.model.BuildListener;
+<span class="keyword">import</span> hudson.model.AbstractProject;
+<span class="keyword">import</span> hudson.tasks.Builder;
+<span class="keyword">import</span> hudson.tasks.BuildStepDescriptor;
+<span class="keyword">import</span> net.sf.json.JSONObject;
+<span class="keyword">import</span> org.kohsuke.stapler.DataBoundConstructor;
+<span class="keyword">import</span> org.kohsuke.stapler.StaplerRequest;
+<span class="keyword">import</span> org.kohsuke.stapler.QueryParameter;
+
+<span class="keyword">import</span> javax.servlet.ServletException;
+<span class="keyword">import</span> java.io.IOException;
+
+<span class="javadoc">/**
+ * Sample {<span class="javadoctag">@link</span> Builder}.
+ *
+ * &lt;p&gt;
+ * When the user configures the project and enables this builder,
+ * {<span class="javadoctag">@link</span> DescriptorImpl#newInstance(StaplerRequest)} is invoked
+ * and a new {<span class="javadoctag">@link</span> HelloWorldBuilder} is created. The created
+ * instance is persisted to the project configuration XML by using
+ * XStream, so this allows you to use instance fields (like {<span class="javadoctag">@link</span> #name})
+ * to remember the configuration.
+ *
+ * &lt;p&gt;
+ * When a build is performed, the {<span class="javadoctag">@link</span> #perform(AbstractBuild, Launcher, BuildListener)}
+ * method will be invoked. 
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldBuilder</span> <span class="keyword">extends</span> <span class="title">Builder</span> {</span>
+
+    <span class="keyword">private</span> <span class="keyword">final</span> String name;
+
+    <span class="comment">// Fields in config.jelly must match the parameter names in the "DataBoundConstructor"</span>
+    <span class="annotation">@DataBoundConstructor</span>
+    <span class="keyword">public</span> HelloWorldBuilder(String name) {
+        <span class="keyword">this</span>.name = name;
+    }
+
+    <span class="javadoc">/**
+     * We'll use this from the &lt;tt&gt;config.jelly&lt;/tt&gt;.
+     */</span>
+    <span class="keyword">public</span> String getName() {
+        <span class="keyword">return</span> name;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">boolean</span> perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
+        <span class="comment">// This is where you 'build' the project.</span>
+        <span class="comment">// Since this is a dummy, we just say 'hello world' and call that a build.</span>
+
+        <span class="comment">// This also shows how you can consult the global configuration of the builder</span>
+        <span class="keyword">if</span> (getDescriptor().getUseFrench())
+            listener.getLogger().println(<span class="string">"Bonjour, "</span>+name+<span class="string">"!"</span>);
+        <span class="keyword">else</span>
+            listener.getLogger().println(<span class="string">"Hello, "</span>+name+<span class="string">"!"</span>);
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+
+    <span class="comment">// Overridden for better type safety.</span>
+    <span class="comment">// If your plugin doesn't really define any property on Descriptor,</span>
+    <span class="comment">// you don't have to do this.</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> DescriptorImpl getDescriptor() {
+        <span class="keyword">return</span> (DescriptorImpl)<span class="keyword">super</span>.getDescriptor();
+    }
+
+    <span class="javadoc">/**
+     * Descriptor for {<span class="javadoctag">@link</span> HelloWorldBuilder}. Used as a singleton.
+     * The class is marked as public so that it can be accessed from views.
+     *
+     * &lt;p&gt;
+     * See &lt;tt&gt;src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly&lt;/tt&gt;
+     * for the actual HTML fragment for the configuration screen.
+     */</span>
+    <span class="annotation">@Extension</span> <span class="comment">// This indicates to Jenkins that this is an implementation of an extension point.</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DescriptorImpl</span> <span class="keyword">extends</span> <span class="title">BuildStepDescriptor</span>&lt;<span class="title">Builder</span>&gt; {</span>
+        <span class="javadoc">/**
+         * To persist global configuration information,
+         * simply store it in a field and call save().
+         *
+         * &lt;p&gt;
+         * If you don't want fields to be persisted, use &lt;tt&gt;transient&lt;/tt&gt;.
+         */</span>
+        <span class="keyword">private</span> <span class="keyword">boolean</span> useFrench;
+
+        <span class="javadoc">/**
+         * Performs on-the-fly validation of the form field 'name'.
+         *
+         * <span class="javadoctag">@param</span> value
+         *      This parameter receives the value that the user has typed.
+         * <span class="javadoctag">@return</span>
+         *      Indicates the outcome of the validation. This is sent to the browser.
+         */</span>
+        <span class="keyword">public</span> FormValidation doCheckName(<span class="annotation">@QueryParameter</span> String value)
+                <span class="keyword">throws</span> IOException, ServletException {
+            <span class="keyword">if</span> (value.length() == <span class="number">0</span>)
+                <span class="keyword">return</span> FormValidation.error(<span class="string">"Please set a name"</span>);
+            <span class="keyword">if</span> (value.length() &lt; <span class="number">4</span>)
+                <span class="keyword">return</span> FormValidation.warning(<span class="string">"Isn't the name too short?"</span>);
+            <span class="keyword">return</span> FormValidation.ok();
+        }
+
+        <span class="keyword">public</span> <span class="keyword">boolean</span> isApplicable(Class&lt;? extends AbstractProject&gt; aClass) {
+            <span class="comment">// Indicates that this builder can be used with all kinds of project types </span>
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+
+        <span class="javadoc">/**
+         * This human readable name is used in the configuration screen.
+         */</span>
+        <span class="keyword">public</span> String getDisplayName() {
+            <span class="keyword">return</span> <span class="string">"Say hello world"</span>;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> <span class="keyword">boolean</span> configure(StaplerRequest req, JSONObject formData) <span class="keyword">throws</span> FormException {
+            <span class="comment">// To persist global configuration information,</span>
+            <span class="comment">// set that to properties and call save().</span>
+            useFrench = formData.getBoolean(<span class="string">"useFrench"</span>);
+            <span class="comment">// ^Can also use req.bindJSON(this, formData);</span>
+            <span class="comment">//  (easier when there are many fields; need set* methods for this, like setUseFrench)</span>
+            save();
+            <span class="keyword">return</span> <span class="keyword">super</span>.configure(req,formData);
+        }
+
+        <span class="javadoc">/**
+         * This method returns true if the global configuration says we should speak French.
+         *
+         * The method name is bit awkward because global.jelly calls this method to determine
+         * the initial state of the checkbox by the naming convention.
+         */</span>
+        <span class="keyword">public</span> <span class="keyword">boolean</span> getUseFrench() {
+            <span class="keyword">return</span> useFrench;
+        }
+    }
+}</code></pre>
+<p>这里主要使用了jenkins的Builder作为扩展点，通过内部类DescripotorImpl添加@Extension声明，告诉系统该内部类是作为BuildStepDescriptor的扩展出现</p>
+<p>这里基本完成了扩展点的后台代码部分，但是扩展过程中还需要对前端页面进行扩张，这时就需要建立一个pcakage放置该扩展类对应的视图</p>
+<p>视图有三种:1,全局配置(global.jelly)2,Job配置(config.jeely),还有就是使用帮助(help-字段名).html</p>
+<p>global.jeely（对于插件需要使用的全局配置）</p>
+<pre><code>&lt;j:jelly xmlns:j=<span class="string">"jelly:core"</span> xmlns:st=<span class="string">"jelly:stapler"</span> xmlns:d=<span class="string">"jelly:define"</span> xmlns:l=<span class="string">"/lib/layout"</span> xmlns:t=<span class="string">"/lib/hudson"</span> xmlns:f=<span class="string">"/lib/form"</span>&gt;
+  &lt;!--
+    This Jelly script is used to produce the global configuration option.
+
+    Jenkins uses a <span class="keyword">set</span> of tag libraries to provide uniformity in forms.
+    To determine where <span class="keyword">this</span> tag is defined, first check the <span class="class"><span class="keyword">namespace</span> <span class="title">URI</span>,
+    <span class="title">and</span> <span class="title">then</span> <span class="title">look</span> <span class="title">under</span> $<span class="title">JENKINS</span>/<span class="title">views</span>/. <span class="title">For</span> <span class="title">example</span>, &lt;<span class="title">f</span>:<span class="title">section</span>&gt; <span class="title">is</span> <span class="title">defined</span>
+    <span class="title">in</span> $<span class="title">JENKINS</span>/<span class="title">views</span>/<span class="title">lib</span>/<span class="title">form</span>/<span class="title">section</span>.<span class="title">jelly</span>.
+
+    <span class="title">It</span>'<span class="title">s</span> <span class="title">also</span> <span class="title">often</span> <span class="title">useful</span> <span class="title">to</span> <span class="title">just</span> <span class="title">check</span> <span class="title">other</span> <span class="title">similar</span> <span class="title">scripts</span> <span class="title">to</span> <span class="title">see</span> <span class="title">what</span>
+    <span class="title">tags</span> <span class="title">they</span> <span class="title">use</span>. <span class="title">Views</span> <span class="title">are</span> <span class="title">always</span> <span class="title">organized</span> <span class="title">according</span> <span class="title">to</span> <span class="title">its</span> <span class="title">owner</span> <span class="title">class</span>,
+    <span class="title">so</span> <span class="title">it</span> <span class="title">should</span> <span class="title">be</span> <span class="title">straightforward</span> <span class="title">to</span> <span class="title">find</span> <span class="title">them</span>.
+  --&gt;
+  &lt;<span class="title">f</span>:<span class="title">section</span> <span class="title">title</span>="<span class="title">Hello</span> <span class="title">World</span> <span class="title">Builder</span>"&gt;
+    &lt;<span class="title">f</span>:<span class="title">entry</span> <span class="title">title</span>="<span class="title">French</span>" <span class="title">field</span>="<span class="title">useFrench</span>"
+      <span class="title">description</span>="<span class="title">Check</span> <span class="title">if</span> <span class="title">we</span> <span class="title">should</span> <span class="title">say</span> <span class="title">hello</span> <span class="title">in</span> <span class="title">French</span>"&gt;
+      &lt;<span class="title">f</span>:<span class="title">checkbox</span> /&gt;
+    &lt;/<span class="title">f</span>:<span class="title">entry</span>&gt;
+  &lt;/<span class="title">f</span>:<span class="title">section</span>&gt;
+&lt;/<span class="title">j</span>:<span class="title">jelly</span>&gt;</code></pre>
+<p>将插件部署到Jenkins后实际效果如下图（系统管理-系统设置）<br><img src="http://static.oschina.net/uploads/space/2012/0703/130915_9ows_553747.jpg" alt=""></p>
+<p>config.jeely（正对每个Job而言需要的配置信息）</p>
+<pre><code><span class="tag">&lt;<span class="title">j:jelly</span> <span class="attribute">xmlns:j</span>=<span class="value">"jelly:core"</span> <span class="attribute">xmlns:st</span>=<span class="value">"jelly:stapler"</span> <span class="attribute">xmlns:d</span>=<span class="value">"jelly:define"</span> <span class="attribute">xmlns:l</span>=<span class="value">"/lib/layout"</span> <span class="attribute">xmlns:t</span>=<span class="value">"/lib/hudson"</span> <span class="attribute">xmlns:f</span>=<span class="value">"/lib/form"</span>&gt;</span>
+  <span class="comment">&lt;!--
+    This jelly script is used for per-project configuration.
+
+    See global.jelly for a general discussion about jelly script.
+  --&gt;</span>
+
+  <span class="comment">&lt;!--
+    Creates a text field that shows the value of the "name" property.
+    When submitted, it will be passed to the corresponding constructor parameter.
+  --&gt;</span>
+  <span class="tag">&lt;<span class="title">f:entry</span> <span class="attribute">title</span>=<span class="value">"Name"</span> <span class="attribute">field</span>=<span class="value">"name"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">f:textbox</span> /&gt;</span>
+  <span class="tag">&lt;/<span class="title">f:entry</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">j:jelly</span>&gt;</span></code></pre>
+<p>部署到jenkins后的实际效果<br><img src="http://static.oschina.net/uploads/space/2012/0703/131122_ZUOx_553747.jpg" alt=""></p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0703/131152_4jbA_553747.jpg" alt=""></p>
+<p>这里细心的人可能已经看出来了，config.jelly中定义的字段实际就是扩展类中构造函数的参数，对于HelloWorldBuilder类而言自成了Builder父类，通过使用@DataBoundConstructor申明，当用户在界面填写配置信息点击保存后将自动初始化该类，同时会在对应的job的配置文件中保存相关信息本机是在.jenkins\jobs\TestJob目录下的config.xml文件中点击查看文件，在publishers节点下即可看见与该插件有关的信息</p>
+<pre><code><span class="tag">&lt;<span class="title">prebuilders</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">org.wocloud.jenkins.manager.HelloWorldBuilder</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">name</span>&gt;</span>Hello!!!!!!!!!!<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">org.wocloud.jenkins.manager.HelloWorldBuilder</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">prebuilders</span>&gt;</span></code></pre>
+<p>每一次修改配置并保存时都将修改该配置文件。<br>在Job进行构建时，将会激活HelloWorldBuilder类的perform方法，而该方法中就是你插件真正开始完成工作的地方</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">boolean</span> perform(AbstractBuild build, Launcher launcher, BuildListener listener)</code></pre>
+<p>listener是此次构建工作的监听器</p>
+<p>通过该listener可以输出内容信息到前端jenkins页面</p>
+<p>使用build可以判断当前构建工作的结果</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>

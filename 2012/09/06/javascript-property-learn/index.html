@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>JavaScript学习笔记-原型继承 | Tseng Note</title>
+  <meta name="author" content="ylTseng">
+  
+  <meta name="description" content="原文最初写与我的[OSCHINA博客](http://my.oschina.net/fhck/blog/77091)
+JavaScript基于原型的编程语言，本身并不包含内置的类实现。但是可以通过Javascript模拟出类
+类
+JavaScript中有构造函数和New运算符。构造函数用来实例对象和">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="JavaScript学习笔记-原型继承"/>
+  <meta property="og:site_name" content="Tseng Note"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Tseng Note" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37439567-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head>
+
+<body>
+  <header id="header" class='normal_mode'>
+    <div class='profile'>
+  <h1><a href="/"><img class="logo" src="/css/img/logo.png"/></a></h1>
+  <h2>
+  	<a href="/">
+  	Tseng Note
+  	关于技术的信仰
+  	</a>
+  </h2>
+</div>
+<nav id="main-nav">
+  <ul class='inner'>
+    
+      <li><a href="/">博客</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/works">那些“坑”</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+  </header>
+  <div id="content" class="inner">
+    <div id="main-col"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+  
+    <h1 class="title">JavaScript学习笔记-原型继承</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <pre><code>  原文最初写与我的<span class="link_label">[OSCHINA博客]</span>(<span class="link_url">http://my.oschina.net/fhck/blog/77091</span>)</code></pre>
+<p>JavaScript基于原型的编程语言，本身并不包含内置的类实现。但是可以通过Javascript模拟出类</p>
+<h1>类</h1>
+<p>JavaScript中有构造函数和New运算符。构造函数用来实例对象和初始化属性。任何JavaScript函数都可以用作构造函数，构造函数必须使用new运算符作为前缀来创建新的实例</p>
+<p>JavaScript要模拟一个类可以直接使用函数function</p>
+<pre><code>
+<span class="keyword">var</span> Person = <span class="keyword">function</span>(name){
+   <span class="keyword">this</span>.name = name;
+}
+
+<span class="comment">//实例化Person</span>
+<span class="keyword">var</span> alice = <span class="keyword">new</span> Person(<span class="string">'alice'</span>);
+console.log(alice.name);</code></pre>
+<p>这里需要注意的this关键字， new运算符会改变函数的执行上下文，同时改变return的行为。当使用new运算符来调用构造函数时，执行上下文this从全局对象编程一个空的上下文，这个上下文代表新生成的实例。因此this指向当前创建的实例。</p>
+<p>所以一下代码执行会出现undefined</p>
+<pre><code>var bob = Person(<span class="string">'bob'</span>);
+<span class="transposed_variable">console.</span><span class="built_in">log</span>(<span class="transposed_variable">bob.</span>name);</code></pre>
+<h1>原型</h1>
+<p>JavaScript本身是基于原型的编程语言，原型的作用:区别类和实例</p>
+<pre><code><span class="keyword">var</span> Animal = <span class="keyword">function</span>(){}
+
+Animal.run = <span class="keyword">function</span>(){
+    console.log(<span class="string">'Animal run'</span>)
+}
+
+Animal.prototype.breath = <span class="keyword">function</span>(){
+   console.log(<span class="string">'animal breath'</span>);
+}
+
+Var Dog = <span class="keyword">function</span>(){}
+
+<span class="comment">//Dog继承自Animal</span>
+Dog.prototype = <span class="keyword">new</span> Animal();
+
+Dog.prototype.wag = <span class="keyword">function</span>(){
+   console.log(<span class="string">'dog wag'</span>);
+}
+
+<span class="keyword">var</span> dog = <span class="keyword">new</span> Dog();
+dog.wag();
+dog.breath();<span class="comment">//继承的属性</span></code></pre>
+<p>输出：</p>
+<pre><code><span class="title">dog</span> wag
+<span class="title">animal</span> breath</code></pre>
+<p>那么通过类的prototype定义的方法或者属性就可以叫做所有实例的方法或属性，而其他的方法和属性就是类本身的方法和属性类比java类中的静态变量</p>
+<p>这里对下面一些东西的叫法约定一下</p>
+<p>通常按照个人习惯</p>
+<p>构造函数/匿名函数</p>
+<pre><code><span class="keyword">var</span> Person = <span class="keyword">function</span>(name){
+  <span class="keyword">this</span>.name=name;
+}</code></pre>
+<p>函数/类</p>
+<pre><code><span class="function"><span class="keyword">function</span> <span class="title">Person</span><span class="params">()</span><span class="comment">{}</span>
+对象/实例
+
+<span class="title">var</span> <span class="title">person</span> = <span class="comment">{ name:'zhangsan',sex:'male'}</span></code></pre>
+<h1>原型继承继承是的什么？</h1>
+<p>还是上面关于Animal和Dog的例子，我们做一些改造</p>
+<pre><code><span class="keyword">var</span>  animal = {
+        breath:<span class="keyword">function</span>(){console.log(<span class="string">'animal breath!'</span>)},
+};
+
+<span class="keyword">var</span> Dog = <span class="keyword">function</span>(){}
+
+<span class="comment">//Dog继承自animal</span>
+Dog.prototype = animal;
+
+Dog.prototype.wag = <span class="keyword">function</span>(){
+   console.log(<span class="string">'dog wag'</span>);
+}
+
+<span class="keyword">var</span> dog = <span class="keyword">new</span> Dog();
+dog.wag();
+dog.breath();<span class="comment">//继承的属性</span></code></pre>
+<p>结果和上面的一样</p>
+<p>在一个例子中我们使用 Dog.prototype = new Animail;   这个例子中我们使用的是Dog.prototype = animal</p>
+<p>区别在于第一个例子中的Animal是一个匿名类，通过调用new运算符调用其构造函数返回了一个animal实例，而第二个例子中animal本身就已经是一个实例/对象。这就是之前提到的new运算符的作用。</p>
+<p>所以一个类的如果要继承另一个类那么就需要继承那个类的实例而不是类本身（Function），当然我们可以试一下直接使用Dog.prototype=Animal，结果就是当调用dog.breath();时直接返回的是一个Function对象，无法达到共享属性的意义。</p>
+<p>原型对象就是一个“模板”，定义在原型上的属性被用来初始化一个新的对象。任何对象都可以作为一个对象的原型对象，以此来共享属性。</p>
+
+      
+    </div>
+    <footer>
+      
+          
+          
+          
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+        <span class="jiathis_txt">分享到：</span>
+        <a class="jiathis_button_icons_1"></a>
+        <a class="jiathis_button_icons_2"></a>
+        <a class="jiathis_button_icons_3"></a>
+        <a class="jiathis_button_icons_4"></a>
+        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+        <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  <div id="profile"></div>
+
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+
+  
+      <!-- Duoshuo Comment BEGIN -->
+<div class="ds-thread"></div>
+<!-- Duoshuo Comment END -->
+  
+</section>
+
+
+</div></div>
+    <!--
+    <aside id="sidebar" class="alignright" style="display:none">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+</aside>
+    
+    -->
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 ylTseng
+  
+  
+    <a class="icon github" href="https://github.com/yunlzheng">github</a>
+    <a href="http://weibo.com/503error">weibo</a>
+    <a href="http://www.google.com">google+</a>
+  
+</div>
+
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        (function(){
+
+            $(window).scroll(function(){
+
+                var scrollTop = $(window).scrollTop();
+                if ( scrollTop >200 ){
+                    $("#main-nav").removeClass('normal_mode').addClass('top_mode');
+                } else{
+                    $("#main-nav").removeClass('top_mode').addClass('normal_mode');
+                }
+
+            });
+
+        })();
+    </script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+  </script>
+
+
+
+    
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"moo123"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = 'http://static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+
+<script type="text/javascript">
+  
+  $(function(){
+
+    $('.title').hover(
+      function() {      
+        $(this).stop().animate(
+          {'marginLeft': '10px'}, 200
+        );   
+      }, 
+      function() {       
+        $(this).stop().animate({'marginLeft': '0px'}, 200);      
+      
+    });   
+
+  });
+
+</script>
+
+
+</body>
+</html>
