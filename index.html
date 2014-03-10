@@ -14,6 +14,8 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/stylesless.css">
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
     <body>
@@ -22,7 +24,37 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+        <div id="container">
+            <div id="pageAboutMe" class="page">
+                <h2>About Me</h2>
+                <div class="profileCart">
+                    <div class="bg"></div>
+                    <div class="avatar">
+                        <img src="img/avatar_01.jpg"/>
+                    </div>
+                    <div class="name">
+                        <h2>Yunl.zheng</h2>
+                    </div>
+                    <div class="description">
+                        <p>CETC Huacloud Information and Service Company</p>
+                    </div>
+                    <div class="links">
+                        <a href="http://weibo.com/234287868" target="_blank" title="weibo"><div class="link" ><i class="fa fa-weibo fa-2x"></i></div></a>
+                        <a href="http://shareks.tumblr.com/" target="_blank" title="Blog"><div class="link" ><i class="fa fa-tumblr fa-2x"></i></div></a>
+                        <a href="https://github.com/yunlzheng" target="_blank" title="Github"><div class="link" ><i class="fa fa-github fa-2x"></i></div><a>
+                    </div>
+                </div>
+            </div>
+            <div id="pageAboutRead" class="page disabled">
+                <h2>What I am reading now...</h2>
+            </div>
+            <div id="pageAboutMySkill" class="page disabled">
+                <h2>How About My Skills..</h2>
+            </div>
+            <div id="pageAboutMyWork" class="page disabled">
+                <h2>What Kind work i did...</h2>
+            </div>
+        </div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
