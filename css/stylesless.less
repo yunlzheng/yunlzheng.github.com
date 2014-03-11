@@ -15,9 +15,7 @@ body {
 	background-size: 100%;
 	height: 100%;
 	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-	padding-bottom: 220px;
 	background-attachment: fixed;
-	overflow: hidden;
 }
 
 #container {
@@ -25,9 +23,11 @@ body {
 }
 
 .page{
-	&.disabled{
-		display:none;
-	}
+    min-height: 600px;
+    display: none;
+    &.active{
+      display: block;
+    }
 }
 
 #pageAboutMe{
@@ -90,17 +90,120 @@ body {
 	}
 }
 
-#pageAboutRead{
+ul.timeline {
+  list-style-type: none;
+  background: url("../img/line_2px.png") repeat-y scroll 122px 0 rgba(0, 0, 0, 0);
+  margin: 50px 0;
+  padding: 0;
 
+  li {
+    position: relative;
+    padding-bottom: 20px;
+    &.last{
+      padding-bottom: 0px;
+    }
+    &:hover{
+      .flag{
+        background: url("../img/dot_hover.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+      }
+      .datetime{
+         color: rgb(255, 255, 255);
+      }
+    }
+  }
 
+  li .datetime{
+    position: absolute;
+    width: 190px;
+    text-align: right;
+    left: -80px;
+    top: 10px;
+    font-size: 20px;
+    line-height: 50px;
+    color:rgb(108, 191, 238);
+    overflow: hidden;
+  }
+  li .flag {
+    position: absolute;
+    background: url("../img/dot_28px.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    width: 56px;
+    height: 56px;
+    left: 111px;
+    top:-1px;
+    line-height: 56px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+  }
+  li .content{
+    margin-left: 180px;
+    color:#fff;
+    min-height: 100px;
+    background: rgb(108, 191, 238);
+    width: 350px;
+    font-size: 1.2em;
+    font-weight: 300;
+    line-height: 1.4;
+    position: relative;
+    border-radius: 5px;
+    p{
+      padding: 2em;
+    }
+  }
+
+  li .avatar{
+    position: absolute;
+    background-color: #AFDCF8;
+    margin-left: 28px;
+    padding: 2px;
+    img{
+      width: 94px;
+      height: 94px;
+    }
+  }
+
+  li .description{
+    color:#fff;
+    position: relative;
+    height: 100px;
+    margin-left: 180px;
+    line-height: 100px;
+  }
+}
+
+#pageAboutTimeLine{
+  width: 600px;
+  margin: 0 auto;
+  position: relative;
+  margin-top: 100px;
 }
 
 #pageAboutMySkill{
-
-
 }
 
 #pageAboutMyWork{
+}
 
+.navigation{
+  position: fixed;
+  top:0px;
+  height: 100%;
+  width:50px;
+  text-align: center;
+  display:table-cell; vertical-align:middle;
+  .fa{
+    position: absolute;
+    top:50%;
+  }
+  &:hover{
+    background-color: rgba(0,0,0,0.2);
+  }
+  &.left{
 
+    left: 0px;
+  }
+  &.right{
+
+    right:0px;
+  }
 }
