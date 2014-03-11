@@ -1,7 +1,7 @@
 $(function () {
 
     var totalPage = $('.page').length - 1;
-    var currentPage = 1;
+    var currentPage = 0;
 
     $('.time_lines').masonry({itemSelector: '.time'});
 
