@@ -1,4 +1,4 @@
-title: 记：“摇滚吧，成都音乐节”
+title: 摇滚吧
 date: 2013-10-19 11:39:11
 tags:
 ---
@@ -14,10 +14,10 @@ tags:
    文艺女青年登场
 
 # 照片墙
-   
+
   先来几张卖的东西的照片，当然东西可基本上都是老姐手工做的，这样的好处就在于（呵呵）成本够低
 
- 
+
 ![](http://media.tumblr.com/47ee77a1bd0018f604130773d666aca8/tumblr_inline_muwaru3miP1sosno0.jpg)
 
   各种手工装饰品

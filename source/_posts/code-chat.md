@@ -1,4 +1,4 @@
-title: CODE: 记最近刨的那些坑之Tornado Chat
+title: 记最近刨的那些坑之Tornado Chat
 date: 2013-10-19 17:00:40
 tags:
 ---
@@ -28,12 +28,12 @@ tags:
 
     # import code for encoding urls and generating md5 hashes
     import urllib, hashlib
- 
+
     # Set your variables here
     email = "someone@somewhere.com"
     default = "http://www.example.com/default.jpg"
     size = 40
- 
+
     # construct the url
     gravatar_url = "http://www.gravatar.com/avatar/" +hashlib.md5(email.lower()).hexdigest() + "?"
     gravatar_url += urllib.urlencode({'d':default, 's':str(size)})
@@ -66,22 +66,22 @@ chat里面消息通知主要从3个方面完成：未读消息数，chrome桌面
             places_enabled: true,
             symbols_enabled: true
         });
-       
-   
+
+
  然后当你觉得应该更新一下页面的时候，调用
 
         emojify.run();
 
 
-就能将页面中的emoji表情符号替换成响应的图片或者是字符图 
-      
+就能将页面中的emoji表情符号替换成响应的图片或者是字符图
+
 
 
 *  背景图片
 
 作为一个只会写点css和javascript而又不懂设计的程序猿，在自己刨坑的时候能窃的就窃点，毕竟都是往坑里面填点东西而已，用过微信网页版的的小伙伴一看就知道，这前端，这样式不就是跟微信一样的呀？ 当然不一样，只能算是模仿，而且还是模仿的很拙劣的那一类，完全没有微信网页版UI的那种流畅感觉。tumblr是最近才开始使用的，之前都是在[oschina](http://my.oschina.net/fhck/blog)上写点东西，不过以前写东西和现在写东西的最大的不同就在于，以前老是把博客当做是个笔记之类的，所以老写些纯技术的东西，后面用了印象笔记，好的资料卡卡卡卡的就往印象笔记里面放，所以后面博客就写的少了。刚说了tumblr是最近才开始用的，优点就不说了，跟国内的博客服务相比一个感觉是文艺范的（毕竟是轻博客嘛，想到国内的点点就不免感叹几句）。
 
-言归正传，tubmlr的登录注册页面每次刷新都是些很漂亮的背景，所以我也一不做二不休，既然无耻了就再无耻一次吧。 
+言归正传，tubmlr的登录注册页面每次刷新都是些很漂亮的背景，所以我也一不做二不休，既然无耻了就再无耻一次吧。
 
 python里面做HTML解析的库倒是很多，这里就不做一一列举，主要怕列举出来就有点装公知的感觉，实际上按最大范围值来计算本人做python到现在也就3个月的时间，连基础都还没学一遍就匆匆开始跟着[@__左弈__](http://weibo.com/xuwenbao)做项目了。
 

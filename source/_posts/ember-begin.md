@@ -1,4 +1,4 @@
-title: Ember.js(一):一个最基本的Ember应用程序
+title: 一个最基本的Ember应用程序
 date: 2012-12-23 00:26:00
 tags:
 ---
@@ -78,7 +78,7 @@ App.ApplicationView = Ember.View.extend({
 你的应用程序必须包含一个ApplicationView的属性，这个类将会为你创建一个视图并插入插入到视图结构中并作为根视图。
 
 ```
-App.ApplicationController = Ember.Controller.extend(); 
+App.ApplicationController = Ember.Controller.extend();
 ```
 
 每一个视图都关联了一个上下文环境，这个上下文环境就是Handlebars模板引擎获取关联属性的对象，所以如果你的模版像下面这种结构：
@@ -93,7 +93,7 @@ App.ApplicationController = Ember.Controller.extend();
 
 一个单独的ApplicationController实例创建时将会自动关联到ApplicationView的上下文环境中。这里有一个简单并且明显的问题是。你的应用程序必须包含一个ApplicationController属性，否则应用程序的根视图将会无法关联上下文并且 Ember将会显示的抛出响应的异常信息
 
- 
+
 ```
 App.Router = Ember.Router.extend({
 
@@ -115,7 +115,7 @@ Ember的Router与你平时所使用的其它JavaScript类库的’router’标�
 
 状态是作为Ember应用程序的一个核心功能模块。当然属性和视图的双向绑定与自动更新时十分便利的，但是如果这就是Ember的全部的话，它只会成为严肃和健壮开发中的一小部分。
 
- 
+
 ```
 root: Ember.Route.extend({
 
@@ -140,5 +140,3 @@ App.initialize();
 
 
 本文翻译至：http://trek.github.com/。为了避免由于蹩脚英语对大家造成误导，还是强烈建议学习原版文章，本文尽作为个人笔记
-
-
