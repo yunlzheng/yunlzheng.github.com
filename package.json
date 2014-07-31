@@ -6,6 +6,7 @@
     "hexo-renderer-ejs": "*",
     "hexo-renderer-stylus": "*",
     "hexo-renderer-marked": "*",
-    "hexo-migrator-rss": "^0.1.2"
+    "hexo-migrator-rss": "^0.1.2",
+    "hexo-generator-feed": "^0.2.0"
   }
 }
