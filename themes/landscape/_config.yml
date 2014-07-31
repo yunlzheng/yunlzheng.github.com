@@ -4,12 +4,15 @@ menu:
   Archives: /archives
 rss: /atom.xml
 
+sitemap:
+    path: sitemap.xml
+
 # Content
 excerpt_link: Read More
 fancybox: true
 
 # Sidebar
-sidebar: 
+sidebar:
 widgets:
 - category
 - tag
