@@ -4,6 +4,8 @@
     isSearchAnim = false,
     searchAnimDuration = 200;
 
+  var $head = $("#header");
+
   var startSearchAnim = function(){
     isSearchAnim = true;
   };
@@ -122,16 +124,17 @@
   }
 
   $('#main-nav-toggle').on('click', function(){
-    if (isMobileNavAnim) return;
-
-    startMobileNavAnim();
-    $container.toggleClass('mobile-nav-on');
-    stopMobileNavAnim();
+    $(".site-nav").fadeToggle(100);
   });
 
-  $('#wrap').on('click', function(){
-    if (isMobileNavAnim || !$container.hasClass('mobile-nav-on')) return;
+  $(window).scroll(function(e) {
 
-    $container.removeClass('mobile-nav-on');
+    if( $('body').scrollTop() > $head.height() ) {
+      $("#header-inner").addClass('active')
+    } else {
+      $("#header-inner").removeClass('active')
+    }
+
   });
+
 })(jQuery);

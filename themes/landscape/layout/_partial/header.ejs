@@ -1,5 +1,4 @@
 <header id="header">
-  <div id="banner"></div>
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
@@ -19,19 +18,26 @@
       <% } %>
       </div>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        <% for (var i in theme.menu){ %>
-          <a class="main-nav-link" href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
-        <% } %>
-      </nav>
-      <nav id="sub-nav">
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <%- search_form({button: '&#xF002;'}) %>
-      </div>
+  </div>
+  <div id="header-inner" class="">
+    <a class="title"><h1><%= config.title %></h1></a>
+    <nav id="main-nav">
+      <a id="main-nav-toggle" class="nav-icon"></a>
+    </nav>
+    <nav id="sub-nav">
+      <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+    </nav>
+    <div id="search-form-wrap">
+      <%- search_form({button: '&#xF002;'}) %>
     </div>
+  </div>
+  <div class="site-nav">
+    <ul>
+    <% for (var i in theme.menu){ %>
+      <li>
+        <a href="<%- url_for(theme.menu[i]) %>"><%= i %></a>
+      </li>
+    <% } %>
+    </ul>
   </div>
 </header>

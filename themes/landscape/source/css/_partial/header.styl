@@ -1,13 +1,12 @@
 #header
-  background-size: cover;
-  background-color: #FFF;
-  color: #333;
-  display: table;
-  height: 50%;
-  height: 100%;
-  text-align: center;
-  width: 100%;
-
+  background-size: cover
+  background-color: #FFF
+  color: #333
+  display: table
+  height: 100%
+  text-align: center
+  width: 100%
+  transition: height 0.25s;
   &:before, &:after
     content: ""
     position: absolute
@@ -16,18 +15,35 @@
     height: 40px
   &:before
     top: 0
-
   &:after
     bottom: 0
 
+#header-inner
+
+  position: fixed
+  text-align: center
+  width: 100%
+  height: 50px
+  background:#fff
+  transition: opacity 0.25s;
+  top: 0;
+  .title
+    font-weight: bold
+    padding-top:20px
+    opacity: 0
+    h1
+      display: inline-block
+      font-size: 1rem
+      line-height: 3rem
+  &.active
+    border-bottom: 1px solid #ddd
+    .title
+      opacity: 1
 
 #header-outer
+  min-height:200px
   height: 100%
   position: relative
-
-#header-inner
-  position: relative
-  overflow: hidden
 
 #banner
   position: absolute
@@ -35,7 +51,6 @@
   left: 0
   width: 100%
   height: 100%
-  background: url(banner-url) center #000
   background-size: cover
   z-index: -1
 
@@ -72,8 +87,33 @@ $logo-text
   margin-top: subtitle-size
 
 #main-nav
-  float: left
-  margin-left: -15px
+  position: absolute
+  top: 0
+
+.site-nav
+  background: #FFF
+  border-bottom: 1px solid #EEE
+  padding: 0px 1.5rem 0 1.5rem
+  position: fixed
+  top: 48px
+  left: 0
+  width: 100%
+  z-index: 999
+  text-align: left;
+  display:none
+  &.nav-on
+    display:block
+  ul
+    list-style: none
+    padding: .5rem 0
+    margin: 0
+    li
+      padding: .5rem 0
+      align: left
+      a
+        color: #999
+        text-decoration: none
+        transition: color 0.3s
 
 $nav-link
   float: left
@@ -96,6 +136,7 @@ $nav-link
   padding: 20px 15px
   position: relative
   cursor: pointer
+  color: #37AAB4
 
 
 .main-nav-link
@@ -105,16 +146,20 @@ $nav-link
   @media mq-mobile
     display: none
 
-#main-nav-toggle
-  display: none
+.nav-toggle
+  font-family: FontAwesome
   &:before
     content: "\f0c9"
-  @media mq-mobile
-    display: block
+
+#main-nav-toggle
+  display: block
+  &:before
+    content: "\f0c9"
 
 #sub-nav
-  float: right
-  margin-right: -15px
+  position: absolute
+  top: 0
+  right:0
 
 #rss-wrap
  width:100px
@@ -144,7 +189,7 @@ $nav-link
   transition: 0.2s ease-out
   &.on
     opacity: 1
-    right: 0
+    right: 15px
   @media mq-mobile
     width: 100%
     right: -100%
