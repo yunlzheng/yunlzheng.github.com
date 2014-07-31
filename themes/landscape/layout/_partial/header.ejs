@@ -10,11 +10,14 @@
           <a href="<%- url_for() %>" id="subtitle"><%= theme.subtitle %></a>
         </h2>
       <% } %>
-      <% if (theme.rss){ %>
       <div id="rss-wrap">
+      <% if (theme.rss){ %>
         <a id="nav-rss-link" class="nav-icon" href="<%- theme.rss %>" title="RSS Feed"></a>
-      </div>
       <% } %>
+      <% if (theme.github) {%>
+        <a id="nav-github-link" class="nav-icon" href="https://github.com/<%- theme.github %>" title="Github Home" target="_blank"></a>
+      <% } %>
+      </div>
     </div>
     <div id="header-inner" class="inner">
       <nav id="main-nav">
