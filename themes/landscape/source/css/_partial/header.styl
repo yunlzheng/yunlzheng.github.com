@@ -19,7 +19,6 @@
     bottom: 0
 
 #header-inner
-
   position: fixed
   text-align: center
   width: 100%
@@ -27,14 +26,22 @@
   background:#fff
   transition: opacity 0.25s;
   top: 0;
+  @media mq-mobile
+    background: #37aab4
+    .nav-icon
+      color:#fff
   .title
     font-weight: bold
     padding-top:20px
     opacity: 0
+    @media mq-mobile
+      opacity: 1
     h1
       display: inline-block
       font-size: 1rem
       line-height: 3rem
+      @media mq-mobile
+        color: #fff
   &.active
     border-bottom: 1px solid #ddd
     .title
@@ -191,7 +198,7 @@ $nav-link
     opacity: 1
     right: 15px
   @media mq-mobile
-    width: 100%
+    width: 80%
     right: -100%
 
 .search-form
