@@ -1,6 +1,6 @@
 title: Jenkins安装与配置
 date: 2012-07-02 17:42:00
-tags:
+tags: jenkins
 ---
 
 Jenkins安装与配置

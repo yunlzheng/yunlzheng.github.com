@@ -1,6 +1,6 @@
 title: RabbitMQ之消息发布订阅与信息持久化技术
 date: 2012-08-09 14:20:00
-tags:
+tags: rabbitMQ
 ---
 
 
@@ -33,33 +33,33 @@ import com.rabbitmq.client.ConnectionFactory;
 public class EmitLog {
 
 	private static final String  EXCHANGE_NAME="logs";
-	
+
 	public static void main(String[] args) throws java.io.IOException{
-		
+
 		//创建链接工厂
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost("localhost");
 		//创建链接
 		Connection connection = factory.newConnection();
-		
+
 		//创建信息管道
 		Channel channel = connection.createChannel();
-		
+
 		//生命Exchange 非持久化
 		channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-		
+
 		String message = "Message "+Math.random();
-		
+
 		//第一个参数是对应的Exchange名称,如果为空则使用默认Exchange
 		channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
 		System.out.println("[x] Sent '"+message+"'");
-		
+
 		//关闭链接
 		channel.close();
 		connection.close();
-		
+
 	}
-	
+
 }
 ```
 
@@ -86,13 +86,13 @@ public class ReceiveLogs {
 		factory.setHost("localhost");
 		//创建链接
 		Connection connection = factory.newConnection();
-		
+
 		//创建消息管道
 		Channel channel = connection.createChannel();
 
 		//声明Exchange
 		channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
-		
+
 		//利用系统自动声明一个非持久化的消息队列，并返回唯一的队列名称
 		String queueName = channel.queueDeclare().getQueue();
 
@@ -106,12 +106,12 @@ public class ReceiveLogs {
 		channel.basicConsume(queueName, true, consumer);
 
 		while (true) {
-			
+
 			//循环获取信息
 			QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 			String message = new String(delivery.getBody());
 			System.out.println(" [x] Received '" + message + "'");
-			
+
 		}
 
 	}
@@ -141,30 +141,30 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
 
 public class Publisher {
-	
+
 	private static final String  EXCHANGE_NAME="persi";//定义Exchange名称
 	private static final boolean durable = true;//消息队列持久化
-	
+
 	public static void main(String[] args) throws java.io.IOException {
 
 		ConnectionFactory factory = new ConnectionFactory();//创建链接工厂
 		factory.setHost("localhost");
 		Connection connection = factory.newConnection();//创建链接
 		Channel channel = connection.createChannel();//创建信息通道
-                
+
 		channel.exchangeDeclare(EXCHANGE_NAME, "fanout", durable);//创建交换机并生命持久化
 
 		String message = "Hello Wrold "+Math.random();
                 //消息的持久化
 		channel.basicPublish(EXCHANGE_NAME, "", MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
-		
+
 		System.out.println("[x] Sent '" + message + "'");
 
 		channel.close();
 		connection.close();
 
 	}
-	
+
 }
 ```
 
@@ -173,20 +173,20 @@ Subscriber.java
 ```
 public class Subscriber {
 
-	
+
 	//private static final String[] QUEUE_NAMES= {"que_001","que_002","que_003","que_004","que_005"};
 	private static final String[] QUEUE_NAMES= {"que_006","que_007","que_008","que_009","que_0010"};
-	
+
 	public static void main(String[] args){
 
 		for(int i=0;i<QUEUE_NAMES.length;i++){
-			
+
 			SubscriberThead sub = new SubscriberThead(QUEUE_NAMES[i]);
 			Thread t = new Thread(sub);
 			t.start();
-			
+
 		}
-		
+
 	}
 }
 ```
@@ -206,18 +206,18 @@ public class SubscriberThead implements Runnable {
 	private String queue_name = null;
 	private static final String EXCHANGE_NAME = "persi";// 定义交换机名称
 	private static final boolean durable = true;//消息队列持久化
-	
+
 	public SubscriberThead(String queue_name) {
-		
+
 		this.queue_name = queue_name;
-	
+
 	}
 
 	@Override
 	public void run() {
 
 		try{
-		
+
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost("localhost");
 		Connection connection = factory.newConnection();
@@ -228,7 +228,7 @@ public class SubscriberThead implements Runnable {
 		DeclareOk ok = channel.queueDeclare(queue_name, durable, false,
 				false, null);
 		String queueName = ok.getQueue();
-		
+
 
 		channel.queueBind(queueName, EXCHANGE_NAME, "");
 
@@ -248,10 +248,10 @@ public class SubscriberThead implements Runnable {
 
 		}
 		}catch(Exception e){
-			
+
 			e.printStackTrace();
 		}
-		
+
 
 	}
 

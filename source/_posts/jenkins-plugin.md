@@ -1,6 +1,6 @@
 title: jenkins插件开发
 date: 2012-07-02 17:58:00
-tags:
+tags: jenkins
 ---
 
 # Jenkins插件开发简要介绍
@@ -51,7 +51,7 @@ mvn -cpu hpi:create
 该操作需要你输入一些参数，比如说groupid,artifactid。之后会创建一个新的插件模板便于开发者之后的开发工作。确保你可以使用一下命令：
 
 ```
-cd newly-create-directory 
+cd newly-create-directory
 mvn package
 ```
 
@@ -141,7 +141,7 @@ import java.io.IOException;
  *
  * <p>
  * When a build is performed, the {@link #perform(AbstractBuild, Launcher, BuildListener)}
- * method will be invoked. 
+ * method will be invoked.
  */
 public class HelloWorldBuilder extends Builder {
 
@@ -218,7 +218,7 @@ public class HelloWorldBuilder extends Builder {
         }
 
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {
-            // Indicates that this builder can be used with all kinds of project types 
+            // Indicates that this builder can be used with all kinds of project types
             return true;
         }
 
@@ -306,7 +306,7 @@ config.jeely（正对每个Job而言需要的配置信息）
     <f:textbox />
   </f:entry>
 </j:jelly>
-``` 
+```
 
 部署到jenkins后的实际效果
 ![](http://static.oschina.net/uploads/space/2012/0703/131122_ZUOx_553747.jpg)
@@ -314,7 +314,7 @@ config.jeely（正对每个Job而言需要的配置信息）
 ![](http://static.oschina.net/uploads/space/2012/0703/131152_4jbA_553747.jpg)
 
 
- 
+
 
 
 这里细心的人可能已经看出来了，config.jelly中定义的字段实际就是扩展类中构造函数的参数，对于HelloWorldBuilder类而言自成了Builder父类，通过使用@DataBoundConstructor申明，当用户在界面填写配置信息点击保存后将自动初始化该类，同时会在对应的job的配置文件中保存相关信息本机是在.jenkins\jobs\TestJob目录下的config.xml文件中点击查看文件，在publishers节点下即可看见与该插件有关的信息
@@ -331,7 +331,7 @@ config.jeely（正对每个Job而言需要的配置信息）
 在Job进行构建时，将会激活HelloWorldBuilder类的perform方法，而该方法中就是你插件真正开始完成工作的地方
 
 ```
-public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) 
+public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener)
 ```
 
 listener是此次构建工作的监听器
@@ -339,7 +339,3 @@ listener是此次构建工作的监听器
 通过该listener可以输出内容信息到前端jenkins页面
 
 使用build可以判断当前构建工作的结果
-
- 
-
- 

@@ -1,6 +1,6 @@
 title: 摇滚吧
 date: 2013-10-19 11:39:11
-tags:
+tags: life
 ---
 
 # 前言

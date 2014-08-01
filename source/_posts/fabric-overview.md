@@ -1,6 +1,6 @@
 title: Fabric Overview
 date: 2014-07-31 15:31:27
-tags:
+tags: devops
 ---
 
 Fabric是一个基于SSH的Python命令行工具

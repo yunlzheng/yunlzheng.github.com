@@ -1,6 +1,6 @@
 title: Flask 国际化记录
 date: 2014-07-31 15:25:39
-tags:
+tags: python
 ---
 
 Flask Bable(i18n)

@@ -1,6 +1,6 @@
 title: Tomcat7 开启CGI，并配置awstats日志监控
 date: 2012-10-8 17:42:38
-tags:
+tags: java
 ---
 
 ```
@@ -95,7 +95,7 @@ StyleSheet="../css/awstats_default.css"
 12,修改<TOMCAT_HOME>/conf/server.xml
 
 ```
-<Service name="Catalina"> 
+<Service name="Catalina">
   <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
       <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
                prefix="localhost_access_log." suffix=".txt"
@@ -104,7 +104,7 @@ StyleSheet="../css/awstats_default.css"
 </Service>
 ```
 
-13，运行脚本 
+13，运行脚本
 
 ```
 awstats.pl -config=localhost -update
@@ -112,8 +112,3 @@ awstats.pl -config=localhost -update
 
 
 14,访问URL查看生成的日志页面：[http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost](http://localhost:8080/awstats/cgi-bin/awstats.pl?config=localhoost)
-
-
-
-
-

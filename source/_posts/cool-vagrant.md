@@ -1,6 +1,6 @@
 title: Vargant一个属于程序员的虚拟机
 date: 2013-11-26 12:30:29
-tags:
+tags: devops
 ---
 
 
@@ -50,12 +50,12 @@ vagrant box add precise32  http://files.vagrantup.com/precise32.box
 ![](/vagrant/04.png)
 
 * 使用BOX
- 
+
 查看Vagrant文件如下，Vagrant默认使用名为base的BOX
 
 ```
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    
+
     config.vm.box = "base"
 
 end
@@ -65,7 +65,7 @@ end
 
 ```
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    
+
     config.vm.box = "precise32"
 
 end
@@ -123,7 +123,7 @@ apt-get install vim
 
 ```
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    
+
     config.vm.box = "precise32"
     config.vm.provision :shell, :path => "bootstrap.sh"
 
@@ -137,14 +137,14 @@ end
 
 * 端口转发
 
-使用该特性， 可以将虚拟机的端口映射到主机的特定端口上。 
+使用该特性， 可以将虚拟机的端口映射到主机的特定端口上。
 
 
 使用该特性需要修改**WORKSPACE/Vagrantfile**文件
 
 ```
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    
+
     config.vm.box = "precise32"
     config.vm.provision :shell, :path => "bootstrap.sh"
     config.vm.network :forwarded_port, guest: 80, host: 8080
@@ -157,5 +157,3 @@ end
 ![](/vagrant/07.png)
 
 如图所示对本机8080端口的请求都将转发到虚拟机的80端口
-
-

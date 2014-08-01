@@ -1,6 +1,6 @@
 title: JavaScript学习笔记-原型继承
 date: 2012-09-06 13:09:32
-tags:
+tags: javascript
 ---
 
 ```
@@ -35,7 +35,7 @@ var bob = Person('bob');
 console.log(bob.name);
 ```
 
-# 原型    
+# 原型
 
 JavaScript本身是基于原型的编程语言，原型的作用:区别类和实例
 
@@ -128,6 +128,3 @@ dog.breath();//继承的属性
 
 
 原型对象就是一个“模板”，定义在原型上的属性被用来初始化一个新的对象。任何对象都可以作为一个对象的原型对象，以此来共享属性。
-
-   
-

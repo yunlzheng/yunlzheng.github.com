@@ -1,6 +1,6 @@
 title: 一个最基本的Ember应用程序
 date: 2012-12-23 00:26:00
-tags:
+tags: javascript
 ---
 
 

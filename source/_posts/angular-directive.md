@@ -1,6 +1,6 @@
 title: Angular 不完全参考手册
 date: 2014-07-31 15:30:25
-tags:
+tags: angular
 ---
 
 

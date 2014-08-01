@@ -1,6 +1,6 @@
 title: Flex Fileupload With Java
 date: 2014-07-31 15:29:13
-tags:
+tags: java
 ---
 
 ## 前言

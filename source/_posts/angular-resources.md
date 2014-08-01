@@ -1,6 +1,6 @@
 title: 使用Angular Resources 封装Rest API
 date: 2014-07-31 15:22:57
-tags:
+tags: angular
 ---
 
 ## 使用[$http](http://docs.angularjs.org/api/ng/service/$http)直接访问接口

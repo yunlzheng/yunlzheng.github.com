@@ -1,6 +1,6 @@
 title: 记最近刨的那些坑之Tornado Chat
 date: 2013-10-19 17:00:40
-tags:
+tags: code
 ---
 
 # Tornado Chat

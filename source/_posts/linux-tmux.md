@@ -1,6 +1,6 @@
 title: Tmux Linux会话管理神器
 date: 2013-10-8 17:06:45
-tags:
+tags: tools
 ---
 
 ## 邂逅Tmux
@@ -14,7 +14,7 @@ tags:
 ![](http://media.tumblr.com/a134acdee31402e4d91b147397e6ae21/tumblr_inline_mucqivJE881sosno0.png)
 
 ## 安装
- 
+
 * 环境Ubuntu 12.04
 
 ```bash
@@ -83,6 +83,6 @@ tmux attach -t <会话编号>
 * ctrl+方向键 以1个单元格为单位移动边缘以调整当前面板大小
 * o 在当前窗口中选择下一面板
 * 方向键 移动光标以选择面板
-* { / } 向前/后置换当前面板 
+* { / } 向前/后置换当前面板
 
 ## 更多的东西还需要你自己去试试！
