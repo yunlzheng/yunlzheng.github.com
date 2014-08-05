@@ -1,3 +1,0 @@
-title: shell-script
-tags:
----
