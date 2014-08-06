@@ -76,6 +76,15 @@ ansible all -m copy -a "src=hosts dest=~/hosts" -i hosts -u vagrant
 
 > ansible的百科全书
 
+显示ansible所有可用模块
+
+```
+ansible-doc -l 
+```
+
+查看特定模块的相关信息
+
+
 ```
 ansible-doc ping
 ```
