@@ -1,7 +1,9 @@
 title: Ansible the simplest way to automate IT
 date: 2014-08-05 09:33:59
-tags: 
+tags:
 ---
+
+![](https://31.media.tumblr.com/64f6098a62f4bf3c88417b06f5e0b961/tumblr_inline_n9yq5400QL1sosno0.png)
 
 ## 简单开始
 
@@ -79,7 +81,7 @@ ansible all -m copy -a "src=hosts dest=~/hosts" -i hosts -u vagrant
 显示ansible所有可用模块
 
 ```
-ansible-doc -l 
+ansible-doc -l
 ```
 
 查看特定模块的相关信息
@@ -88,6 +90,8 @@ ansible-doc -l
 ```
 ansible-doc ping
 ```
+
+![](https://31.media.tumblr.com/545c9ccfd0486332ea0958683392c108/tumblr_inline_n9yq5hTERc1sosno0.png)
 
 ## ansible-playbook 剧本
 
