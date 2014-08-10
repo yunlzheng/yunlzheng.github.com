@@ -1,4 +1,4 @@
-title: Ansible the simplest way to automate IT
+title: Ansible初体验
 date: 2014-08-05 09:33:59
 tags:
 ---
