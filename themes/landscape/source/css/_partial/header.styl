@@ -1,12 +1,13 @@
 #header
-  background-size: cover
-  background-color: #FFF
+  background-color: #3fb0e7
   color: #333
   display: table
   height: 100%
   text-align: center
   width: 100%
-  transition: height 0.25s;
+  transition: height 0.25s
+  position: relative
+  overflow: hidden
   &:before, &:after
     content: ""
     position: absolute
@@ -24,12 +25,9 @@
   width: 100%
   height: 50px
   background:#fff
-  transition: opacity 0.25s;
-  top: 0;
-  @media mq-mobile
-    background: #37aab4
-    .nav-icon
-      color:#fff
+  transition: opacity 0.25s
+  z-index: 99999
+  top: 0
   .title
     font-weight: bold
     padding-top:20px
@@ -71,7 +69,7 @@
 
 $logo-text
   text-decoration: none
-  color: #333
+  color: #fff
   font-weight: 300
 
 #logo
@@ -143,7 +141,7 @@ $nav-link
   padding: 20px 15px
   position: relative
   cursor: pointer
-  color: #37AAB4
+  color: #2E3434
 
 
 .main-nav-link
@@ -234,3 +232,98 @@ $nav-link
   cursor: pointer
   &:hover, &:focus
     color: #777
+
+.mountains
+  position: absolute
+  bottom: -120px
+  right: 0px
+  @media mq-mobile
+    height: 100px
+
+$cloud
+  background-image: url("/css/images/cloud.png")
+  background-size: cover
+  position: absolute
+
+$sun
+  background-image: url("/css/images/sun.png")
+  background-size: cover
+  position: absolute
+  animation: 10s sun infinite linear
+
+#cloud-1
+  @extend $cloud
+  width:80px
+  height:70px
+  bottom:300px
+  right:-200px
+  animation: 10s cloud-right infinite linear
+
+#cloud-2
+  @extend $cloud
+  width:80px
+  height:70px
+  bottom:200px
+  right:-200px
+  animation: 5s cloud-right infinite linear
+
+#cloud-3
+  @extend $cloud
+  width:80px
+  height:70px
+  bottom:400px
+  left:-200px
+  animation: 10s cloud-left infinite linear
+
+#cloud-4
+  @extend $cloud
+  width:80px
+  height:80px
+  bottom:100px
+  animation: 5s cloud-middle infinite ease-in-out alternate
+
+.cloud
+  @media mq-mobile
+    display:none
+
+#sun
+  @extend $sun
+  width:80px
+  height:80px
+  top: 10px
+  left: 50px
+  z-index: 100000
+
+@keyframes cloud-middle
+  from{
+    right: 200px
+  }
+  to {
+    right: 800px
+  }
+
+@keyframes cloud-left
+  from{
+    opacity: 0
+    left: -100px
+  }
+  to {
+    opacity: 1
+    left: 1800px
+  }
+
+@keyframes cloud-right
+  from{
+    opacity: 0
+    right: -100px
+  }
+  to {
+    opacity: 1
+    right: 1800px
+  }
+
+$keyframe-name-2 = sun
+@keyframes {$keyframe-name-2}
+  to {
+    transform: rotate(1turn);
+  }
