@@ -14,11 +14,15 @@
 </script>
 <% } %>
 
-<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/scrollReveal.js/0.1.2/scrollReveal.min.js"></script>
 <% if (theme.fancybox){ %>
   <%- css('fancybox/jquery.fancybox') %>
   <%- js('fancybox/jquery.fancybox.pack') %>
 <% } %>
+
+<script>
+  window.scrollReveal = new scrollReveal();
+</script>
 
 <%- js('js/script') %>
