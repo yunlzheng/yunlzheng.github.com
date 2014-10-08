@@ -17,7 +17,7 @@ widgets:
 - tag
 
 # Miscellaneous
-google_analytics:
+google_analytics: UA-37439567-4
 favicon: /favicon.png
 twitter:
 google_plus:
