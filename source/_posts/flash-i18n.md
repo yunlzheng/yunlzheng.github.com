@@ -3,8 +3,10 @@ date: 2014-07-31 15:25:39
 tags: python
 ---
 
-Flask Bable(i18n)
-=================
+
+当你的应用面向更多的用户时国际化是不可避免的一步，而在Flask中国际化主要依赖于Flask-Babel这个Python库实现，记录一下在Flask下面的国籍化过程
+
+<!-- more -->
 
 ## 安装Flask-Babel
 
@@ -23,7 +25,7 @@ Flask Application目录下创建babel.cfg, 内容如下：
 
 根据该配置Babel会自动扫描配置文件所描述的文件，并将需要进行国际化处理的内容提取出来。
 
-<!-- more -->
+
 
 ## 生成翻译模版.pot
 

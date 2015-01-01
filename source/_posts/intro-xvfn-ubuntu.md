@@ -3,10 +3,10 @@ date: 2014-10-19 22:47:10
 tags: devops
 ---
 
-<!-- more -->
-
 在诸如Linxu的服务器版本，Vagrant,Docker并不包含物理的显示设备。
-某些特定的程序诸如浏览器firefox,chrome，在linux下运行都需要依赖于显示设备。
+某些特定的程序诸如浏览器firefox,chrome，在linux下运行都需要依赖于显示设备。最明显的需求就包括运行基于浏览器的单元测试。那么该如何解决这些问题？
+
+<!-- more -->
 
 ```
 vagrant@vagrant-ubuntu-trusty-64:~$ firefox
@@ -19,7 +19,7 @@ Error: no display specified
 
 如何解决？xvfb(virtual framebuffer X server)，xvfb 这个工具相当于一个wrapper，给应用程序提供模拟的 X server。
 
-<!-- more -->
+
 
 ## 安装Xvfb
 

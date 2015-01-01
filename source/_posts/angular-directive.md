@@ -3,6 +3,8 @@ date: 2014-07-31 15:30:25
 tags: angular
 ---
 
+Angulare及Ember之后又一前端MVC的一大力作，同时也越来越多的应用到现在Web应用开发当中，这里我们来了解一下Angular中非常重要的一块Derective
+
 <!-- more -->
 
 用简单的方式理解Directive就是通过标记（例如通过 属性, 标签, 或者css的 class）特定的DOM元素，为其提供额外功能的方法。
@@ -39,8 +41,6 @@ Directive的名称
     <div my-directive></div>
 
 实例见:[http://jsbin.com/kovak/7/](http://jsbin.com/kovak/7/)
-
-<!-- more -->
 
 ## Directive参数详解
 

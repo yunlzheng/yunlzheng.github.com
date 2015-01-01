@@ -3,11 +3,8 @@ date: 2014-08-05 09:33:59
 tags:
 ---
 
-![](https://31.media.tumblr.com/64f6098a62f4bf3c88417b06f5e0b961/tumblr_inline_n9yq5400QL1sosno0.png)
-
-## 简单开始
-
-Ansible自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单
+Ansible是一个简单，强大的自动化配置管理工具，
+对于Ansible而言，自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单
 
 <!-- more -->
 
@@ -46,8 +43,6 @@ example1 初识:
 echo "127.0.0.1:2222" | tee hosts
 ansible all -m ping -i hosts -u vagrant
 ```
-
-<!-- more -->
 
 
 上面的命令首先在当前目录创建了一个hosts文件，然后调用ansible的ping模块来对hosts文件中定义的服务器调用ping操作

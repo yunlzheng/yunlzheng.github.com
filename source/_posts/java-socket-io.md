@@ -3,8 +3,6 @@ date: 2014-07-31 15:28:23
 tags: java
 ---
 
-## 情景再现
-
 今天有一个小任务，主要是解决将来可能遇到的Web前端与服务器端实时通讯的一个小需求。其实按照我个人的理解直接在前端轮循基本上也能达到相同的效果，但是由于某领导认为这样实现不够优雅,So就又倒腾一下Websocket，不过是在Java下基于Socket.io实现的。
 
 之前在Python下也做过一个[基于WebSocket的聊天程序](github.com/yunlzheng/chat)，不过是使用原生html的websocket api和tornado实现的。 在接触Node以后了解了Socket.io这个牛逼哄哄的组件，Socket.io对web端而言主要使用Html5 WebSocket和Flask分别适配，达到可以在Chrome这类Morden浏览器也可以在IE这货上正常使用。不过Java党就没有Node那么幸运了至少之前都没听说什么比较出名的Socket.io的Java服务器端实现。不过机缘巧合之前学习Netty的时候也看过一些实现Websocket的例子，顺着这条线在万能的Google和程序员的好朋友Stackflow上找到了一个答案[netty-socketio](https://github.com/mrniko/netty-socketio), 基于Netty的Socket.io的服务器端实现。

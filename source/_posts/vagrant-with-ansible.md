@@ -3,8 +3,6 @@ date: 2014-08-08 08:40:59
 tags: Devops
 ---
 
-## 前言
-
 在Vagrant出现的时候，发现原来使用虚拟机是这么爽得一件事情从**vagrant init**到**vagrant up**的过程是这么美好。于是程序员所有的虚拟机都开始通过Vagrant来进行管理(unless windows)
 
 我所有开发相关服务Mysql, Mongodb, Rabbit都跑在了Vagrant里面。 有一天我的虚拟机挂掉了，完蛋！ 又要重新装一遍这些所有的服务

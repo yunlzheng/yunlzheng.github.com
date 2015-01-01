@@ -3,6 +3,10 @@ date: 2014-07-31 15:22:57
 tags: angular
 ---
 
+在前端应用开发当中我们用到最多的与后端服务进行交互的技术就是Ajax,当然在Angular中我们可以使用$resource去完成我们对于后端服务的ajax请求调用。
+
+<!-- more -->
+
 ## 使用[$http](http://docs.angularjs.org/api/ng/service/$http)直接访问接口
 
 $http是angular提供的http调用的基础服务。
@@ -39,8 +43,6 @@ config对象主要包含对诸如请求地址url,请求方法method,查询参数
         });
 
 除此之外$http还提供了请求拦截机制Interceptors可以对api请求进行统一的错误处理等功能。
-
-<!-- more -->
 
 ## $http结合Factory封装访问接口
 

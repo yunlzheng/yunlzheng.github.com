@@ -3,8 +3,9 @@ date: 2014-07-31 15:31:27
 tags: devops
 ---
 
-Fabric是一个基于SSH的Python命令行工具
+如果说要一句话去评价Fabric是话，那就应该是：“简单，犀利！”
 
+<!-- more -->
 
 ## Hello Fabric
 
@@ -27,7 +28,7 @@ __Execute__
 
     fab hello:name=Jeff
 
-    <!-- more -->
+
 
 ## Fabric能做什么？
 
