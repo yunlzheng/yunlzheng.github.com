@@ -13,6 +13,8 @@ tags: tools
 
 ![](http://media.tumblr.com/a134acdee31402e4d91b147397e6ae21/tumblr_inline_mucqivJE881sosno0.png)
 
+<!-- more -->
+
 ## 安装
 
 * 环境Ubuntu 12.04

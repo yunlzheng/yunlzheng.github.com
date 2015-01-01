@@ -1,7 +1,9 @@
-title: intro-xvfn-ubuntu
+title: 如何在Vagrant/Docker中运行Firefox
 date: 2014-10-19 22:47:10
 tags: devops
 ---
+
+<!-- more -->
 
 在诸如Linxu的服务器版本，Vagrant,Docker并不包含物理的显示设备。
 某些特定的程序诸如浏览器firefox,chrome，在linux下运行都需要依赖于显示设备。
@@ -16,6 +18,8 @@ Error: no display specified
 如果尝试在服务器版本Linux或者Vagrant中运行Firefox我们将会得到诸如以上的输出**Error: no display specified**.
 
 如何解决？xvfb(virtual framebuffer X server)，xvfb 这个工具相当于一个wrapper，给应用程序提供模拟的 X server。
+
+<!-- more -->
 
 ## 安装Xvfb
 

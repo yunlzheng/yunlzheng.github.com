@@ -41,6 +41,7 @@ App.Router = Ember.Router.extend({
 App.initialize();
 ```
 
+<!-- more -->
 
 现在介绍该应用程序的每一部分
 

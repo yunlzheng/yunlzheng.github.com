@@ -23,6 +23,8 @@ sudo rabbitmqctl list_bindings
 
 分别查看当前系统种存在的Exchange和Exchange上绑定的Queue信息。
 
+<!-- more -->
+
 消息发布者EmitLog.java
 
 ```

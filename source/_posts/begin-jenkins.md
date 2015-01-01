@@ -11,6 +11,7 @@ Jenkins安装与配置
 
 将下载的jenkins.war包直接放到tomcat下，启动tomcat即可安装完成
 
+<!-- more -->
 
 ![](http://static.oschina.net/uploads/space/2012/0702/174713_juh7_553747.jpg)
 图表 1 Jenkins初始化界面

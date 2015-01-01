@@ -3,13 +3,15 @@ date: 2014-07-31 15:26:28
 tags: java
 ---
 
-	有人想做一个游戏服务器，所以google了一把大概了解了java体系中主要的两个可以作为游戏服务器的框架mina和netty. 参考了知乎上的上的一些观点，毅然决然的选择了netty. 至于原因引用一段netty上的原话“The answer is the philosophy it is build, netty is build to give you most comfortable exprience both terms of API and the implementation from the day one	”
+有人想做一个游戏服务器，所以google了一把大概了解了java体系中主要的两个可以作为游戏服务器的框架mina和netty. 参考了知乎上的上的一些观点，毅然决然的选择了netty. 至于原因引用一段netty上的原话“The answer is the philosophy it is build, netty is build to give you most comfortable exprience both terms of API and the implementation from the day one	”
 
-	其实在技术选型上我有个基本观点，如果不是作为企业开发为目的的话，我一般选新不选旧，其次看官方文档是否完善，而且mina和netty都出自同一个作者。 所以没有多少理由就简单做了一个决定.
+其实在技术选型上我有个基本观点，如果不是作为企业开发为目的的话，我一般选新不选旧，其次看官方文档是否完善，而且mina和netty都出自同一个作者。 所以没有多少理由就简单做了一个决定.
 
 ## What is netty
 
 netty是一个提供基于异步事件驱动的网络应用程序框架和用于构架高可维护性，高性能，高伸缩性的协议服务器和客户端的工具.
+
+<!-- more -->
 
 ## 支持的协议
 

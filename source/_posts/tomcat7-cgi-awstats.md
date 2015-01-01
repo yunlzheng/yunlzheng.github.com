@@ -14,9 +14,13 @@ JDK 1.6+
 Perl 5.2+
 Ubuntu
 
+<!-- more -->
+
 1，下载[Tomcat](http://www.fayea.com/apache-mirror/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.tar.gz)并解压到特定目录
 
+
 2,修改<Tomcat_HOME>\conf\web.xml配置文件，取消cgi servlet和对应的mapping注释
+
 
 ```
 <servlet>

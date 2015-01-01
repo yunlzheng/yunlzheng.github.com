@@ -48,6 +48,8 @@ tags: jenkins
 mvn -cpu hpi:create
 ```
 
+<!-- more -->
+
 该操作需要你输入一些参数，比如说groupid,artifactid。之后会创建一个新的插件模板便于开发者之后的开发工作。确保你可以使用一下命令：
 
 ```

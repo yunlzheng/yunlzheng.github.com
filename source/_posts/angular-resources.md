@@ -40,6 +40,8 @@ config对象主要包含对诸如请求地址url,请求方法method,查询参数
 
 除此之外$http还提供了请求拦截机制Interceptors可以对api请求进行统一的错误处理等功能。
 
+<!-- more -->
+
 ## $http结合Factory封装访问接口
 
 factory是Angular中$provide注册组件的方法之一（常用的其他方法还包括provider,value,service），这里可以简单理解为一个对象工厂(if you code java)， 通过注册一个factory我们可以将后端程序提供的API接口进行统一的封装。

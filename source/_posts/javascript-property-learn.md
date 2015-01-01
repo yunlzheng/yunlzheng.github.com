@@ -35,6 +35,8 @@ var bob = Person('bob');
 console.log(bob.name);
 ```
 
+<!-- more -->
+
 # 原型
 
 JavaScript本身是基于原型的编程语言，原型的作用:区别类和实例

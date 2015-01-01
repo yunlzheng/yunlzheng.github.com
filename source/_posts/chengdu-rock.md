@@ -9,6 +9,8 @@ tags: life
 
    老姐给我感觉是一直有一种裁缝的文艺气息，读的是新闻传媒偶尔喜欢卖弄小清新风格的文字，还没毕业有去学了服装设计， 后面实习结果又去了一家[@红秀](http://weibo.com/graziachina?sudaref=www.google.com.hk)的某时尚杂志社实习。 总的来说算得上是个文艺独立女青年，时常喜欢自己做点东西然后到上海各种群体活动（如音乐节）投机倒把的小勾当补贴日常开支。
 
+   <!-- more -->
+
    ![](http://media.tumblr.com/8ca4f8185393da1cbddb8b3428d589ef/tumblr_inline_muwbunwAgE1sosno0.jpg)
 
    文艺女青年登场

@@ -9,6 +9,8 @@ tags:
 
 Ansible自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单
 
+<!-- more -->
+
 ## 安装Ansible
 
 For python user
@@ -33,6 +35,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub vagrant@127.0.0.1:2222
 
 > for mac user need install ssh-copy-id tools first "brew install ssh-copy-id"
 
+
 ## ansible Ad-hot
 
 Ad-hot简单来说就是利用ansible来执行一些简单的零时的服务器远程操作。
@@ -43,6 +46,9 @@ example1 初识:
 echo "127.0.0.1:2222" | tee hosts
 ansible all -m ping -i hosts -u vagrant
 ```
+
+<!-- more -->
+
 
 上面的命令首先在当前目录创建了一个hosts文件，然后调用ansible的ping模块来对hosts文件中定义的服务器调用ping操作
 

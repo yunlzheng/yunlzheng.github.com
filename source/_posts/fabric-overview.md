@@ -27,6 +27,8 @@ __Execute__
 
     fab hello:name=Jeff
 
+    <!-- more -->
+
 ## Fabric能做什么？
 
 * 系统和服务器管理

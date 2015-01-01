@@ -21,7 +21,7 @@ tags: javascript
 
   所以一句话就感觉就像是一陀狗屎一样。
 
-
+  <!-- more -->
   如果是ember.js算是对前端mvc的一次初识，那么Backbone.js算是第一次的实践，这两个前端MVC框架中Backbone感觉更轻量级一点，而且由于和jquery的搭配使用所以更容易上手一点。两个框架都可以通过浏览器的hash实现路由功能，也可以使用html5的pushstate来实现，不过需要后端配合。 两个框架都使用前端模板引擎来绑定视图和数据，不过在这方面感觉ember.js的能力更加牛B一点，它是双向的数据绑定，Backbone则需要自己实现对model的监听来更新视图。例如如下的这种形式的代码片段一样，完整代码[在这](https://github.com/yunlzheng/backbone-sample/blob/master/static/js/views/todos.js)
 
 ```

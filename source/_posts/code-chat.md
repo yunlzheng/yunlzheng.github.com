@@ -17,6 +17,8 @@ tags: code
 
 基于Tornado 和 html5 websocket技术的匿名在线聊天工具
 
+<!-- more -->
+
 # 杂记
 
 ## 前端杂记

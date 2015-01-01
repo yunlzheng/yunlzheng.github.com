@@ -16,6 +16,8 @@ Vargant一个属于程序猿的虚拟机。
 在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题
 Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫BOX的东西来进行分发，下面主要记录一些Vagrant的基本使用方式和方法
 
+<!-- more -->
+
 ## 安装Vargant
 
 [下载地址](http://hc-vagrant-files.s3.amazonaws.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi)
