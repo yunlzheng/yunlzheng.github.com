@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <%
   var title = page.title;
-
   if (is_archive()){
     title = 'Archives';
 
@@ -17,6 +16,8 @@
     title = 'Category: ' + page.category;
   } else if (is_tag()){
     title = 'Tag: ' + page.tag;
+  } else {
+
   }
   %>
   <title><% if (title){ %><%= title %> | <% } %><%= config.title %></title>
