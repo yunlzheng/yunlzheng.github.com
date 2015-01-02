@@ -1,4 +1,5 @@
 .DS_Store
+.vagrant
 Thumbs.db
 db.json
 debug.log

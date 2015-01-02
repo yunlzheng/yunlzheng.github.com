@@ -25,6 +25,8 @@
       display:none
     #header-inner
       border-bottom: 1px solid #ddd
+      &.active
+        border-bottom: 1px solid rgb(63, 176, 231)
       .title
         opacity: 1
 
@@ -50,7 +52,7 @@
       @media mq-mobile
         color: #fff
   &.active
-    border-bottom: 1px solid #ddd
+    border-bottom: 1px solid rgb(63, 176, 231);
     .title
       opacity: 1
 
@@ -170,10 +172,21 @@ $nav-link
   &:before
     content: "\f0c9"
 
+#sub-profile
+  position: absolute
+  top: 12px
+  width: 30px
+  height: 30px
+  right: 15px
+  border:1px solid #ddd
+  img
+    width:30px
+    height:30px
+
 #sub-nav
   position: absolute
   top: 0
-  right:0
+  right:42px
 
 #rss-wrap
  width:100px
@@ -203,7 +216,7 @@ $nav-link
   transition: 0.2s ease-out
   &.on
     opacity: 1
-    right: 15px
+    right: 50px
   @media mq-mobile
     width: 80%
     right: -100%
