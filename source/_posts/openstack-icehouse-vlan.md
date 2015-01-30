@@ -1,10 +1,7 @@
-title: OpenStack Icehouse Vlan配置
-date: 2015-1-30 23:56:00
+title: openstack-icehouse-vlan
+date: 2015-01-31 00:00:34
 tags: openstack
 ---
-
-OpenStack Icehouse Neutron Vlan
-==============================
 
 ## 基本结构
 
@@ -61,7 +58,7 @@ bridge_mapping = physnet1:br-em2
 重启openvswitch agent服务
 
 ```
- service neutron-plugin-openvswitch-agent restart
+service neutron-plugin-openvswitch-agent restart
 ```
 
 * 网络节点创建外部网络网桥
