@@ -50,3 +50,29 @@ ethtool -K eth3 gso off
 ```
 
 这里的eth3是指网络节点的外部网络网卡
+
+## 启动metadata-service
+
+按照OpenStack安装文档部署完成OpenStack之后，会发现创建虚拟机时user-data无法使用。
+跟踪虚拟机启动日志我们会发现，在虚拟机内部无法访问http://169.254.169.254
+
+修复办法：
+
+编辑dhcp_agent.ini文件修改如下配置
+
+```
+# The DHCP server can assist with providing metadata support on isolated
+# networks. Setting this value to True will cause the DHCP server to append
+# specific host routes to the DHCP request. The metadata service will only
+# be activated when the subnet does not contain any router port. The guest
+# instance must be configured to request host routes via DHCP (Option 121).
+enable_isolated_metadata = True
+
+# Allows for serving metadata requests coming from a dedicated metadata
+# access network whose cidr is 169.254.169.254/16 (or larger prefix), and
+# is connected to a Neutron router from which the VMs send metadata
+# request. In this case DHCP Option 121 will not be injected in VMs, as
+# they will be able to reach 169.254.169.254 through a router.
+# This option requires enable_isolated_metadata = True
+enable_metadata_network = True
+```
