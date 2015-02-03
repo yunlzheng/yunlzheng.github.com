@@ -35,6 +35,14 @@ qemu-img create -f qcow windows7.qcow2 20G
 kvm -m 2048 -no-reboot -boot order=d -drive file=windows7.qcow2,if=virtio,boot=off -drive file=windows7.iso,media=cdrom,boot=on -drive file=virtio-win-0.1-94.iso,media=cdrom,boot=off -net nic,model=virtio -nographic -vnc :1
 ```
 
+ubuntu examples:
+
+```
+kvm -m 1024 -cdrom ubuntu-14.04.1-desktop-amd64.iso -drive file=ubuntu-14.04-desktop-amd64.qcow2 -boot d -nographic -vnc :2
+# restart
+kvm -m 1024 -drive file=ubuntu-14.04-desktop-amd64.qcow2 -boot d -nographic -vnc :2
+```
+
 之后可以通过vnc客户端连接到虚拟机
 
 ```
