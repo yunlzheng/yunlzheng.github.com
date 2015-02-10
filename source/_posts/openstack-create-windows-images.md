@@ -1,5 +1,5 @@
 title: OpenStack创建Windows镜像
-date: 2015-01-02 00:42:54
+date: 2015-02-10 10:09:00
 tags: openstack
 ---
 
@@ -7,13 +7,13 @@ tags: openstack
 
 <!-- more -->
 
-## 准备基础环境
+## 1，准备基础环境
 
 * 系统环境：ubuntu 14.04
 * window7版本iso源文件；
 * virtio驱动程序virtio-win-0.1-94.iso（下载地址：http://alt.fedoraproject.org/pub/alt/virtio-win/latest/）；
 
-## 安装相关软件包
+## 2，安装相关软件包
 
 ```
 apt-get install vncviewer kvm qemu-kvm
@@ -21,7 +21,7 @@ apt-get install vncviewer kvm qemu-kvm
 
 注意：由于使用到KVM需要打开主机的Intel VT-x/EPT支持，否则无法使用kvm模块
 
-## 创建windows7镜像
+## 3，创建windows7镜像
 
 这里默认建立具有20G存储空间的镜像,在实际使用中假如没有提供Cinder存储服务，虚拟机的磁盘空间往往不能满足使用需求
 
@@ -70,7 +70,7 @@ vncviewer # localhost:1
 ![](http://filehost.qiniudn.com/penstack-images-windows-005.png)
 ![](http://filehost.qiniudn.com/openstack-images-window-007.png)
 
-## 安装网卡驱动程序
+## 4，安装网卡驱动程序
 
 当完成系统安装之后，你会惊喜的发现windows系统找不到本地网络驱动设备，也就是说这个镜像依然无法在opensatck中正常使用。
 
@@ -78,11 +78,47 @@ vncviewer # localhost:1
 
 当然驱动程序你可以在CDROM下面找到自己相应版本的操作系统驱动程序即可。 这里就不截图了（mei de jie）。
 
-## 开放windows部分防火墙
+## 5，开放windows部分防火墙
 
 由于OpenStack使用到安装组（Securiyu Group进行安装管理），所以对于windows的操作系统镜像需要至少打开TCP3389和ICMP。
 
-## 完成
+## 6，加载文件内容
+
+在完成基础的镜像制作之后（操作系统安装，网卡驱动安装），我们往往需要对虚拟机镜像进行一些其他操作诸如：激活操作系统，安装软件等定制化。 这时候需要我们能上传文件到虚拟机内部。
+
+此时采取的策略与加载virto驱动相识，我们实现创建好一个iso文件，并包含我们必要的文件内容。 在使用kvm启动虚拟机时以CDROM的方式加载ISO文件即可
+
+### 6.1，创建临时文件目录
+
+```
+mkdir /tmp/directory
+```
+
+将需要的文件保存到/tmp/directory目录下，建议按照不同操作系统分目录如：
+
+---
+- window7
+|-- amd64
+|-- x86
+- window8
+|-- amd64
+|-- x86
+
+### 6.2，将目录保存为iso文件，如/tmp/cd.iso
+
+```
+mkisofs -o /tmp/cd.iso  /tmp/directory
+```
+
+### 6.3，将cd.iso作为CDROM加载到虚拟机
+
+```
+kvm -m 2048 -no-reboot -boot order=d -drive file=windows7.qcow2,if=virtio,boot=off -drive file=virtio-win-0.1-94.iso,media=cdrom -drive file=cd.iso,media=cdrom -net nic,model=virtio -nographic -vnc :1
+```
+
+![](http://filehost.qiniudn.com/kvm-load-file.png)
+
+## 7，导入
 
 接下来你就可以使用glance的cli命令上传镜像到OpenStack并且进行测试了。
 
@@ -92,7 +128,7 @@ glance image-create --name "windows7-x86_64" --disk-format qcow2 --container-for
 
 对于不同类型版本的windows操作系统，只需要选择相应的驱动程序即可。 Enjoy Your OpenStack;
 
-## 其他
+## 8，其他
 
 For Linux 安装官方文档制作Linux虚拟机时，文档提供的shell脚本有部分错误，修改如下：
 
