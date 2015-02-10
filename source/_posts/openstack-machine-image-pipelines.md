@@ -1,4 +1,4 @@
-title: 大话OpenStack之镜像管理
+title: OpenStack之镜像管理
 date: 2015-01-02 02:14:15
 tags: openstack
 ---

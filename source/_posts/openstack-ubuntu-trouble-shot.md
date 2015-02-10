@@ -53,6 +53,7 @@ ethtool -K eth3 gso off
 
 ## 启动metadata-service
 
+
 按照OpenStack安装文档部署完成OpenStack之后，会发现创建虚拟机时user-data无法使用。
 跟踪虚拟机启动日志我们会发现，在虚拟机内部无法访问http://169.254.169.254
 

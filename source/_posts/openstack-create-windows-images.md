@@ -1,4 +1,4 @@
-title: 大话OpenStack之创建Windows镜像
+title: OpenStack创建Windows镜像
 date: 2015-01-02 00:42:54
 tags: openstack
 ---
@@ -91,3 +91,40 @@ glance image-create --name "windows7-x86_64" --disk-format qcow2 --container-for
 ```
 
 对于不同类型版本的windows操作系统，只需要选择相应的驱动程序即可。 Enjoy Your OpenStack;
+
+## 其他
+
+For Linux 安装官方文档制作Linux虚拟机时，文档提供的shell脚本有部分错误，修改如下：
+
+```
+#!/bin/sh
+#
+# This script will be executed *after* all the other init scripts.
+# You can put your own initialization stuff in here if you don't
+# want to do the full Sys V style init stuff.
+if [ ! -d /root/.ssh ]; then
+mkdir -p /root/.ssh
+chmod 700 /root/.ssh
+fi
+ATTEMPTS=30
+FAILED=0
+while [ ! -f /root/.ssh/authorized_keys ]; do
+curl -f http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key > /tmp/metadata-key 2>/dev/null
+if [ \$? -eq 0 ]; then
+cat /tmp/metadata-key >> /root/.ssh/authorized_keys
+chmod 0600 /root/.ssh/authorized_keys
+restorecon /root/.ssh/authorized_keys
+rm -f /tmp/metadata-key
+echo "Successfully retrieved public key from instance metadata"
+echo "*****************"
+echo "AUTHORIZED KEYS"
+echo "*****************"
+cat /root/.ssh/authorized_keys
+echo "*****************"
+fi
+done
+
+touch /var/loc/subsys/local
+
+/sbin/black_box.sh >> /var/log/bbox.log 2>&1 &
+```
