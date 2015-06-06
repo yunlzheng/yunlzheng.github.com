@@ -1,4 +1,4 @@
-title: 百里香的叶子-Java轻量级模板引擎Thymeleaf
+title: Java轻量级模板引擎Thymeleaf
 date: 2015-03-17 15:02:11
 tags: Java
 ---
