@@ -1,4 +1,4 @@
-title: 使用docker-compose进行Python开发
+title: 使用docker-compose进行python开发
 date: 2015-06-06 11:33:42
 tags: [Docker, Docker-compose]
 ---
