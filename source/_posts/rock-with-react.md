@@ -6,7 +6,9 @@ author: '墨鱼'
 
 ## 1，入坑
 
-React.js 入坑记：快速上手，组件化，高复用，高性能。 
+React.js 入坑记：快速上手，组件化，高复用，高性能。
+
+![](http://7pn5d3.com1.z0.glb.clouddn.com/blog_logo_react.png)
 
 <!-- more -->
 
