@@ -3,6 +3,11 @@ date: 2015-06-15 21:30:15
 tags: [翻译, Agile]
 ---
 
+代码审查，作为一个团队的日常质量活动扮演着重要的作用。但是作为一个群体活动，必然需要参与者都遵守一套行为准则，避免将Code Review变成一场争论。得不偿失。
+本文翻译自thoughtbot关于[Code Review Guide](https://github.com/thoughtbot/guides/blob/master/code-review/README.md)
+
+<!--more-->
+
 作为参与者
 --------
 
