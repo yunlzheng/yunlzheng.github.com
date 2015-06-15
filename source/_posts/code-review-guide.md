@@ -44,3 +44,5 @@ tags: [翻译, Agile]
 * 即使作者已经考虑过的问题，我们也可以提出不同的实现方式
 * 尝试理解作者的立场和意图.
 * 关闭pull request时使用"Ready to merge"的评论.
+
+> 参考：https://github.com/thoughtbot/guides/blob/master/code-review/README.md
