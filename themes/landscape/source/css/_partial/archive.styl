@@ -1,45 +1,6 @@
 .archives-wrap
   margin: block-margin 0
 
-.archives-wrap
-  .widget-wrap
-    .widget-title
-      text-decoration: none
-      text-transform: uppercase
-      letter-spacing: 2px
-      color: #999
-      margin-bottom: 1em
-      margin-left: 5px
-      line-height: 1em
-      text-shadow: 0 1px #fff
-      font-weight: bold
-    .tag-list-item
-      display: inline-block
-      margin-right: 20px
-      padding: 5px
-    .tag-list-link
-      text-decoration: none
-      font-weight: bold
-      color: #555
-      -webkit-transition: color 0.2s
-      -moz-transition: color 0.2s
-      -ms-transition: color 0.2s
-      transition: color 0.2s
-      line-height: 1.6em
-      margin-right: 5px
-    .tag-list-count
-      display: inline
-      padding: .2em .6em .3em
-      font-size: 75%
-      font-weight: 700
-      line-height: 1
-      color: #fff
-      text-align: center
-      white-space: nowrap
-      vertical-align: baseline
-      border-radius: .25em
-      background-color: #428bca
-
 .archives
   clearfix()
 
@@ -88,24 +49,28 @@
   clearfix()
   margin: block-margin auto
   background: #fff
+  box-shadow: 1px 2px 3px #ddd
+  border: 1px solid color-border
+  border-radius: 3px
   text-align: center
   color: color-grey
   overflow: hidden
   a, span
     padding: 10px 20px
-    font-size: 18px
+    line-height: 1
+    height: 2ex
   a
-    font-size:20px
     color: color-grey
     text-decoration: none
-  .next:before
-    font-family: FontAwesome
-    content: "\f105"
-  .prev:before
-    font-family: FontAwesome
-    content: "\f104"
+    &:hover
+      background: color-grey
+      color: #fff
+  .prev
+    float: left
+  .next
+    float: right
   .page-number
-    display: none
+    display: inline-block
     @media mq-mobile
       display: none
   .current

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <%
   var title = page.title;
+
   if (is_archive()){
     title = 'Archives';
 
@@ -16,8 +17,6 @@
     title = 'Category: ' + page.category;
   } else if (is_tag()){
     title = 'Tag: ' + page.tag;
-  } else {
-
   }
   %>
   <title><% if (title){ %><%= title %> | <% } %><%= config.title %></title>
@@ -29,6 +28,7 @@
   <% if (theme.favicon){ %>
     <link rel="icon" href="<%- theme.favicon %>">
   <% } %>
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   <%- css('css/style') %>
   <%- partial('google-analytics') %>
 </head>

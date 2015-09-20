@@ -1,27 +1,26 @@
 # Header
 menu:
-  主页: /
-  归档: /archives
-  关于: /about
+  Home: /
+  Archives: /archives
 rss: /atom.xml
 
-sitemap:
-    path: sitemap.xml
-
 # Content
-excerpt_link: Read More
+excerpt_link: 更多
 fancybox: true
 
 # Sidebar
+sidebar: right
 widgets:
+- category
 - tag
+- tagcloud
+- archive
+- recent_posts
 
 # Miscellaneous
-google_analytics: UA-37439567-4
-favicon: /favicon.ico
+google_analytics:
+favicon: /favicon.png
 twitter:
 google_plus:
 fb_admins:
 fb_app_id:
-github: yunlzheng
-weibo:

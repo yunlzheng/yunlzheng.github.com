@@ -1,9 +1,7 @@
-.idea
 .DS_Store
-.vagrant
 Thumbs.db
 db.json
-debug.log
+*.log
 node_modules/
 public/
-.deploy/
+.deploy*/
