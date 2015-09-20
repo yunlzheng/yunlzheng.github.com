@@ -13,6 +13,7 @@
         }
         .sidebar-profile-name {
             display: none;
+            color: map-get($sidebar, color);
         }
     }
     // Buttons
