@@ -28,7 +28,7 @@ image_dir: assets/images
 sidebar:
     menu:
         home:
-            title: global.home
+            title: 主页
             url: /
             icon: home
         # categories:
@@ -50,7 +50,7 @@ sidebar:
         #     # `st-search-show-outputs` classes are used to open swiftype search window
         #     class: st-search-show-outputs
         about:
-            title: global.about
+            title: 关于我
             url: /#about
             icon: question
     author_links:
