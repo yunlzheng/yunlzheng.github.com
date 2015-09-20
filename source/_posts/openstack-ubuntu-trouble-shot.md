@@ -1,4 +1,4 @@
-title:  大话OpenStack之Trouble shot
+title:  OpenStack之Trouble shot
 date: 2015-01-02 01:52:03
 tags: openstack
 ---

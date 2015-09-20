@@ -1,4 +1,4 @@
-title: 大话OpenStack之ntp服务
+title: OpenStack之ntp服务
 date: 2015-01-02 01:51:49
 tags: openstack
 ---

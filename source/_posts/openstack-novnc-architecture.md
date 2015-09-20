@@ -3,8 +3,6 @@ date: 2015-02-1 00:00:34
 tags: openstack
 ---
 
-## 概述
-
 对于使用过OpenStack的用户，我们第一次操作虚拟机都可能是直接通过OpenStack Dashbord管理控制台提供的Web vnc来进行使用。
 
 如图所示，我们可以很方便的使用该功能，对虚拟机进行管理和配置；

@@ -1,4 +1,4 @@
-title: 大话OpenStack之体系设计
+title: OpenStack之体系设计
 date: 2015-01-02 01:52:26
 tags: openstack
 ---
