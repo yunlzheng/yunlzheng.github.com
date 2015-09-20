@@ -4,4 +4,11 @@
     margin:        0 auto;
     padding-right: map-get($main-content, padding-right-left);
     padding-left:  map-get($main-content, padding-right-left);
+    p {
+      color: rgb(47, 47, 47);
+      display: block;
+      font-family: 'lucida grande', 'lucida sans unicode', lucida, helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+      font-size: 14px;
+      font-weight: normal;
+    }
 }

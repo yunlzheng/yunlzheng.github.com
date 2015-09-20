@@ -14,12 +14,29 @@
     width:          100%;
     display:        inline-block;
     vertical-align: top;
-
+    .postShorten-excerpt {
+      p {
+        color: rgb(47, 47, 47);
+        display: block;
+        font-family: 'lucida grande', 'lucida sans unicode', lucida, helvetica, 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        height: 81px;
+        line-height: 27.2px;
+      }
+    }
     .postShorten-header {
         .postShorten-title {
             margin:     0;
             word-break: initial;
             overflow:   hidden;
+            margin-top: 0;
+            margin-bottom: 10px;
+            margin-left: 0;
+            display: inherit;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.5;
 
             &:hover {
                 text-decoration: none;
@@ -99,5 +116,3 @@
         }
     }
 }
-
-
