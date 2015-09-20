@@ -25,9 +25,9 @@ global:
 
 pagination:
     page: "页"
-    of: "of"
-    newer_posts: "NEWER POSTS"
-    older_posts: "OLDER POSTS"
+    of: "共"
+    newer_posts: "新一点的"
+    older_posts: "旧一点的"
     previous: "前一页"
     next: "下一页"
 
