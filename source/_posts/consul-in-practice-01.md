@@ -50,11 +50,7 @@ consul reload
 
 ```
 curl http://localhost:8500/v1/catalog/service/web
-```
 
-返回值:
-
-```
 [
   {
     "Node":"agent-two",
@@ -75,11 +71,7 @@ curl http://localhost:8500/v1/catalog/service/web
 
 ```
 dig @127.0.0.1 -p 8600 sonarqube.service.consul
-```
 
-返回值:
-
-```
 ; <<>> DiG 9.9.4-RedHat-9.9.4-29.el7_2.1 <<>> @127.0.0.1 -p 8600 sonarqube.service.consul
 ; (1 server found)
 ;; global options: +cmd
@@ -104,11 +96,7 @@ sonarqube.service.consul. 0	IN	A	10.174.231.41
 
 ```
 dig @127.0.0.1 -p 8600 dev.sonarqube.service.consul
-```
 
-返回值:
-
-```
 ; <<>> DiG 9.9.4-RedHat-9.9.4-29.el7_2.1 <<>> @127.0.0.1 -p 8600 dev.sonarqube.service.consul
 ; (1 server found)
 ;; global options: +cmd
@@ -244,7 +232,7 @@ consul join 192.168.0.2
 
 ```
 consul members
-#response
+
 agent-one  192.168.0.2:8301  alive   server  0.6.4  2         dev
 agent-two  192.168.0.3:8301  alive   client  0.6.4  2         dev
 ```
@@ -263,7 +251,7 @@ consul agent -server  -bootstrap-expect 1  -data-dir /tmp/consul -node=agent-thr
 
 ```
 consul members -wan
-# response:
+
 agent-one  192.168.0.2:8301  alive   server  0.6.4  2         dev
 ```
 
