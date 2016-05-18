@@ -273,6 +273,6 @@ consul join -wan 192.168.2.2
 
 * 使用Consul替换Spring Cloud作为服务发现和注册平台；
 * 与Docker集成完成服务的自动发现和注册；
-* 基于Consul的KV特性完成系统的中兴化配置管理
+* 基于Consul的KV特性完成系统的中心化配置管理
 
 未完待续......
