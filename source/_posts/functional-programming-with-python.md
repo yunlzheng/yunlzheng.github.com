@@ -1,4 +1,4 @@
-title: functional-programming-with-python
+title: Python函数式编程
 date: 2016-04-21 21:28:49
 tags:
 ---
