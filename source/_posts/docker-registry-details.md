@@ -1,6 +1,6 @@
 title: Docker Registry V2浅析
 date: 2016-11-29 21:56:41
-tags: [docker]
+tags: docker
 ---
 
 如果你有一下需求，请阅读本文：
