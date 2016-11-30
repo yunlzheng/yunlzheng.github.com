@@ -14,8 +14,6 @@ Thymeleaf是一个开源的Java模板引擎库。
 
 其实根据上面提到的内容Thymeleaf非常适合去处理XHTML/HTML5这类模板。当然也可以处理其他任何的XML模板
 
-<!-- more -->
-
 ## 为什么要选择Thymeleaf?
 
 | 模板引擎    | 支持的文件格式          |
