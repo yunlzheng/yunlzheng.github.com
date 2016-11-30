@@ -19,6 +19,7 @@ h1, h2, h3, h4, h5, h6
   font-weight 800
 
 a
+  @extend .serif
   color gray-dark
   &:hover, &:focus
     color brand-primary
@@ -175,16 +176,28 @@ hr.small
       font-weight 300
       margin-bottom 10px
   > .post-meta
-    font-size 18px
-    margin-top 0
+    margin-top 15px
+    color #b3b3b1
+    font-size 13px
+    text-align left
+    @extend .serif
     &.archive
       font-size 16px
     > a
+      @extend .serif
       text-decoration none
       color gray-dark
       &:hover, &:focus
         color brand-primary
         text-decoration underline
+  > .post-excerpt
+    @extend .serif
+    font-size 14px
+    color #000
+    &:hover
+      color #000
+    p
+      margin: 5px
   @media only screen and (min-width: 768px)
     > a
       > .post-title

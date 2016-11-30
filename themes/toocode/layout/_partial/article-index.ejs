@@ -9,12 +9,18 @@
             </h3>
         <% } %>
     </a>
+    <!-- <% if(item.excerpt) {%>
+    <a class="post-excerpt" href="<%- config.root %><%- item.path %>">
+        <%- item.excerpt %>
+    </a>
+    <% } %> -->
     <p class="post-meta">
         <!-- Date and Author -->
         <% if(item.author) { %>
-            Posted by <%- item.author %> on
+            <%- item.author %> on
         <% } %>
         <%= item.date.format(config.date_format) %>
+        <a href="<%- config.root %><%- item.path %>">继续阅读>></a>
     </p>
 </div>
 <hr>

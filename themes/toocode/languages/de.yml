@@ -1,5 +1,5 @@
-prev: Vorherige Seite
-next: Nächste Seite
-comment: Kommentare
-archive_a: Archiv
-archive_b: "Archiv: %s"
+prev: 旧一点的
+next: 新一点的
+comment: 留言
+archive_a: 归档
+archive_b: 归档：%s

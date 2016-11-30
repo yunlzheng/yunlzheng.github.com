@@ -1,13 +1,12 @@
 # Header
 menu:
-  Home: /
-  Archives: /archives
+  博客: /
   Github:
-    url: https://github.com/klugjo/hexo-theme-clean-blog
+    url: https://github.com/yunlzheng
     icon: github
 
 # Title on top left of menu. Leave empty to use main blog title
-menu_title: Home
+menu_title: Peaceful
 
 # URL of the Home page image
 index_cover: http://7xj61w.com1.z0.glb.clouddn.com/header-bg-1.jpg
@@ -38,7 +37,7 @@ favicon:
 twitter_url:
 twitter_handle:
 facebook_url:
-github_url: https://github.com/klugjo/hexo-theme-clean-blog
+github_url: https://github.com/yunlzheng
 gitlab_url:
 linkedin_url:
 mailto:
