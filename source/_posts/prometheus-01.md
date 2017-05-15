@@ -1,6 +1,6 @@
-title: 使用Prometheus Pusher实现垮环境监控
+title: 使用Prometheus Pusher实现跨环境监控
 date: 2017-05-13 23:28:14
-tags:
+tags: [devops]
 ---
 
 ## 本文结构
@@ -328,7 +328,7 @@ irate(node_disk_io_time_ms{agentIP=~'$machine',device!~'^(md\\d+$|dm-)'}[5m])
 
 在上部分我们介绍了Prometheus的基础架构以及Prometheus所提供的丰富的查询功能。
 
-* 问题一：垮网络环境问题
+* 问题一：跨网络环境问题
 
 基于Prometheus的Pull模式对于网络环境的基本要求就是Prometheus Server可以访问Exporter所提供的metrics接口，这就要求Prometheus Server与Exporter的网络是能够联通的。
 
@@ -336,7 +336,7 @@ irate(node_disk_io_time_ms{agentIP=~'$machine',device!~'^(md\\d+$|dm-)'}[5m])
 
 * 问题二：Pushgateway
 
-在架构部分我们简单介绍过，通过Pushgateway组件，我们可以通过Pushgatway作为中间代理，实现垮网络环境的数据采集，通过一些周期性的任务定时向Pushgateway上报数据，Prometheus依然通过Pull模式定时获取数据。
+在架构部分我们简单介绍过，通过Pushgateway组件，我们可以通过Pushgatway作为中间代理，实现跨网络环境的数据采集，通过一些周期性的任务定时向Pushgateway上报数据，Prometheus依然通过Pull模式定时获取数据。
 
 在官方文档中介绍了三种使用Pushgateway的问题：
 * 当采用Pushgateway获取监控数据时，Pushway即会成为单点以及潜在的性能瓶颈
@@ -349,7 +349,7 @@ irate(node_disk_io_time_ms{agentIP=~'$machine',device!~'^(md\\d+$|dm-)'}[5m])
 
 ## Part4: 扩展Prometheus: Prometheus Pusher
 
-[Prometheus Pusher](https://github.com/yunlzheng/prometheus-pusher)是为了解决垮网络环境下监控数据采集的问题。扩展的原有的Prometheus功能，实现对exporters的数据采集并且推送到pushgateway
+[Prometheus Pusher](https://github.com/yunlzheng/prometheus-pusher)是为了解决跨网络环境下监控数据采集的问题。扩展的原有的Prometheus功能，实现对exporters的数据采集并且推送到pushgateway
 
 ![](https://camo.githubusercontent.com/cf42bd41b01f47ed55e00de8e91a336433922d57/687474703a2f2f37706e3564332e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f70726f6d6574686575735f7075736865722e706e67)
 
@@ -415,7 +415,7 @@ export PUSH_GATEWAY=http://pushgateway.example.org:9091
 
 ## Part5: 小结
 
-这边文章在上层角度向读者感性介绍了Promtheus监控平台的架构，Prometheus提供的查询功能，以及在现有模式下在企业实践方面存在的不足。最后介绍了垮环境数据采集方案Prometheus Pusher等信息。本文并不能作为Prometheus的入门参考。因此后续笔者将在本文的基础上结合官方文档继续完成Prometheus的入门系列教程。
+这边文章在上层角度向读者感性介绍了Promtheus监控平台的架构，Prometheus提供的查询功能，以及在现有模式下在企业实践方面存在的不足。最后介绍了跨环境数据采集方案Prometheus Pusher等信息。后续将在本文的基础上结合官方文档继续完成Prometheus的入门系列教程。
 
 * Prometheus以及其它监控平台的生态系统（ING）
 * 在Rancher下快速搭建Prometheus监控平台
