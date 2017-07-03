@@ -16,8 +16,10 @@ default_post_title: Untitled
 
 # Comments. Choose one by filling up the information
 comments:
+  #
+  uyan_id: 2137469
   # Disqus comments
-  disqus_shortname:
+  # disqus_shortname: shareks
   # Facebook comments
   facebook:
     appid:

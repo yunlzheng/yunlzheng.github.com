@@ -6,6 +6,13 @@
     </div>
 <% } %>
 
+<% if(page.comments && theme.comments && theme.comments.uyan_id){ %>
+    <hr />
+    <h3><%- __('comment')%>:</h3>
+    <div id="uyan_frame"></div>
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=<%- theme.comments.uyan_id%>"></script>
+<% } %>
+
 <% if(page.comments && theme.comments && theme.comments.facebook && theme.comments.facebook.appid) { %>
     <hr />
     <h3><%- __('comment')%>:</h3>
