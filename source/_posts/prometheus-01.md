@@ -1,6 +1,6 @@
-title: 使用Prometheus Pusher实现跨环境监控
+title: Prometheus以及如果实现跨环境监控
 date: 2017-05-13 23:28:14
-tags: [devops]
+tags: [DevOps, Monitor, Prometheus]
 ---
 
 ## 本文结构
