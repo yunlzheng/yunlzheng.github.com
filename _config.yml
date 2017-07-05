@@ -72,3 +72,11 @@ deploy:
   repo: git@github.com:yunlzheng/yunlzheng.github.com.git
   branch: master
   message: I'm Yunlong, my blog is update
+
+toc:
+  maxdepth: 3
+  class: toc
+  anchor:
+    position: before
+    symbol: '#'
+    style: header-anchor
