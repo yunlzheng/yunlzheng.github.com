@@ -3,6 +3,8 @@ date: 2016-11-29 21:56:41
 tags: docker
 ---
 
+<!-- toc -->
+
 如果你有一下需求，请阅读本文：
 
 * 想要理解Docker Registry V2认证机制

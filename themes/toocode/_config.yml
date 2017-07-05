@@ -14,6 +14,11 @@ index_cover: http://7xj61w.com1.z0.glb.clouddn.com/header-bg-1.jpg
 # Default post title
 default_post_title: Untitled
 
+toc:
+  maxdepth: 3
+  class: toc
+  # slugify: transliteration
+
 # Comments. Choose one by filling up the information
 comments:
   #

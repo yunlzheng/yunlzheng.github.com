@@ -3,11 +3,13 @@ date: 2017-07-04 22:19:36
 tags: [DevOps,Monitor,Prometheus]
 ---
 
+<!-- toc -->
+
 在上一篇文章[使用Prometheus Pusher实现跨环境监控](http://yunlzheng.github.io/2017/05/13/prometheus-01/)中笔者分享了Prometheus的一些基本概念，包括架构，数据模型，查询API以及表达式等内容。
 
 在这边文章中笔者将会详细介绍在kubernetes平台下部署Prometheus,以及监控kubernetes平台中部署的应用的信息。
 
-### 总体目标
+## 总体目标
 
 从监控平台本身的业务需求分析来看，我们至少应该希望通过Prometheus平台获取到一下监控数据:
 
@@ -25,7 +27,7 @@ tags: [DevOps,Monitor,Prometheus]
 
 除了获取监控数据意外，我们还需要对一些特定的异常情况进行告警，因此需要配合使用AlertManager使用告警通知
 
-### 实现思路和要点
+## 实现思路和要点
 
 **1，容器和Pod相关的性能指标数据**
 
@@ -43,9 +45,9 @@ Prometheus社区提供的[NodeExporter](https://github.com/prometheus/node_expor
 
 Promentheus最基本的数据采集方式是用过在yml文件中直接定义目标Exporter的的访问地址，此刻Prometheus可以根据Target地址定时轮训获取监控数据。同时Prometheus还支持动态的服务发现注册方式，具体信息可以参考[Promethues官方文档](https://prometheus.io/docs/operating/configuration/#kubernetes_sd_config)，这里我们主要关注在kubernetes下的采集目标发现的配置，Prometheus支持通过kubernetes的Rest API动态发现采集的目标Target信息，包括kubernetes下的node,service,pod,endpoints等信息。因此基于kubernetes_sd_config以及之前提到的三点，我们基本了解了整个的一个实现实例。
 
-## 步步为营
+## Step By Step
 
-**1, 使用Demaon Set部署NodeExporter服务**
+### DaemonSet部署NodeExporter服务
 
 ```
 # node-exporter-ds.yml
@@ -93,9 +95,9 @@ spec:
 
 在Service中定义标注prometheus.io/scrape: 'true'，表明该Service需要被promethues发现并采集数据
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/kubernetes_prometheus.png)
+![](http://7pn5d3.com1.z0.glb.clouddn.com/kubernates_prometheus.png)
 
-**2, 使用RBC创建Cluster Role并设置访问权限**
+### 使用RBC创建Cluster Role并设置访问权限
 
 ```
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -140,7 +142,7 @@ subjects:
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_role.png)
 
-**3, 创建Promethues配置文件ConfigMap**
+### 创建Promethues配置文件ConfigMap
 
 ```
 apiVersion: v1
@@ -277,7 +279,7 @@ Promethues可以在容器内通过DNS地址 **https://kubernetes.default.svc** �
 
 rule_files则定义了告警规则的文件匹配规则，这里会加载/etc/prometheus-rules/下所有匹配*.rules的文件
 
-**4, 创建AlertManager配置文件ConfigMap**
+### 创建AlertManager配置文件ConfigMap
 
 ```
 kind: ConfigMap
@@ -333,7 +335,7 @@ ALERT NodeCPUUsage
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/alert_email.png)
 
-**4, 部署自定义kubernetes Exporter获取kubernetes下主要资源对象的健康状态***
+### 部署自定义kubernetes Exporter获取kubernetes下主要资源对象的健康状态
 
 ```
 apiVersion: v1
@@ -382,7 +384,7 @@ spec:
 
 这里由于kubernetes Exporter同样需要访问全局kubernetes资源，因此使用了之前步骤定义的ServiceAccount从而可以通过kubernetes API获取到deployments，pod，service等资源的详细信息，从而通过/metrics接口暴露相关信息。这里Service中同样标注了 prometheus.io/scrape: 'true'从而确保prometheus会采集数据。
 
-**5, 部署Promethues和Alertmanager的Deployment**
+### 部署Promethues和Alertmanager的Deployment
 
 ```
 apiVersion: v1
@@ -512,10 +514,10 @@ serviceAccount: prometheus
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_alert.png)
 
-### 总结
+## 总结
 
 在本文中我们以在总体目标为背景定义了在Kubernates下部署promentheus监控平台的总体目标，并且一次目标分析了细线的基本实例，最后给出了在Kubernates部署Promentheus的具体步骤。
 
-### 参考资料
+## 参考资料
 
 * https://github.com/prometheus/prometheus

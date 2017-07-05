@@ -3,12 +3,7 @@ date: 2017-05-13 23:28:14
 tags: [DevOps, Monitor, Prometheus]
 ---
 
-## 本文结构
-
-* 第一部分：我们会了解关于Prometheus架构以及主要组件的一些基础知识；
-* 第二部分：通过具体实例了解Prometheus基于时间序列的数据查询以及聚合方式；
-* 第三部分：Prometheus在企业实践中存在的一些典型问题；
-* 第四部分：多环境数据采集方案Prometheus Pusher。
+<!-- toc -->
 
 ## Part1: Prometheus
 

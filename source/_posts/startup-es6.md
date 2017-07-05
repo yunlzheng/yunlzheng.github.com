@@ -3,14 +3,16 @@ date: 2016-9-18 15:36:15
 tags: web
 ---
 
-#### 转换器
+<!-- toc -->
+
+## 转换器
 
 目前ES6并没有在主流浏览器上直接支持，如果想使用ES6的新特性需要使用转换器，将ES6的代码转换成ES5
 
 * Tracerur
 * Babeljs
 
-#### 变量定义Let
+## 变量定义Let
 
 在ES6之前的版本当中我们使用var来声明变量，但是var的行为和其它编程语言相比显得非常奇怪，通常而言变量的作用范围只存在于其声明的作用域当中，但是在js中var直接声明的变量不同，无论何时声明，其作用域都是顶级作用域
 
@@ -57,7 +59,7 @@ function getPonyFullName(pony) {
 }
 ```
 
-#### 常量定义-Constants
+## 常量定义-Constants
 
 除了let意外，es6还定义了一个新的keywords用于定义常量**const**,当你使用const声明一个变量时，这个变量必须立即初始化，并且不能再次赋值
 
@@ -82,7 +84,7 @@ const PONY = {};
 PONY = {color: 'red'} // SyntaxError
 ```
 
-#### 创建对象
+## 创建对象
 
 在新的ES6中当我们要创建对象的属性和变量名一致时，我们可以通过ES6提供的语法糖快速创建对象
 
@@ -104,7 +106,7 @@ function createPony() {
 }
 ```
 
-#### 解构赋值
+## 解构赋值
 
 在ES6中支持一种新的方式来从对象或者数组中获取值
 
@@ -175,7 +177,7 @@ function randomPonyInRace(){
 let { pony } = randomPonyInRace();
 ```
 
-#### 默认参数和默认值
+## 默认参数和默认值
 
 当我们定义函数时，对于可选参数我们可以这样写：
 
@@ -229,7 +231,7 @@ function getPonies(size = defaultSize(), page = size - 1) {
 let { timeout = 1000 } = httpOptions;
 ```
 
-#### 可变长参数
+## 可变长参数
 
 在之前版本的JS当中我们可以通过arguments来获取函数的所有操作
 
@@ -268,7 +270,7 @@ let ponyPrices = [12, 3, 4];
 let minPrice = Math.min(...ponyPrices);
 ```
 
-#### 类-class
+## 类-class
 
 在ES6中引入的另外一个非常重要的概念类。
 
@@ -372,7 +374,7 @@ let pony = new Pony(20, 'blue');
 console.log(pony.speed); // 20
 ```
 
-#### Promises
+## Promises
 
 在ES5中当我们使用异步编程如ajax时我们通常会定义一些列的回调函数。
 
@@ -474,7 +476,7 @@ getUser(login)
     })
 ```
 
-#### 箭头函数
+## 箭头函数
 
 ES6中箭头函数也是一个非常有用的特性，它可以帮组我们大大简化我们的代码，尤其是对于回调函数以及匿名函数
 
@@ -555,7 +557,7 @@ maxFinder.find([2, 3, 4]);
 console.log(maxFinder.max);
 ```
 
-#### Sets and Maps
+## Sets and Maps
 
 相比于ES5而言，在ES6中我们有了新的Set和Map来创建专门的数据结构
 
@@ -578,7 +580,7 @@ console.log(users.size); // 1
 users.delete(cedric); // removes the user
 ```
 
-#### 模板字符串
+## 模板字符串
 
 在ES5当中对字符串进行格式化通常是一件比较麻烦的事情
 
@@ -592,7 +594,7 @@ let fullname = 'Miss ' + firstname + ' ' + lastname;
 let fullname = `Miss ${firstname} ${lastname}`;
 ```
 
-#### Modules
+## Modules
 
 在过去原生JS一直缺乏模块管理机制，在过去我们经常听到CommonJS规范，以及AMD规范。响应的我们可以使用诸如RequireJS这样的工具来模拟模块管理。但所有的这些都不是实时上的标准
 
@@ -628,7 +630,7 @@ import { start as startRace } from './service';
 startRace(race);
 ```
 
-当你需要使用模块提供的所有功能时，还可以使用“*”
+当你需要使用模块提供的所有功能时，还可以使用*
 
 ```
 import * as racesService from './service'
@@ -646,11 +648,3 @@ export default class Pony {
 // service.js
 import Pony from './pony';
 ```
-
-### 函数式编程
-
-#### filter
-
-#### map
-
-#### reduce

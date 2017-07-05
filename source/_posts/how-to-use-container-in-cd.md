@@ -1,9 +1,11 @@
-title: 我们应该如何基于容器来进行软件的持续交付的（一）？
+title: 我们应该如何基于容器来进行软件的持续交付的
 date: 2016-12-14 11:31:44
 tags: devops
 ---
 
-### 概述
+<!-- toc -->
+
+## 概述
 
 在过去的一段时间里容器已经大量的使用到了IT软件生产的各个环节当中：从软件开发，持续集成，持续部署，测试环境到生产环境。
 
@@ -11,9 +13,9 @@ tags: devops
 
 本文将从针对软件研发流程，基于容器解决软件的持续交付问题，以及团队协作问题
 
-### 在持续集成中使用容器
+## 在持续集成中使用容器
 
-- 构建环境统一管理
+### 构建环境统一管理
 
 在传统模式下使用持续集成工具诸如Jenkins，在部署企业持续持续集成平台的第一个问题就是多样化的构建构建环境需求，而通常的做法是将构建Agent（服务器或者虚拟机）分配给团队由团队自己管理构建服务器的环境配置信息，安装相应的构建依赖等
 
@@ -60,17 +62,17 @@ docker-compose run --rm build sh -c 'mvn clean package' && docker-compose stop &
 - [x] --rm 确保在构建命令执行完成后自动清理build所产生的容器
 - [x] - docker-compose stop && docker-compose rm -f 确保依赖的其它服务如mysql能够正常的退出并且清理所产生的容器
 
-### 持续交付是文化，自动化是基石，垮职能团队协作是根本
+## 持续交付是文化，自动化是基石，垮职能团队协作是根本
 
 建立基于共同目标的具有跨职能协同的研发团队，是DevOps运动的根本。而自动化则是提高效率的基石。基于以上我们是如何基于容器建立我们的持续交付解决方案？
 
-- 基础设施自动化
+### 基础设施自动化
 
 使用Rancher理由很简单，Rancher是目前市面上唯一一个能满足开箱即用的容器管理平台，同时能够支持多种编排引擎，如Rancher自己的Cattle，Google的K8S,以及Docker官方的Swarm作为容器编排引擎。同时Rancher提供的Catalog应用商店能够帮助研发团队自主创建所需要的服务实例
 
 ![http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png](http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png)
 
-- 创建持续交付流水线
+### 创建持续交付流水线
 
 建立持续交付流水线的核心问题是如何定义企业的软件交付**价值流动**。
 
@@ -78,7 +80,7 @@ docker-compose run --rm build sh -c 'mvn clean package' && docker-compose stop &
 
 ![http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png](http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png)
 
-- 在持续交付流水线下的团队协作
+### 在持续交付流水线下的团队协作
 
 正如上文所说，创建持续交付流水线的本质就是定义软件的交付的价值流动，反应正式的软件交付流程。价值的流动则涉及到团队中各个职能的成员的高度协同
 
