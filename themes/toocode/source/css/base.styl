@@ -8,7 +8,8 @@ body
 
 p
   line-height 1.5
-  margin 10px 0
+  margin-top: 0;
+  margin-bottom: 16px;
 
 p, li
   a
@@ -16,19 +17,21 @@ p, li
 
 h1, h2, h3, h4, h5, h6
   @extend .sans-serif
+  a
+    padding-right: 5px
 
 h2
-  border-left 5px solid rgb(0, 188, 212)
-  padding-left 10px
+  padding-bottom: 0.3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid rgb(234, 236, 239);
 
 h3
-  border-bottom 1px solid rgb(221, 221, 221)
-  display inline
   padding-bottom 5px
-  padding-left 15px
-
-h3 h4 h5 h6
-  padding-left: 15px;
+  font-size: 1.25em
+  margin-top: 24px;
+  margin-bottom: 16px
+  font-weight: 600
+  line-height: 1.25
 
 a
   @extend .serif
