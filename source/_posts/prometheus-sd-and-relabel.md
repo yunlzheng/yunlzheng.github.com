@@ -1,4 +1,4 @@
-title: Prometheus中的service discovery和relabel
+title: Prometheus中的服务发现和relabel
 date: 2018-01-17 15:15:49
 tags: prometheus
 ---
@@ -13,8 +13,7 @@ Prometheus主要由一下几个部分组成：
 
 在Prometheus Server的配置文件中我们使用scrape_configs来定义
 
-```
-...
+``` yaml
 scrape_configs:
 - job_name: prometheus
   metrics_path: /metrics
@@ -22,7 +21,6 @@ scrape_configs:
   static_configs:
   - targets:
     - localhost:9090
-...
 ```
 
 其中每一个scrape_config对象对应一个数据采集的Job，每一个Job可以对应多个Instance,即配置文件中的targets. 通过Prometheus UI可以更直观的看到其中的关系。
@@ -49,7 +47,7 @@ scrape_configs:
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prometheus_sd.png)
 
-Prometheus支持多种服务发现机制：文件，DNS，Consul,Kubernetes,OpenStack,EC2等等。基于服务发现的工程并不复杂，通过第三方提供的接口，Prometheus查询到需要监控的Target列表，然后轮训这些Target获取监控数据。
+Prometheus支持多种服务发现机制：文件，DNS，Consul,Kubernetes,OpenStack,EC2等等。基于服务发现的过程并不复杂，通过第三方提供的接口，Prometheus查询到需要监控的Target列表，然后轮训这些Target获取监控数据。
 
 这里为了验证Prometheus的服务发现能力，我们使用Docker Compose在本地搭建我们的测试环境。我们使用gliderlabs/registrator监听Docker进程，对于暴露了端口的容器，registrator会自动将该容器暴露的服务地址注册到Consul中。
 
@@ -127,12 +125,10 @@ scrape_configs:
 挂载配置文件到Prometheus Server,并且重新启动docker compose.
 
 ```
-...
 services:
   prometheus:
     volumes:
       - ./prometheus/prometheus:/etc/prometheus/prometheus.yml
-...
 ```
 
 查看Prometheus UI的Target页面，我们可以看到，如下结果：
@@ -202,7 +198,6 @@ node_cpu{cpu="cpu0",instance="172.21.0.3:9100",dc="dc1",job="consul_sd",mode="gu
 这里我们使用__meta_consul_dc信息来标记当前target所在的data center。并且通过regex来匹配source_label的值，使用replacement来选择regex表达式匹配到的mach group。通过action来告诉prometheus在采集数据之前，需要将replacement的内容写入到target_label dc当中
 
 ```
-...
 scrape_configs:
   - job_name: consul_sd
     relabel_configs:
@@ -211,7 +206,6 @@ scrape_configs:
       replacement: $1
       action: replace
       target_label: "dc"
-...
 ```
 
 对于直接保留标签的值时，也可以简化为：
