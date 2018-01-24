@@ -403,10 +403,6 @@ spec:
     protocol: TCP
     port: 9093
     targetPort: 9093
-  - name: prometheus-rest
-    protocol: TCP
-    port: 16010
-    targetPort: 16010
   selector:
     app: prometheus-server
   type: NodePort
@@ -466,14 +462,6 @@ spec:
           mountPath: /etc/alertmanager
         - name: templates-volume
           mountPath: /etc/alertmanager-templates
-      - name: prometheus-rest
-        image: registry.cn-hangzhou.aliyuncs.com/wise2c/prometheus-rest:0.1.0-beta
-        volumeMounts:
-        - mountPath: "/etc/prometheus-rules"
-          name: alert-roles
-        ports:
-        - containerPort: 16010
-          protocol: TCP
       volumes:
       - emptyDir: {}
         name: data
