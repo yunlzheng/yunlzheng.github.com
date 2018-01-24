@@ -10,7 +10,9 @@ tags: [DevOps]
 ## 关于CKA考试
 
 CKA(Certified Kubernetes Administrator)是CNCF基金会(Cloud Native Computing Foundation)官方推出的Kubernetes管理员认证计划，用于证明持有人有履行Kubernetes管理的知识，技能等相关的能力。
-除了对于个人技能提供认证以外，如果企业想要加入CNCF基金会的KCSP计划（Kubernetes认证服务提供商）也需要企业至少有3名及以上员工的通过CKA认证考试
+除了对于个人技能提供认证以外，如果企业想要加入CNCF基金会的KCSP计划（Kubernetes认证服务提供商）也需要企业至少有3名及以上工程师的通过CKA认证考试。
+
+* [考试注册地址](https://www.cncf.io/certification/expert/)
 
 ## CKA考试费用
 

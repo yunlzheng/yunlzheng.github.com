@@ -29,7 +29,7 @@ scrape_configs:
 
 ## Pull vs Push
 
-对于zabbix以及nagios这类Pull系统而言，通常由采集的agent来决定和哪一个监控服务进行通讯。而对于Prometheus这类基于Pull的监控平台而言，则由server侧决定采集的目标有哪些。
+对于zabbix以及nagios这类Push系统而言，通常由采集的agent来决定和哪一个监控服务进行通讯。而对于Prometheus这类基于Pull的监控平台而言，则由server侧决定采集的目标有哪些。
 
 ![](http://p2n2em8ut.bkt.clouddn.com/prom_pull_vs_push.png)
 
@@ -94,7 +94,7 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
 ```
 
-使用docker compose启动该应用堆栈，大概consul ui,我们可以看到如下结果：
+使用docker compose启动该应用堆栈，在consul ui中,我们可以看到如下结果：
 
 ![](http://p2n2em8ut.bkt.clouddn.com/blog_service_discovery_and_relabel_consul.png)
 
