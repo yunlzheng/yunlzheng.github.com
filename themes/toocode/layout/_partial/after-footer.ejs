@@ -12,7 +12,7 @@
 <script type="text/javascript">
   (function(){
     $('a.header-anchor').each(function(){
-      $(this).attr('href', '#'+$(this).attr('href'))
+      $(this).remove()
     })
     $('.toc').prepend('<h4>目录</h4>')
   })()

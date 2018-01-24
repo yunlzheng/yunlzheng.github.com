@@ -3,8 +3,6 @@ date: 2017-05-13 23:28:14
 tags: [DevOps, Monitor, Prometheus]
 ---
 
-<!-- toc -->
-
 ## Part1: Prometheus
 
 Prometheus是SoundCloud开源的监控与告警平台，由于其从推出就提供了完整的基于容器的部署方式，开发者可以快速的基于容器搭建自己的监控平台。因此在Docker社区迅速聚集了大量的人气。
