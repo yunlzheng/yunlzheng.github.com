@@ -398,7 +398,19 @@ public class CustomExporter extends Collector {
 
 ## 小结
 
-好了。 目前为止，我们通过Spring的拦截器，以及通过自定义Collector两种方式实现对应用自定义指标的暴露，启动应用程序，并且访问 http://localhost:8080/metrics。我们可以看到如下结果。
+好了。 目前为止，启动应用程序，并且访问 http://localhost:8080/metrics。我们可以看到如下结果。
 ![](http://p2n2em8ut.bkt.clouddn.com/spring_boot_etrics.png)
+
+这部分分别介绍了两种方式，在Spring应用中实现对于自定义Metrics指标的定义：
+
+* 拦截器/过滤器：用于统计所有应用请求的情况
+* 自定义Collector: 可以用于统计应用业务能力相关的监控情况
+
+同时介绍了4中Metrics指标类型以及使用场景：
+
+* Counter，只增不减的计数器
+* Gauge，可增可减的仪表盘
+* Histogram，自带buckets区间用于统计分布统计图
+* Summary， 客户端定义的数据分布统计图
 
 恭喜，接下来在后面的文章中我们会尝试将应用程序部署到Kubernetes当中，并且通过Prometheus采集其数据,通过PromQL聚合数据，并且在Grafana中进行监控可视化。
