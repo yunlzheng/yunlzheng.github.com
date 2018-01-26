@@ -1,11 +1,28 @@
-title: 使用Prometheus监控的Spring Boot程序
+title: 自定义Metrics：让Prometheus监控你的应用程序（Spring版）
 date: 2018-01-24 10:07:45
 tags: prometheus
 ---
 
-本文将会带领读者，在Spring Boot/Spring Cloud应用中添加对Prometheus监控的支持，以实现对应用性能以及业务相关监控指标的数据采集。同时也会介绍Prometheus中不同的Metrics类型的使用场景。
+## 前言
 
-## 添加Prometheus Java Client依赖
+Prometheus社区提供了大量的[官方以及第三方Exporters](https://prometheus.io/docs/instrumenting/exporters/)，可以满足Prometheus的采纳者快速实现对关键业务，以及基础设施的监控需求。
+
+![](http://p2n2em8ut.bkt.clouddn.com/app-with-exporters.png)
+
+如上所示，一个简单的应用以及环境架构。一般而言，我们通常会从几个层面进行监控指标的采集：
+
+* 入口网关：这里可以是Nginx/HaProxy这一类的负载均衡器，也可以是注入Spring Cloud Zuul这一类框架提供的微服务入口。一般来说我们需要对所有Http Request相关的指标数据进行采集。如请求地址，Http Method,返回状态码，响应时长等。从而可以通过这些指标历史数据去分析业务压力，服务状态等信息。
+* 应用服务：对于应用服务而言，基本的如应用本身的资源使用率,比如如果是Java类程序可以直接通过JVM信息来进行统计，如果是部署到容器中，则可以通过Container的资源使用情况来统计。除了资源用量外，某些特殊情况下，我们可能还会对应用中的某些业务指标进行采集。
+* 基础设施：虚拟机或者物理机的资源使用情况等。
+* 其它：集群环境中所使用到的数据库，缓存，消息队列等中间件状态等。
+
+对于以上的集中场景中，除了直接使用Prometheus社区提供的Exporter外，不同的项目可能还需要实现一些自定义的Exporter用于实现对于特定目的的指标的采集和监控需求。
+
+本文将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus SDK实现自定义监控指标的定义以及暴露，并且会介绍Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景；
+
+## 扩展Spring应用程序，支持Prometheus采集
+
+### 添加Prometheus Java Client依赖
 
 > 这里使用0.0.24的版本，在之前的版本中Spring Boot暴露的监控地址，无法正确的处理Prometheus Server的请求，详情：https://github.com/prometheus/client_java/issues/265
 
@@ -21,7 +38,7 @@ dependencies {
 ...
 ```
 
-## 启用Prometheus Metrics Endpoint
+### 启用Prometheus Metrics Endpoint
 
 添加注解@EnablePrometheusEndpoint启用Prometheus Endpoint,这里同时使用了simpleclient_hotspot中提供的DefaultExporter该Exporter会在metrics endpoint中放回当前应用JVM的相关信息
 
@@ -70,7 +87,7 @@ jvm_classes_loaded 8376.0
 ...
 ```
 
-## 添加拦截器，为监控埋点做准备
+### 添加拦截器，为监控埋点做准备
 
 除了获取应用JVM相关的状态以外，我们还可能需要添加一些自定义的监控Metrics实现对系统性能，以及业务状态进行采集，以提供日后优化的相关支撑数据。首先我们使用拦截器处理对应用的所有请求。
 
@@ -103,11 +120,11 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 }
 ```
 
-## 自定义Metrics指标
+### 自定义Metrics指标
 
 Prometheus提供了4中不同的Metrics类型:Counter,Gauge,Histogram,Summary
 
-### Counter:只增不减的计数器
+#### Counter:只增不减的计数器
 
 计数器可以用于记录只会增加不会减少的指标类型,比如记录应用请求的总量(http_requests_total)，cpu使用时间(process_cpu_seconds_total)等。
 
@@ -165,7 +182,7 @@ sum(rate(io_wise2c_gateway_requests_total[5m]))
 topk(10, sum(io_namespace_http_requests_total) by (path))
 ```
 
-### Gauge: 可增可减的仪表盘
+#### Gauge: 可增可减的仪表盘
 
 对于这类可增可减的指标，可以用于反应应用的__当前状态__,例如在监控主机时，主机当前空闲的内容大小(node_memory_MemFree)，可用内存大小(node_memory_MemAvailable)。或者容器当前的cpu使用率,内存使用率。
 
@@ -205,7 +222,7 @@ public class PrometheusMetricsInterceptor extends HandlerInterceptorAdapter {
 io_namespace_http_inprogress_requests{}
 ```
 
-### Histogram：自带buckets区间用于统计分布统计图
+#### Histogram：自带buckets区间用于统计分布统计图
 
 主要用于在指定分布范围内(Buckets)记录大小(如http request bytes)或者事件发生的次数。
 
@@ -279,7 +296,7 @@ io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET
 io_namespace_http_requests_latency_seconds_histogram_bucket{path="/",method="GET",code="200",le="+Inf",} 2.0
 ```
 
-### Summary: 客户端定义的数据分布统计图
+#### Summary: 客户端定义的数据分布统计图
 
 Summary和Histogram非常类型相似，都可以统计事件发生的次数或者发小，以及其分布情况。
 
@@ -340,7 +357,7 @@ io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="2
 # 含义：这12次http请求响应时间的9分位数是8.003261666s
 io_namespace_http_requests_latency_seconds_summary{path="/",method="GET",code="200",quantile="0.9",} 8.003261666
 ```
-## 使用Collector暴露业务指标
+### 使用Collector暴露业务指标
 
 除了在拦截器中使用Prometheus提供的Counter,Summary,Gauage等构造监控指标以外，我们还可以通过自定义的Collector实现对相关业务指标的暴露
 
