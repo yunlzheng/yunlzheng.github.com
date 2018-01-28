@@ -4,6 +4,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <% if (theme.baidu_analytics) { %>
+    <meta name="baidu-site-verification" content="<%= theme.baidu_analytics %>" />
+    <% } %>
+
     <!--Description-->
     <% if (page.description){ %>
         <meta name="description" content="<%= page.description %>">
@@ -91,6 +95,8 @@
 
     <!-- Google Analytics -->
     <%- partial('google-analytics') %>
+
+    <%- partial('growing-io') %>
 
     <!-- favicon -->
     <% if (theme.favicon){ %>
