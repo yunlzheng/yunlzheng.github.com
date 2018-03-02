@@ -7,7 +7,7 @@ title: I'm Yunlong
 subtitle: DevOps,Agile,Learner
 description:
 author: 云龙
-language: zh-cn
+language: zh-Hans
 timezone:
 
 # URL
@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: toocode
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
@@ -80,3 +80,4 @@ deploy:
 #     position: before
 #     symbol: '#'
 #     style: header-anchor
+

@@ -3,9 +3,9 @@ date: 2015-09-20 17:09:49
 tags: [swift, ios, xcode]
 ---
 
-## 主要内容
-
 RESideMenu是github上开源的一个Objective-c实现IOS侧滑菜单的组件库. 本文简单介绍一下如何在Swift中集成并且使用该第三发库
+
+<!-- more -->
 
 ## 添加RESideMenu依赖
 

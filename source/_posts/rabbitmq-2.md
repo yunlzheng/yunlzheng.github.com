@@ -3,9 +3,11 @@ date: 2012-08-09 14:20:00
 tags: rabbitMQ
 ---
 
+RabbitMQ之消息发布订阅与信息持久化技术
+
+<!-- more -->
 
 # 信息发布与订阅
-
 
 Rabbit的核心组件包含Queue(消息队列)和Exchanges两部分，Exchange的主要部分就是对信息进行路由，通过将消息队列绑定到Exchange上，则可以实现订阅形式的消息发布及Publish/Subscribe在这种模式下消息发布者只需要将信息发布到相应的Exchange中，而Exchange则自动将信息分发到不同的Queue当中。
 

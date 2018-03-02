@@ -5,6 +5,8 @@ tags: [DevOps]
 
 最近花了些时间完成了CNCF官方基金会推出的CKA(Certified Kubernetes Administrator)认证考试，这边文章就简单说一下CKA认证考试是撒，以及参加考试一些准备过程。
 
+<!-- more -->
+
 > 更多详细信息，请参考本文末尾的参考资料部分的**CKA candidate handbook**
 
 ## 关于CKA考试

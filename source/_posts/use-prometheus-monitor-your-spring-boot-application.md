@@ -3,6 +3,10 @@ date: 2018-01-24 10:07:45
 tags: prometheus
 ---
 
+本文将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus SDK实现自定义监控指标的定义以及暴露，并且会介绍Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景；
+
+<!-- more -->
+
 ## 前言
 
 Prometheus社区提供了大量的[官方以及第三方Exporters](https://prometheus.io/docs/instrumenting/exporters/)，可以满足Prometheus的采纳者快速实现对关键业务，以及基础设施的监控需求。
@@ -18,7 +22,7 @@ Prometheus社区提供了大量的[官方以及第三方Exporters](https://prome
 
 对于以上的集中场景中，除了直接使用Prometheus社区提供的Exporter外，不同的项目可能还需要实现一些自定义的Exporter用于实现对于特定目的的指标的采集和监控需求。
 
-本文将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus SDK实现自定义监控指标的定义以及暴露，并且会介绍Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景；
+
 
 ## 扩展Spring应用程序，支持Prometheus采集
 

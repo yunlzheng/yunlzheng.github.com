@@ -3,6 +3,10 @@ date: 2016-04-16 11:37:51
 tags:
 ---
 
+译文，原文地址：[http://fr.umio.us/why-ramda/](http://fr.umio.us/why-ramda/)
+
+<!-- more -->
+
 当buzzdecafe最近向大家介绍了Ramda之后，这里基本上存在两种截然不同的反应。那些已经习惯在Javascript或者其它语言中使用函数式编程的人大部分反应是“Cool”. 他们可能会感到兴奋或者只是注意到Ramda可能作为另一个工具，并且他们理解这是什么。
 
 而另一类的人的反应则是:Huh?这是什么鬼？

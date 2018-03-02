@@ -3,6 +3,10 @@ date: 2016-04-21 10:57:01
 tags: [consul]
 ---
 
+我们是如何在项目中使用Consul的。
+
+<!-- more -->
+
 ## Background Info
 
 项目基本信息：

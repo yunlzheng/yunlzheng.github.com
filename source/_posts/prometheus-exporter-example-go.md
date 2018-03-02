@@ -3,6 +3,10 @@ date: 2017-07-07 10:26:04
 tags: [Prometheus, Exporter, Devops]
 ---
 
+本文将介绍Prometheus下的四种基本数据结构，以及其使用场景。
+
+<!-- more -->
+
 上一篇文章中分享了[在Kubernetes部署Prometheus](http://yunlzheng.github.io/2017/07/04/prometheus-kubernates/)的内容,Prometheus除了监控数据采集，存储，查询以外。也提供了非常方便的扩展接口，可以方便用户根据自己的业务实现自己的数据采集Exporter。 再实现自定义Exporter或者在现有应用上扩展API接口支持Prometheus采集数据之前，我们需要先了解一下Prometheus下的度量指标数据结构基本类型
 
 ## Prometheus metric类型

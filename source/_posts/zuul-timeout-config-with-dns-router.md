@@ -3,6 +3,10 @@ date: 2017-11-28 13:02:08
 tags: [Spring Cloud]
 ---
 
+本文将介绍在Kubernetest如何搭建基于Spring Cloud Zuul的API网关。
+
+<!-- more -->
+
 ## 两种服务发现模式
 
 * 客户端服务发现

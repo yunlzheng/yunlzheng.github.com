@@ -3,6 +3,10 @@ date: 2016-04-21 21:28:49
 tags:
 ---
 
+Python函数式编程笔记。
+
+<!-- more -->
+
 ## Introducation
 
 * Function Programming has a long history

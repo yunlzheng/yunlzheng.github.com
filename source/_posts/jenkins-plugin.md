@@ -3,7 +3,9 @@ date: 2012-07-02 17:58:00
 tags: jenkins
 ---
 
-# Jenkins插件开发简要介绍
+Jenkins插件开发简要介绍
+
+<!-- more -->
 
 ## 环境变量
 
@@ -47,8 +49,6 @@ tags: jenkins
 ```
 mvn -cpu hpi:create
 ```
-
-<!-- more -->
 
 该操作需要你输入一些参数，比如说groupid,artifactid。之后会创建一个新的插件模板便于开发者之后的开发工作。确保你可以使用一下命令：
 

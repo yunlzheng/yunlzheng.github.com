@@ -3,9 +3,9 @@ date: 2012-10-8 17:42:38
 tags: java
 ---
 
-```
-  原文最初写与我的[OSCHINA博客](http://my.oschina.net/fhck/blog/85773)
-```
+原文最初写与我的[OSCHINA博客](http://my.oschina.net/fhck/blog/85773)
+
+<!-- more -->
 
 # 搭建环境
 
@@ -14,7 +14,7 @@ JDK 1.6+
 Perl 5.2+
 Ubuntu
 
-<!-- more -->
+
 
 1，下载[Tomcat](http://www.fayea.com/apache-mirror/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.tar.gz)并解压到特定目录
 

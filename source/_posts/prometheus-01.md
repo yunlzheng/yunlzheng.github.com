@@ -3,6 +3,10 @@ date: 2017-05-13 23:28:14
 tags: [DevOps, Monitor, Prometheus]
 ---
 
+笔者创建的一个实验性的项目项目prometheus-pusher用于实现垮网络环境下的监控数据采集
+
+<!-- more -->
+
 ## Part1: Prometheus
 
 Prometheus是SoundCloud开源的监控与告警平台，由于其从推出就提供了完整的基于容器的部署方式，开发者可以快速的基于容器搭建自己的监控平台。因此在Docker社区迅速聚集了大量的人气。

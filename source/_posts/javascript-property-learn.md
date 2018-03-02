@@ -3,9 +3,9 @@ date: 2012-09-06 13:09:32
 tags: javascript
 ---
 
-```
-  原文最初写与我的[OSCHINA博客](http://my.oschina.net/fhck/blog/77091)
-```
+原文最初写与我的[OSCHINA博客](http://my.oschina.net/fhck/blog/77091)
+
+<!-- more -->
 
 JavaScript基于原型的编程语言，本身并不包含内置的类实现。但是可以通过Javascript模拟出类
 

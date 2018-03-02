@@ -7,6 +7,8 @@ tags: [DevOps,Monitor,Prometheus]
 
 在这边文章中笔者将会详细介绍在kubernetes平台下部署Prometheus,以及监控kubernetes平台中部署的应用的信息。
 
+<!-- more -->
+
 ## 总体目标
 
 从监控平台本身的业务需求分析来看，我们至少应该希望通过Prometheus平台获取到一下监控数据:
