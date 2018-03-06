@@ -48,13 +48,16 @@
   <span class="post-meta-divider">|</span>
 {% endif %}
 
-{% if theme.footer.theme.enable %}
+{% if theme.tencent_analytics %}
   <div class="theme-info">{#
-  #}{{ __('footer.theme') }} &mdash; {#
-  #}<a class="theme-link" target="_blank"{{ nofollow }} href="https://github.com/theme-next/hexo-theme-next">{#
-    #}NexT.{{ theme.scheme }}{#
-  #}</a>{% if theme.footer.theme.version %} v{{ theme.version }}{% endif %}{#
+  #}<a class="theme-link" target="_blank"{{ nofollow }} href="http://v2.ta.qq.com">{#
+    #}站点统计{#
+  #}</a>{#
 #}</div>
+{% endif %}
+
+{% if theme.tencent_analytics %}
+
 {% endif %}
 
 {% if theme.footer.custom_text %}

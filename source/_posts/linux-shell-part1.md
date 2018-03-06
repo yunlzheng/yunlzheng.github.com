@@ -1,5 +1,5 @@
 title: Linux Shell基础（一）
-tags: linux
+tags: [linux, shell]
 date: 2014-08-01 16:24:00
 ---
 

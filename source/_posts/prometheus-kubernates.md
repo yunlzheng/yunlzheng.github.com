@@ -1,6 +1,6 @@
 title: Prometheus在Kubernetes下的监控实践
 date: 2017-07-04 22:19:36
-tags: [DevOps,Monitor,Prometheus]
+tags: [DevOps,Monitor,Prometheus,Kubernetes]
 ---
 
 在上一篇文章[使用Prometheus Pusher实现跨环境监控](http://yunlzheng.github.io/2017/05/13/prometheus-01/)中笔者分享了Prometheus的一些基本概念，包括架构，数据模型，查询API以及表达式等内容。

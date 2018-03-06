@@ -1,6 +1,6 @@
 title:  在Kubernetes下实现API网关
 date: 2017-11-28 13:02:08
-tags: [Spring Cloud]
+tags: ['Spring Cloud', 'Spring Cloud Zuul', 'Kubernetes']
 ---
 
 本文将介绍在Kubernetest如何搭建基于Spring Cloud Zuul的API网关。

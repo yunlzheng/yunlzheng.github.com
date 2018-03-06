@@ -1,6 +1,6 @@
 title: 使用gRPC-Gateway快速构建微服务
 date: 2017-10-19 21:43:31
-tags: grpc
+tags: ['gRPC', 'gRPC-Gateway']
 ---
 
 “鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway
