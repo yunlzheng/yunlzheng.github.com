@@ -1,6 +1,6 @@
 title: Fabric Overview
 date: 2014-07-31 15:31:27
-tags: devops
+tags: DevOps
 ---
 
 如果说要一句话去评价Fabric是话，那就应该是：“简单，犀利！”

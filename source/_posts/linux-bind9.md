@@ -1,6 +1,6 @@
 title: Ubuntu Bind9泛域名解析配置
 date: 2013-03-26 01:06:34
-tags: devops
+tags: DevOps
 ---
 
 # Bind9简介

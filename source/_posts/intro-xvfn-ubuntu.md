@@ -1,6 +1,6 @@
 title: 如何在Vagrant/Docker中运行Firefox
 date: 2014-10-19 22:47:10
-tags: devops
+tags: DevOps
 ---
 
 在诸如Linxu的服务器版本，Vagrant,Docker并不包含物理的显示设备。
