@@ -1,9 +1,9 @@
-title: Prometheus 联邦集群
-date: 2018-03-01 21:55:41
+title: Promethues高可用(3)：联邦集群
+date: 2018-03-08 12:55:41
 tags: Prometheus
 ---
 
-单个Prometheus Server可以轻松的处理数以百万的时间序列。当然根据规模的不同的变化，Prometheus同样可以轻松的进行扩展。本文将会介绍利用Prometheus的联邦集群特性，对Prometheus进行扩展。
+单个Prometheus Server可以轻松的处理数以百万的时间序列。当然根据规模的不同的变化，Prometheus同样可以轻松的进行扩展。这部分将会介绍利用Prometheus的联邦集群特性，对Prometheus进行扩展。
 
 <!-- more -->
 
