@@ -124,7 +124,7 @@ $ goreman -f alertmanager.procfile start
 
 当集群中的Alertmanager节点不在一台主机时，通常需要使用--cluster.advertise-address参数指定当前节点所在网络地址。
 
-> 注意：由于goreman不保证进程之间的启动顺序，如果集群状态未达到预期，可以使用```goreman -f alertmanager.procfile run restart a2```重启a2，a3服务。
+> 注意：由于goreman不保证进程之间的启动顺序，如果集群状态未达到预期，可以使用goreman -f alertmanager.procfile run restart __service__重启a2，a3服务。
 
 当Alertmanager集群启动完成后，可以使用send-alerts.sh脚本对集群进行简单测试，这里利用curl分别向3个Alertmanager实例发送告警信息。
 
