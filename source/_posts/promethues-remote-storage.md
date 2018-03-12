@@ -1,17 +1,17 @@
-title: Promethues高可用(2)：理解远端存储
+title: Prometheus高可用(2)：理解远端存储
 date: 2018-03-07 13:49:31
-tags: ['Promethues', 'InfluxDB']
+tags: ['Prometheus', 'InfluxDB']
 ---
 
-Promethues的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Promethues无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。
+Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。
 
-为了保持Promethues的简单性，Promethues并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对接任意第三方的存储服务，这种方式在Promthues中成为Remote Storage。
+为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对接任意第三方的存储服务，这种方式在Promthues中成为Remote Storage。
 
 <!--more-->
 
 ## Remote Write
 
-用户可以在Promtheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Promethues将样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。
+用户可以在Promtheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Prometheus将样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。
 
 ![Remote Write](http://p2n2em8ut.bkt.clouddn.com/remote-write-path-2.png)
 
@@ -27,7 +27,7 @@ Promethues的本地存储设计可以减少其自身运维和管理的复杂度�
 
 ### 配置文件
 
-用户需要使用远程读写功能时，主要通过在Promethues配置文件中添加remote_write和remote_read配置，其中url用于指定远程读/写的HTTP服务地址。如果该URL启动了认证则可以通过basic_auth进行安全认证配置。对于https的支持需要设定tls_concig。proxy_url主要用于Promethues无法直接访问适配器服务的情况下。
+用户需要使用远程读写功能时，主要通过在Prometheus配置文件中添加remote_write和remote_read配置，其中url用于指定远程读/写的HTTP服务地址。如果该URL启动了认证则可以通过basic_auth进行安全认证配置。对于https的支持需要设定tls_concig。proxy_url主要用于Prometheus无法直接访问适配器服务的情况下。
 
 remote_write和remote_write具体配置如下所示：
 
@@ -67,7 +67,7 @@ remote_read:
 
 ![Remote Storage](http://p2n2em8ut.bkt.clouddn.com/remote-storage-paths.png)
 
-当前Promethues中Remote Storage相关的协议主要通过以下proto文件进行定义：
+当前Prometheus中Remote Storage相关的协议主要通过以下proto文件进行定义：
 
 ```
 syntax = "proto3";
@@ -173,7 +173,7 @@ func main() {
 | PostgreSQL/TimescaleDB:  | read/write|
 | SignalFx                 | write|
 
-这里我们演示将如何使用Influxdb作为Promethues的Remote Storage，从而确保当Promethues发生宕机或者重启之后能够从Influxdb中恢复和获取历史数据。
+这里我们演示将如何使用Influxdb作为Prometheus的Remote Storage，从而确保当Prometheus发生宕机或者重启之后能够从Influxdb中恢复和获取历史数据。
 
 这里使用docker-compose定义并启动Influxdb数据库服务，docker-compose.yml定义如下：
 
@@ -203,7 +203,7 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 795d0ead87a1        influxdb:1.3.5      "/entrypoint.sh -c..."   3 hours ago         Up 3 hours          0.0.0.0:8086->8086/tcp   localhost_influxdb_1
 ```
 
-获取并启动Promethues提供的Remote Storage Adapter：
+获取并启动Prometheus提供的Remote Storage Adapter：
 
 ```
 go get github.com/prometheus/prometheus/documentation/examples/remote_storage/remote_storage_adapter
@@ -227,7 +227,7 @@ remote_read:
   - url: "http://localhost:9201/read"
 ```
 
-重新启动Promethues能够获取数据后，登录到influxdb容器，并验证数据写入。如下所示，当数据能够正常写入Influxdb后可以看到Promtheus相关的指标。
+重新启动Prometheus能够获取数据后，登录到influxdb容器，并验证数据写入。如下所示，当数据能够正常写入Influxdb后可以看到Promtheus相关的指标。
 
 ```
 docker exec -it 795d0ead87a1 influx
@@ -257,7 +257,7 @@ go_memstats_heap_alloc_bytes
 go_memstats_heap_idle_bytes
 ```
 
-当数据写入成功后，停止Promethues服务。同时删除Promethues的data目录，模拟Promthues数据丢失的情况后重启Promethues。打开Promethues UI如果配置正常，Promethues可以正常查询到本地存储以删除的历史数据记录。
+当数据写入成功后，停止Prometheus服务。同时删除Prometheus的data目录，模拟Promthues数据丢失的情况后重启Prometheus。打开Prometheus UI如果配置正常，Prometheus可以正常查询到本地存储以删除的历史数据记录。
 
 ![从Remote Storage获取历史数据](http://p2n2em8ut.bkt.clouddn.com/promethues-remote-storage.png)
 

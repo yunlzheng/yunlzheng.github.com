@@ -43,7 +43,7 @@ Prometheus社区提供的[NodeExporter](https://github.com/prometheus/node_expor
 
 **4，Prometheus如何动态发现采集Target的地址**
 
-Promentheus最基本的数据采集方式是用过在yml文件中直接定义目标Exporter的的访问地址，此刻Prometheus可以根据Target地址定时轮训获取监控数据。同时Prometheus还支持动态的服务发现注册方式，具体信息可以参考[Promethues官方文档](https://prometheus.io/docs/operating/configuration/#kubernetes_sd_config)，这里我们主要关注在kubernetes下的采集目标发现的配置，Prometheus支持通过kubernetes的Rest API动态发现采集的目标Target信息，包括kubernetes下的node,service,pod,endpoints等信息。因此基于kubernetes_sd_config以及之前提到的三点，我们基本了解了整个的一个实现实例。
+Promentheus最基本的数据采集方式是用过在yml文件中直接定义目标Exporter的的访问地址，此刻Prometheus可以根据Target地址定时轮训获取监控数据。同时Prometheus还支持动态的服务发现注册方式，具体信息可以参考[Prometheus官方文档](https://prometheus.io/docs/operating/configuration/#kubernetes_sd_config)，这里我们主要关注在kubernetes下的采集目标发现的配置，Prometheus支持通过kubernetes的Rest API动态发现采集的目标Target信息，包括kubernetes下的node,service,pod,endpoints等信息。因此基于kubernetes_sd_config以及之前提到的三点，我们基本了解了整个的一个实现实例。
 
 ## Step By Step
 
@@ -93,7 +93,7 @@ spec:
       restartPolicy: Always
 ```
 
-在Service中定义标注prometheus.io/scrape: 'true'，表明该Service需要被promethues发现并采集数据
+在Service中定义标注prometheus.io/scrape: 'true'，表明该Service需要被prometheus发现并采集数据
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/kubernates_prometheus.png)
 
@@ -138,11 +138,11 @@ subjects:
   namespace: default
 ```
 
-通过RBC创建ClusterRole,ServiceAccount以及ClusterRoleBinding从而确保Promethues可以通过kubernetes API访问到全局资源信息
+通过RBC创建ClusterRole,ServiceAccount以及ClusterRoleBinding从而确保Prometheus可以通过kubernetes API访问到全局资源信息
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_role.png)
 
-### 创建Promethues配置文件ConfigMap
+### 创建Prometheus配置文件ConfigMap
 
 ```
 apiVersion: v1
@@ -275,7 +275,7 @@ data:
         target_label: kubernetes_name
 ```
 
-Promethues可以在容器内通过DNS地址 **https://kubernetes.default.svc** 访问kubernetes的Rest API.
+Prometheus可以在容器内通过DNS地址 **https://kubernetes.default.svc** 访问kubernetes的Rest API.
 
 rule_files则定义了告警规则的文件匹配规则，这里会加载/etc/prometheus-rules/下所有匹配*.rules的文件
 
@@ -314,9 +314,9 @@ data:
       - channel: '#alerts'
 ```
 
-在Alertmanager的配置文件中我们定义了两种基本的通知方式,邮件以及Slack对于产生的告警默认情况下都会通知到slack的特定channel,这里promethues主要集成了Slack的[incoming-webhooks](https://api.slack.com/incoming-webhooks),从而实现基于slack的告警通知，对于某些告警当存在label为severity：email则通过还会通过邮件发送告警信息。
+在Alertmanager的配置文件中我们定义了两种基本的通知方式,邮件以及Slack对于产生的告警默认情况下都会通知到slack的特定channel,这里prometheus主要集成了Slack的[incoming-webhooks](https://api.slack.com/incoming-webhooks),从而实现基于slack的告警通知，对于某些告警当存在label为severity：email则通过还会通过邮件发送告警信息。
 
-例如如果在promethues中定义了告警规则
+例如如果在prometheus中定义了告警规则
 
 ```
 ALERT NodeCPUUsage
@@ -384,7 +384,7 @@ spec:
 
 这里由于kubernetes Exporter同样需要访问全局kubernetes资源，因此使用了之前步骤定义的ServiceAccount从而可以通过kubernetes API获取到deployments，pod，service等资源的详细信息，从而通过/metrics接口暴露相关信息。这里Service中同样标注了 prometheus.io/scrape: 'true'从而确保prometheus会采集数据。
 
-### 部署Promethues和Alertmanager的Deployment
+### 部署Prometheus和Alertmanager的Deployment
 
 ```
 apiVersion: v1
@@ -483,14 +483,14 @@ spec:
 serviceAccountName: prometheus
 serviceAccount: prometheus
 ```
-因此Promethues可以在容器内通过DNS地址 **https://kubernetes.default.svc** 访问kubernetes的Rest API地址.同时访问API所需的认证信息以及https的ca证书信息可以从文件
+因此Prometheus可以在容器内通过DNS地址 **https://kubernetes.default.svc** 访问kubernetes的Rest API地址.同时访问API所需的认证信息以及https的ca证书信息可以从文件
 /var/run/secrets/kubernetes.io/serviceaccount/token和/var/run/secrets/kubernetes.io/serviceaccount/ca.crt读取，从而确保prometheus具有权限并且可以发现采集的目标资源。
 
 同时由于promentheus和alertmanager部署在同一个pod当中，因此prometheus可以直接通过127.0.0.1:9073推送告警信息到alertmanager
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_pod.png)
 
-访问promethues网页我们可以查看当前的所有target信息
+访问prometheus网页我们可以查看当前的所有target信息
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/promethues_target.png)
 

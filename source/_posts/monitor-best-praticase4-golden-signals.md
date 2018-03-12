@@ -48,7 +48,7 @@ Four Golden Signals是Google针对大量分布式监控的经验总结，4个黄
 
 ### RED方法
 
-RED方法是Weave Cloud在基于Google的“4个黄金指标”的原则下结合Promethues以及Kubernetes容器实践，细化和总结的方法论，特别适合于云原生应用以及微服务架构应用的监控和度量。主要关注以下三种关键指标：
+RED方法是Weave Cloud在基于Google的“4个黄金指标”的原则下结合Prometheus以及Kubernetes容器实践，细化和总结的方法论，特别适合于云原生应用以及微服务架构应用的监控和度量。主要关注以下三种关键指标：
 
 * (请求)速率：服务每秒接收的请求数。
 * (请求)错误：每秒失败的请求数。

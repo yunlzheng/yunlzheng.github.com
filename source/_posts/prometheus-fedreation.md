@@ -1,4 +1,4 @@
-title: Promethues高可用(3)：联邦集群
+title: Prometheus高可用(3)：联邦集群
 date: 2018-03-08 12:55:41
 tags: Prometheus
 ---

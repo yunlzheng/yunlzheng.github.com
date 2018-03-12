@@ -3,7 +3,7 @@ date: 2018-01-17 15:15:49
 tags: prometheus
 ---
 
-在云平台中如果自动发现监控目标？本文将结合Consul向读者介绍Promethues下的服务发现机制以及relabel机制。
+在云平台中如果自动发现监控目标？本文将结合Consul向读者介绍Prometheus下的服务发现机制以及relabel机制。
 
 <!-- more -->
 
