@@ -1,6 +1,6 @@
 title: Prometheus高可用(4)：Alertmanager高可用
 date: 2018-03-12 11:26:52
-tags: [Prometheus, Alertmanager]
+tags: ['Prometheus', 'Alertmanager', '高可用']
 ---
 
 在前面的部分我们主要讨论了Prometheus Server自身的高可用问题。而接下来，重点将放在告警处理也就是Alertmanager部分。如下所示。

@@ -1,6 +1,6 @@
 title: Prometheus高可用(2)：理解远端存储
 date: 2018-03-07 13:49:31
-tags: ['Prometheus', 'InfluxDB']
+tags: ['Prometheus', 'InfluxDB', '高可用']
 ---
 
 Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。

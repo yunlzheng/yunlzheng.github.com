@@ -1,6 +1,6 @@
 title: 自定义Metrics：让Prometheus监控你的应用程序（Spring版）
 date: 2018-01-24 10:07:45
-tags: prometheus
+tags: ['Prometheus', 'Spring', 'Java']
 ---
 
 本文将以Spring Boot/Spring Cloud为例，介绍如果使用Prometheus SDK实现自定义监控指标的定义以及暴露，并且会介绍Prometheus中四种不同指标类型(Counter, Gauge, Histogram, Summary)的实际使用场景；
