@@ -1,5 +1,7 @@
 title: Prometheus中的服务发现和relabel
 date: 2018-01-17 15:15:49
+categories:
+  - Prometheus
 tags: prometheus
 ---
 

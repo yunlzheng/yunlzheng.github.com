@@ -71,14 +71,167 @@ public ThreadPoolExecutor(int corePoolSize,
 
 ## 异步与并行
 
-![异步与并行](http://7pn5d3.com1.z0.glb.clouddn.com/asynchronous.png)
+在经常接触Java Web开发的同学都知道应用服务器如(Tomcat),会为每一个请求分配一个独立的线程。因此在大部分情况下，都不需要考虑多线程的问题。
 
-在其它的一些场景当中，即使是多线程，如果一个线程中处理了多个任务，并且每个任务有相对比较耗时这时一个请求的响应时间，会变成这些所有任务的耗时总和，如上图第一个场景描述的那样。如果以HTTP请求为例的话，这个HTTP请求的响应时间也会变得很长。
+例如，可以通过修改Tomcat的配置，修改其线程池的相关配置。
 
-这是我们就需要采用异步编程的方式，来提升系统的吞吐量。一般根据具体的业务来说，会有两种使用方式。
+```xml
+<Connector port="8080"     
+               maxThreads="150" minSpareThreads="25" maxSpareThreads="75"     
+               enableLookups="false" redirectPort="8443" acceptCount="100"     
+               debug="0" connectionTimeout="20000"      
+               disableUploadTimeout="true" />  
+```
 
-如上图中第二个场景，一个后端服务需要聚合多个其它数据时，可以将这些业务流程编程多个并发的操作，并在最后进行聚合响应给客户端。 第三个场景则描述的是，在某些情况下，如果有些服务本身是需要后台处理的。当客户端发起请求后，直接响应Accepted，告诉客户端，“朕知道了，我会慢慢处理，你先下去吧”。然后由后台任务对业务进行处理即可。
+但是对于每一个Request而言，假如对应了多个业务操作，特别是在微服务的方式中可能还会远程调用多个其它远程服务，会使得该Request的响应时间过长，降低系统的吞吐量。
 
-第二种场景，可以使用Java提供的Feature/或者CountDown进行实现。第三种场景一般配合消息队列进行处理。
+![HttpServer的多线程与请求的单线程](http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-1.png)
 
-> 未完待续<使用Feature进行异步编程>
+因此为了提升系统的吞吐量(注意，不是并发量，并发量由Webserver的线程池大小决定)。可以使用异步的方式对请求进行处理。将这些远程调用，变成异步的方式，而在外部等待这些异步操作执行完成后，对结果进行汇集后再返回给客户端。 响应时间减少到最长远程调用的时间。
+
+![异步处理](http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-3.png)
+
+除了以上的方式以外，如果业务操作时间就非常长，可能就需要结合消息队列的方式对请求进行处理。当客户端发起请求后，理解响应Accepted，告诉客户端，“朕知道了，我会慢慢处理，你先下去吧”。然后由后台任务对业务进行处理即可。
+
+![使用队列解决异步问题](http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-queue.png)
+
+### 使用Future实现并发
+
+在前面的部分，介绍过在Java中使用Thread和Runnable实现多线程程序，这种模式下调用者并不关心线程的返回状态，直接把线程丢给线程池执行即可。而有些情况下，调用者是需要了解线程中任务的执行结果，然后对结果进行汇集。在还没有Future之前，可以使用CountDownLatch的方式。
+
+例如，这里有一个远程调用的服务RemoteService:
+
+```
+
+package com.github.concurrent;
+
+import java.util.Random;
+
+public class RemoteService {
+    private final Random random = new Random(System.nanoTime());
+
+    public int call() throws InterruptedException {
+        int target = random.nextInt(10) + 1;
+        int millis = target * 10;
+        Thread.sleep(millis);
+        return millis;
+    }
+}
+```
+
+为了模拟远程调用的等待时间，这里随机让线程sleep一段时间。
+
+```
+package com.github.concurrent;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class CountDownSample {
+
+    final static ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+    public static void main(String[] args) throws InterruptedException {
+        RemoteService remoteService = new RemoteService();
+        // 定义CountDownLatch的count为2
+        CountDownLatch _latch = new CountDownLatch(2);
+
+        RemoteCallRunnable calback1 = new RemoteCallRunnable(remoteService, _latch);
+        RemoteCallRunnable callback2 = new RemoteCallRunnable(remoteService, _latch);
+
+        executorService.execute(calback1);
+        executorService.execute(callback2);
+
+        // 等待count为0，即等待两次remote call调用成功
+        _latch.await();
+
+        System.out.println(calback1.getResult() + callback2.getResult());
+    }
+
+}
+
+
+class RemoteCallRunnable implements Runnable {
+
+    private RemoteService remoteService;
+    private CountDownLatch _latch;
+
+    // 存储远程调用的返回结果
+    private int result;
+
+    public RemoteCallRunnable(RemoteService remoteService, CountDownLatch _latch) {
+        this.remoteService = remoteService;
+        this._latch = _latch;
+    }
+
+    @Override
+    public void run() {
+        try {
+            result = remoteService.call();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            // count计数减1
+            _latch.countDown();
+        }
+
+    }
+
+    public int getResult() {
+        return result;
+    }
+}
+```
+
+在上述的代码中，为了能够以多线程的方式实现对远程服务的调用，并且需要获取结果时，专门将RemoteService包装到了一个Runnable当中。 那有没有更简单的方式？答案是：Future。
+
+下面的代码演示了如何通过Future简化上述代码：
+
+```
+package com.github.concurrent;
+
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+public class FutureSample {
+
+    final static ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+    public static void main(String[] args) {
+
+        long start = System.currentTimeMillis();
+
+        RemoteService remoteService = new RemoteService();
+
+        // 使用submit提交异步任务，并且获取返回值为future
+        Future<Integer> future1 = executorService.submit(remoteService::call);
+        Future<Integer> future2 = executorService.submit(remoteService::call);
+
+        try {
+            // 调用future.get() 阻塞主线程，获取异步任务的返回结果
+            Integer result1 = future1.get(200, TimeUnit.MILLISECONDS);
+            Integer result2 = future2.get(200, TimeUnit.MILLISECONDS);
+            System.out.println("sum=" + (result1 + result2));
+            System.out.println("Spend Time Millis:" + (System.currentTimeMillis() - start));
+        } catch (Exception e) {
+            if (future1 != null) {
+                future1.cancel(true);
+            }
+            if (future2 != null) {
+                future2.cancel(true);
+            }
+        }
+
+        executorService.shutdown();
+    }
+
+}
+```
+
+Future可以在不阻塞主线程的情况下，进行异步调用，并且监视远程调用的返回结果。 当需要得到异步任务的结果时，再通过get方法获取。
+
+> 未完待续： 使用CompletableFuture对Future进行编排

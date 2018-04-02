@@ -1,5 +1,7 @@
 title: Prometheus的基本数据类型
 date: 2017-07-07 10:26:04
+categories:
+  - Prometheus
 tags: [Prometheus, Exporter, Devops]
 ---
 

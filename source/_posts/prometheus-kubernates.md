@@ -1,5 +1,7 @@
 title: Prometheus在Kubernetes下的监控实践
 date: 2017-07-04 22:19:36
+categories:
+  - Prometheus
 tags: [DevOps,Monitor,Prometheus,Kubernetes]
 ---
 

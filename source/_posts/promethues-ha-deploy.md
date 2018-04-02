@@ -1,5 +1,7 @@
 title: Prometheus高可用(5)：Prometheus高可用方案策略
 date: 2018-03-17 11:35:37
+categories:
+  - Prometheus
 tags: ['Prometheus', '高可用']
 ---
 

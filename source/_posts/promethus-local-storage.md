@@ -1,6 +1,8 @@
 title: Prometheus高可用(1)：理解本地存储
 date: 2018-03-06 8:52:03
 tags: ['Prometheus', '高可用']
+categories:
+  - Prometheus
 ---
 
 在构建Prometheus高可用方案之前，我们先来了解一下Prometheus的本地存储相关的内容。

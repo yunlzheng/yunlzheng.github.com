@@ -1,5 +1,7 @@
 title: Prometheus以及如果实现跨环境监控
 date: 2017-05-13 23:28:14
+categories:
+  - Prometheus
 tags: [DevOps, Monitor, Prometheus]
 ---
 

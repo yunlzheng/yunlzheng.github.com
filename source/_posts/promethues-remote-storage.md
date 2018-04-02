@@ -1,5 +1,7 @@
 title: Prometheus高可用(2)：理解远端存储
 date: 2018-03-07 13:49:31
+categories:
+  - Prometheus
 tags: ['Prometheus', 'InfluxDB', '高可用']
 ---
 
