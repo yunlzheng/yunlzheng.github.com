@@ -1,13 +1,12 @@
-title: [Tips]解决Consul中服务实例重复注册的问题
-date: 2018-04-03 09:23:47
+---
+title: Tips:解决Consul中服务实例重复注册的问题
+date: 2018-06-04 00:59:45
 tags:
- - Spring Cloud
- - Consul
- - Kubernetes
- - Service Discovery
 ---
 
 为了提升系统核心服务的问题性，避免由于K8S网络导致服务间调用的稳定性。目前将系统核心服务的部署方式从Pod Network切换到了Host Network。 Host Network限制了Pod的部署数量，最大情况下只能和主机数量保持一致。因此需要在Deployment中设置一些反亲和性的调度策略。 确保Pod不会被反复注册到相同主机上。
+
+<!-- more -->
 
 ![](http://7pn5d3.com1.z0.glb.clouddn.com/to-many-instance.png)
 
