@@ -7,6 +7,7 @@
 
 <html class="{{ html_class | lower }}" lang="{{ config.language }}">
 <head>
+  {% include '_scripts/nprogress.swig' %}
   {{ partial('_partials/head/head.swig', {}, {cache: theme.cache.enable}) }}
   {% include '_partials/head/head-unique.swig' %}
   <title>{% block title %}{% endblock %}</title>
@@ -21,6 +22,10 @@
   {% if theme.sidebar.position %}
     {% set container_class = container_class + 'sidebar-position-' + theme.sidebar.position %}
   {% endif %}
+
+  <script>
+    NProgress.start();
+  </script>
 
   <div class="{{ container_class }} {% block page_class %}{% endblock %}">
     <div class="headband"></div>
@@ -72,6 +77,10 @@
 
   </div>
 
+  <script>
+    NProgress.set(0.5);
+  </script>
+
   {% include '_scripts/vendors.swig' %}
   {% include '_scripts/commons.swig' %}
 
@@ -94,5 +103,8 @@
   {% include '_third-party/scroll-cookie.swig' %}
   {% include '_third-party/exturl.swig' %}
   {% include '_third-party/bookmark.swig' %}
+  <script>
+    NProgress.done();
+  </script>
 </body>
 </html>

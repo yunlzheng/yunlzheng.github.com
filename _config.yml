@@ -69,6 +69,7 @@ theme: next
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: git
+  
   repo: git@github.com:yunlzheng/yunlzheng.github.com.git
   branch: master
   message: I'm Yunlong, my blog is update
