@@ -5,6 +5,8 @@ tags: kubernetes
 
 在Kubernetes中网络中，主要包含两种IP，分别是Pod IP和Cluster IP。 Pod IP是实际存在于网卡之上（如VETH的虚拟网卡），而Cluster IP则是一个虚拟的IP地址，该虚拟机IP由kube-proxy进行维护，kube-proxy目前提供了两种实现方式，包括默认的ip tables实现以及在K8S 1.8之后开始支持的ipvs实现。
 
+<!-- more -->
+
 对于Kubernetes其网络而言，其实现需要确保集群中每个Pod都有一个唯一的IP地址，并且Pod之间可以直接进行跨主机通讯。在符合这一原则的前提下，Kubernetes允许通过插件的方式，集成不同的容器集群网络实现。其中最常用的应该是Flannel。Flannel是由CoreOS团队针对KUbernetes设计的一个Overlay Network实现，通过隧道协议（udp，vxlan）封装容器之间的通讯报文，实现集群间网络通讯。
 
 ![http://7pn5d3.com1.z0.glb.clouddn.com/flannel.png](http://7pn5d3.com1.z0.glb.clouddn.com/flannel.png)
