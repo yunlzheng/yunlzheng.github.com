@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="DevOps," />
+
+
+<meta name="description" content="Vargant一个属于程序猿的虚拟机。 “这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”， “我这儿都能运行，肯定是你机器的问题”。 在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫">
+<meta name="keywords" content="DevOps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vargant一个属于程序员的虚拟机">
+<meta property="og:url" content="http://yunlzheng.github.io/2013/11/26/cool-vagrant/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="Vargant一个属于程序猿的虚拟机。 “这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”， “我这儿都能运行，肯定是你机器的问题”。 在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yunlzheng.github.io/vagrant/03.png">
+<meta property="og:image" content="http://yunlzheng.github.io/vagrant/04.png">
+<meta property="og:image" content="http://yunlzheng.github.io/2013/11/26/cool-vagrant/vagrant/05.png">
+<meta property="og:image" content="http://yunlzheng.github.io/vagrant/06.png">
+<meta property="og:image" content="http://yunlzheng.github.io/vagrant/07.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vargant一个属于程序员的虚拟机">
+<meta name="twitter:description" content="Vargant一个属于程序猿的虚拟机。 “这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”， “我这儿都能运行，肯定是你机器的问题”。 在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫">
+<meta name="twitter:image" content="http://yunlzheng.github.io/vagrant/03.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2013/11/26/cool-vagrant/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Vargant一个属于程序员的虚拟机 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2013/11/26/cool-vagrant/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Vargant一个属于程序员的虚拟机</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-11-26T12:30:29+08:00">2013-11-26</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2013/11/26/cool-vagrant/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2013/11/26/cool-vagrant/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Vargant一个属于程序猿的虚拟机。</p>
+<p>“这段程序明明在我的机器上运行的好好的，怎么到这就没法运行的”，</p>
+<p>“我这儿都能运行，肯定是你机器的问题”。</p>
+<p>在软件开发过程中往往由于开发环境不一致导致各种各样奇怪的问题，而是用Vagrant就可以很好的解决这种问题<br>Vagrant是用Ruby开发的，对虚拟机操作进行封装和简化，从而可以很方便的创建用于开发的虚拟机环境，Vagrant中的虚拟机都可以使用一个名叫BOX的东西来进行分发，下面主要记录一些Vagrant的基本使用方式和方法</p>
+<a id="more"></a>
+<h2><span id="安装vargant">安装Vargant</span></h2><p><a href="http://hc-vagrant-files.s3.amazonaws.com/packages/a40522f5fabccb9ddabad03d836e120ff5d14093/Vagrant_1.3.5.msi" target="_blank" rel="noopener">下载地址</a></p>
+<h2><span id="初始化工作目录">初始化工作目录</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="built_in">cd</span> WORKSPACE</span><br></pre></td></tr></table></figure>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attribute">vagrant init</span></span><br></pre></td></tr></table></figure>
+<p><img src="/vagrant/03.png" alt=""></p>
+<p>完成初始化后将在工作目录创建Vagrantfile文件</p>
+<h2><span id="boxes">BOXES</span></h2><ul>
+<li>添加BOX <strong>vargant box add</strong></li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box <span class="built_in">add</span> precise32  <span class="keyword">http</span>://<span class="built_in">files</span>.vagrantup.com/precise32.box</span><br></pre></td></tr></table></figure>
+<p><img src="/vagrant/04.png" alt=""></p>
+<ul>
+<li>使用BOX</li>
+</ul>
+<p>查看Vagrant文件如下，Vagrant默认使用名为base的BOX</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Vagrant.configure(VAGRANTFILE_API_VERSION) <span class="built_in">do</span> |<span class="built_in">config</span>|</span><br><span class="line"></span><br><span class="line">    <span class="built_in">config</span>.vm.box = <span class="string">"base"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">end</span></span><br></pre></td></tr></table></figure>
+<p>修改<strong>config.vm.box</strong>,让vagrant使用新添加的BOX</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Vagrant.configure(VAGRANTFILE_API_VERSION) <span class="built_in">do</span> |<span class="built_in">config</span>|</span><br><span class="line"></span><br><span class="line">    <span class="built_in">config</span>.vm.box = <span class="string">"precise32"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">end</span></span><br></pre></td></tr></table></figure>
+<h2><span id="启动和ssh登录">启动和SSH登录</span></h2><ul>
+<li>启动Vargant</li>
+</ul>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vagrant up</span></span><br></pre></td></tr></table></figure>
+<p><img src="vagrant/05.png" alt=""></p>
+<ul>
+<li>SSH登录Vagrant虚拟机</li>
+</ul>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vargant ssh</span></span><br></pre></td></tr></table></figure>
+<p>windows下直接使用cmd会报错如下</p>
+<p><img src="/vagrant/06.png" alt=""></p>
+<p>如果windows本机安装了git客户端，可以在git-bash中使用<strong>vagrant ssh</strong>,也可以使用Putty等SSH客户端,链接地址如下</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="symbol">Port:</span> <span class="number">2222</span></span><br><span class="line"><span class="symbol">Username:</span> vagrant</span><br></pre></td></tr></table></figure>
+<ul>
+<li>文件同步</li>
+</ul>
+<p>默认情况下虚拟机 /vagrant目录下则自动同步了当前工作区下的所有内容</p>
+<h2><span id="自动化部署">自动化部署</span></h2><p>vagrant内置对自动化部署的支持，使用该特性可以在<strong>vagrant up</strong>时自动安装所需要的软件</p>
+<ul>
+<li>安装软件</li>
+</ul>
+<p>在<strong>WORKSPACE</strong>目录下新建<strong>bootstrap.sh</strong>文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line">apt-<span class="builtin-name">get</span> update</span><br><span class="line">apt-<span class="builtin-name">get</span> install vim</span><br></pre></td></tr></table></figure>
+<p>修改<strong>WORKSPACE/Vagrantfile</strong>文件</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Vagrant.configure(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |<span class="built_in">config</span>|</span><br><span class="line"></span><br><span class="line">    <span class="built_in">config</span>.vm.box = <span class="string">"precise32"</span></span><br><span class="line">    <span class="built_in">config</span>.vm.provision :shell, :<span class="built_in">path</span> =&gt; <span class="string">"bootstrap.sh"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>该配置让Vagrant知道在虚拟机启动时，运行<strong>bootstrap.sh</strong>文件<br>文件路径<strong>$WORKSPACE</strong>目录的相对路径</p>
+<h2><span id="网络">网络</span></h2><ul>
+<li>端口转发</li>
+</ul>
+<p>使用该特性， 可以将虚拟机的端口映射到主机的特定端口上。</p>
+<p>使用该特性需要修改<strong>WORKSPACE/Vagrantfile</strong>文件</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Vagrant.configure(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |<span class="built_in">config</span>|</span><br><span class="line"></span><br><span class="line">    <span class="built_in">config</span>.vm.box = <span class="string">"precise32"</span></span><br><span class="line">    <span class="built_in">config</span>.vm.provision :shell, :<span class="built_in">path</span> =&gt; <span class="string">"bootstrap.sh"</span></span><br><span class="line">    <span class="built_in">config</span>.vm.network :forwarded_port, guest: <span class="number">80</span>, host: <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>修改文件后重新启动<strong>Vagrant</strong> 重新启动虚拟机</p>
+<p><img src="/vagrant/07.png" alt=""></p>
+<p>如图所示对本机8080端口的请求都将转发到虚拟机的80端口</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DevOps/" rel="tag"># DevOps</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/11/21/talk-about-mvc/" rel="next" title="谈谈关于前端的MVC">
+                <i class="fa fa-chevron-left"></i> 谈谈关于前端的MVC
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/07/31/angular-resources/" rel="prev" title="使用Angular Resources 封装Rest API">
+                使用Angular Resources 封装Rest API <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">安装Vargant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">初始化工作目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">BOXES</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">启动和SSH登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">自动化部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">网络</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2013/11/26/cool-vagrant/';
+        this.page.identifier = '2013/11/26/cool-vagrant/';
+        this.page.title = 'Vargant一个属于程序员的虚拟机';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

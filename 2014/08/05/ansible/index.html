@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Yunlong, Agile, DevOps" />
+
+
+<meta name="description" content="Ansible是一个简单，强大的自动化配置管理工具，对于Ansible而言，自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible初体验">
+<meta property="og:url" content="http://yunlzheng.github.io/2014/08/05/ansible/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="Ansible是一个简单，强大的自动化配置管理工具，对于Ansible而言，自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://31.media.tumblr.com/545c9ccfd0486332ea0958683392c108/tumblr_inline_n9yq5hTERc1sosno0.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ansible初体验">
+<meta name="twitter:description" content="Ansible是一个简单，强大的自动化配置管理工具，对于Ansible而言，自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单">
+<meta name="twitter:image" content="https://31.media.tumblr.com/545c9ccfd0486332ea0958683392c108/tumblr_inline_n9yq5hTERc1sosno0.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2014/08/05/ansible/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Ansible初体验 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2014/08/05/ansible/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Ansible初体验</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-08-05T09:33:59+08:00">2014-08-05</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/08/05/ansible/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2014/08/05/ansible/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Ansible是一个简单，强大的自动化配置管理工具，<br>对于Ansible而言，自动化所需要的一切就是在控制机上安装一个python的package.就和Fabric一样简单</p>
+<a id="more"></a>
+<h2><span id="安装ansible">安装Ansible</span></h2><p>For python user</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> ansible</span><br></pre></td></tr></table></figure>
+<p>For mac user</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">brew </span><span class="keyword">install </span>ansible</span><br></pre></td></tr></table></figure>
+<h2><span id="ssh远程登录授权">SSH远程登录授权</span></h2><p>在这里我们使用Vagrant模拟一个远程服务器 <strong>vagrant init</strong> 创建一个vagrant实例</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -<span class="selector-tag">i</span> ~/.ssh/id_rsa<span class="selector-class">.pub</span> vagrant@<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">2222</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>for mac user need install ssh-copy-id tools first “brew install ssh-copy-id”</p>
+</blockquote>
+<h2><span id="ansible-ad-hot">ansible Ad-hot</span></h2><p>Ad-hot简单来说就是利用ansible来执行一些简单的零时的服务器远程操作。</p>
+<p>example1 初识:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"127.0.0.1:2222"</span> | tee hosts</span><br><span class="line">ansible all -m<span class="built_in"> ping </span>-i hosts -u vagrant</span><br></pre></td></tr></table></figure>
+<p>上面的命令首先在当前目录创建了一个hosts文件，然后调用ansible的ping模块来对hosts文件中定义的服务器调用ping操作</p>
+<p>console output:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">127.0.0.1 | success &gt;</span>&gt; &#123;</span><br><span class="line">    <span class="string">"changed"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"ping"</span>: <span class="string">"pong"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>all: 指定该命令对hosts中的所有主机生效</li>
+<li>-i hosts: 指定hosts配置文件，默认使用/etc/ansible/hosts</li>
+<li>-u vagrant: 指定远程用户vagrant</li>
+<li>-m ping: 指定ansible模块ping</li>
+</ul>
+<p>example2 运行echo语句:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -<span class="selector-tag">a</span> <span class="string">'echo hello'</span> -<span class="selector-tag">i</span> hosts -u vagrant</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-a: 模块参数，当未使用-m 指定模块时，默认模块为command</li>
+</ul>
+<p>example3 使用ansible copy模块远程拷贝文件:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m copy -<span class="selector-tag">a</span> <span class="string">"src=hosts dest=~/hosts"</span> -<span class="selector-tag">i</span> hosts -u vagrant</span><br></pre></td></tr></table></figure>
+<h2><span id="ansible-doc-查看模块信息">ansible-doc 查看模块信息</span></h2><blockquote>
+<p>ansible的百科全书</p>
+</blockquote>
+<p>显示ansible所有可用模块</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-<span class="meta">doc</span> -l</span><br></pre></td></tr></table></figure>
+<p>查看特定模块的相关信息</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-doc <span class="built_in">ping</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://31.media.tumblr.com/545c9ccfd0486332ea0958683392c108/tumblr_inline_n9yq5hTERc1sosno0.png" alt=""></p>
+<h2><span id="ansible-playbook-剧本">ansible-playbook 剧本</span></h2><blockquote>
+<p>做自己的导演</p>
+</blockquote>
+<p>hosts</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[webserver]</span></span><br><span class="line">127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:2222</span></span><br></pre></td></tr></table></figure>
+<p>示例：playbook.xml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">- hosts:</span> <span class="string">webserver</span></span><br><span class="line"><span class="attr">  sudo:</span> <span class="literal">yes</span></span><br><span class="line"><span class="attr">  remote_user:</span> <span class="string">vagrant</span></span><br><span class="line"><span class="attr">  vars:</span></span><br><span class="line"><span class="attr">    http_port:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">    max_clients:</span> <span class="number">200</span></span><br><span class="line"><span class="attr">  tasks:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">ensure</span> <span class="string">apache</span> <span class="string">is</span> <span class="string">at</span> <span class="string">the</span> <span class="string">latest</span> <span class="string">version</span></span><br><span class="line"><span class="attr">      apt:</span> <span class="string">name=apache2</span> <span class="string">state=latest</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">write</span> <span class="string">the</span> <span class="string">apache</span> <span class="string">config</span> <span class="string">file</span></span><br><span class="line"><span class="attr">      template:</span> <span class="string">src=apache2.conf</span> <span class="string">dest=/etc/apache2/apache2.conf</span></span><br><span class="line"><span class="attr">      notify:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">restart</span> <span class="string">apache</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">ensure</span> <span class="string">apache</span> <span class="string">is</span> <span class="string">running</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">name=apache2</span> <span class="string">state=started</span></span><br><span class="line"><span class="attr">  handlers:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">restart</span> <span class="string">apache</span></span><br><span class="line"><span class="attr">      service:</span> <span class="string">name=apache2</span> <span class="string">state=restarted</span></span><br></pre></td></tr></table></figure>
+<p>执行shell:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible-playbook playbook<span class="selector-class">.yml</span> -<span class="selector-tag">i</span> hosts</span><br></pre></td></tr></table></figure>
+<h3><span id="hosts-amp-users">Hosts &amp; Users</span></h3><p>在playbook中使用hosts和remote_user指定<strong>全局</strong>主机和远程服务器的用户</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">- hosts:</span> <span class="string">webserver</span></span><br><span class="line"><span class="attr">  remote_user:</span> <span class="string">vagrant</span></span><br></pre></td></tr></table></figure>
+<p>使用sudo指定任务是否使用sudo权限执行</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">- hosts:</span> <span class="string">webserver</span></span><br><span class="line"><span class="attr">  remote_user:</span> <span class="string">vagrant</span></span><br><span class="line"><span class="attr">  sudo:</span> <span class="literal">yes</span></span><br></pre></td></tr></table></figure>
+<p>我们也可以给每一个tasks单独指定remote_user和sudo，如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- name:</span> <span class="string">ensure</span> <span class="string">apache</span> <span class="string">is</span> <span class="string">at</span> <span class="string">the</span> <span class="string">latest</span> <span class="string">version</span></span><br><span class="line"><span class="attr">  apt:</span> <span class="string">name=apache2</span> <span class="string">state=latest</span></span><br><span class="line"><span class="attr">  remote_user:</span> <span class="string">vagrant</span></span><br><span class="line"><span class="attr">  sudo:</span> <span class="literal">yes</span></span><br></pre></td></tr></table></figure>
+<h3><span id="tasks">Tasks</span></h3><p>在playbook的描述文件中会包含一个tasks的列表，这些就是我们实际需要在服务器上所做的操作，<br>在ansible中这些任务都是按照顺序依次执行，如果其中的一个任务发生了异常或者错误，ansible将会自动退出，并显示错误信息</p>
+<p>在playbook中我们可以使用<strong>ignore_errors</strong>忽略单个task的发生的错误</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- <span class="built_in">name</span>: ensure apache <span class="keyword">is</span> <span class="keyword">at</span> <span class="keyword">the</span> latest <span class="built_in">version</span> ignore <span class="keyword">the</span> errors</span><br><span class="line">  apt: <span class="built_in">name</span>=apache2 state=latest</span><br><span class="line">  ignore_errors: True</span><br></pre></td></tr></table></figure>
+<p>在ansible中我们可以使用shell模块直接执行shell语句，所以熟悉shell的同学可以直接利用shell完成所有的task如：</p>
+<figure class="highlight smali"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- name:<span class="built_in"> execute </span>shell by ansible</span><br><span class="line">  shell: echo <span class="string">"hello world"</span> | tee ~/test.txt</span><br></pre></td></tr></table></figure>
+<p>但是ansible还提供了很多有用的模块，例如apt, yum, mysql, openstack等</p>
+<p>ansible模块列表：<a href="http://docs.ansible.com/list_of_all_modules.html" target="_blank" rel="noopener">http://docs.ansible.com/list_of_all_modules.html</a></p>
+<h3><span id="handlers">Handlers</span></h3><p>一般来说当我们更新了服务器的配置文件，都需要对相应的服务器进行重启或者做一些其他的关联操作。这个时候就会使用到handlers。</p>
+<p>简单来说handlers就是ansible中定义好的一组事件，默认并不会执行。 只有当task中使用了notify触发了相应事件，在所有task执行完成后<br>相应的handler才会执行。</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">handlers:</span><br><span class="line">  - name: restart apache</span><br><span class="line">    service: name=apache2 <span class="keyword">state</span>=restarted</span><br></pre></td></tr></table></figure>
+<p>我们可能在多个task中都使用了notify，但是handler只会执行一次</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- name: write the apache<span class="built_in"> config </span>file</span><br><span class="line">  template: <span class="attribute">src</span>=apache2.conf <span class="attribute">dest</span>=/etc/apache2/apache2.conf</span><br><span class="line">  notify:</span><br><span class="line">    - restart apache</span><br></pre></td></tr></table></figure>
+<p>Demo源码：<a href="https://github.com/yunlzheng/ansible-examples/tree/master/webserver" target="_blank" rel="noopener">https://github.com/yunlzheng/ansible-examples/tree/master/webserver</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/08/01/linux-shell-part1/" rel="next" title="Linux Shell基础（一）">
+                <i class="fa fa-chevron-left"></i> Linux Shell基础（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/08/08/vagrant-with-ansible/" rel="prev" title="利用Ansible将开发环境纳入版本管理">
+                利用Ansible将开发环境纳入版本管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">安装Ansible</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">SSH远程登录授权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">ansible Ad-hot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">ansible-doc 查看模块信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">ansible-playbook 剧本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">Hosts &amp; Users</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.2.</span> <span class="nav-text">Tasks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.3.</span> <span class="nav-text">Handlers</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2014/08/05/ansible/';
+        this.page.identifier = '2014/08/05/ansible/';
+        this.page.title = 'Ansible初体验';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

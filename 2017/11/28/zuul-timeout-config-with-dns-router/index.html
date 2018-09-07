@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Kubernetes,Spring Cloud,Spring Cloud Zuul," />
+
+
+<meta name="description" content="本文将介绍在Kubernetest如何搭建基于Spring Cloud Zuul的API网关。">
+<meta name="keywords" content="Kubernetes,Spring Cloud,Spring Cloud Zuul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Kubernetes下实现API网关">
+<meta property="og:url" content="http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="本文将介绍在Kubernetest如何搭建基于Spring Cloud Zuul的API网关。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/service-discovery.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Kubernetes下实现API网关">
+<meta name="twitter:description" content="本文将介绍在Kubernetest如何搭建基于Spring Cloud Zuul的API网关。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/service-discovery.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>在Kubernetes下实现API网关 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">在Kubernetes下实现API网关</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-28T13:02:08+08:00">2017-11-28</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/28/zuul-timeout-config-with-dns-router/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/28/zuul-timeout-config-with-dns-router/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文将介绍在Kubernetest如何搭建基于Spring Cloud Zuul的API网关。</p>
+<a id="more"></a>
+<h2><span id="两种服务发现模式">两种服务发现模式</span></h2><ul>
+<li><p>客户端服务发现</p>
+<p>客户端服务发现可以以Netflix的Eureka，CoreOS的etcd以及xxx的Consul为代表，提供了单独的服务发现和注册中心。客户端在进行远程调用时首先通过服务发现和注册中心获取到要访问的目标服务实例信息，在根据客户端负载均衡策略选择实例，再发起API的远程调用。</p>
+</li>
+<li><p>服务器端服务发现</p>
+<p>服务器端服务发现模式主要以DNS为代表，相关的工具包括Consul,以及一些平台如Kubernetes, Rancher等都提供了基于DNS服务发现注册能力。服务请求转发由平台或者工具提供相关的能力(如Health Check)支持，用于维护DNS代理的后端实例信息。</p>
+</li>
+</ul>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/service-discovery.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/service-discovery.png"></p>
+<p>在<strong>服务无状态的前提下</strong>，基于DNS可以简化在代理过程中的Http请求次数，降低由于网络或者其他不稳定因数导致的服务远程调用失败。</p>
+<h2><span id="在kubernetes下使用zuul创建api网关">在Kubernetes下使用Zuul创建API网关</span></h2><h3><span id="创建服务实例">创建服务实例</span></h3><ol>
+<li><p>创建应用Deployment</p>
+<p>构建应用镜像后通过Deployment文件可以将应用部署到k8s环境中</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">apiVersion</span>: extensions/v1beta1</span><br><span class="line"><span class="attribute">kind</span>: Deployment</span><br><span class="line"><span class="attribute">metadata</span>:</span><br><span class="line">  <span class="attribute">labels</span>:</span><br><span class="line">    <span class="attribute">app</span>: servicea</span><br><span class="line">  <span class="attribute">name</span>: servicea</span><br><span class="line"><span class="attribute">spec</span>:</span><br><span class="line">  <span class="attribute">template</span>:</span><br><span class="line">    <span class="attribute">metadata</span>:</span><br><span class="line">      <span class="attribute">labels</span>:</span><br><span class="line">        <span class="attribute">app</span>: servicea</span><br><span class="line">    <span class="attribute">spec</span>:</span><br><span class="line">      <span class="attribute">containers</span>:</span><br><span class="line">      - <span class="attribute">name</span>: servicea</span><br><span class="line">        <span class="attribute">image</span>: namespace/<span class="attribute">servicea</span>:stable</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加服务健康检测探针</p>
+<p>通过设置Pod的liveness和readiness可以提升应用程序的稳定性，并且可以基于k8s的自身调度机制实现服务的自愈。同时在对服务进行滚动升级过程中，也可以避免k8s将请求发送到不健康的服务实例当中</p>
+<ul>
+<li>liveness探针用于检测服务的运行状态</li>
+<li>readiness探针用于服务状态是否正常</li>
+</ul>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">spec</span>:</span><br><span class="line">  <span class="attribute">template</span>:</span><br><span class="line">    <span class="attribute">spec</span>:</span><br><span class="line">      <span class="attribute">containers</span>:</span><br><span class="line">      - <span class="attribute">name</span>: servicea</span><br><span class="line">        <span class="attribute">livenessProbe</span>:</span><br><span class="line">          <span class="attribute">httpGet</span>:</span><br><span class="line">            <span class="attribute">path</span>: /health</span><br><span class="line">            <span class="attribute">port</span>: <span class="number">8080</span></span><br><span class="line">          <span class="attribute">initialDelaySeconds</span>: <span class="number">15</span></span><br><span class="line">          <span class="attribute">timeoutSeconds</span>: <span class="number">1</span></span><br><span class="line">        <span class="attribute">readinessProbe</span>:</span><br><span class="line">          <span class="attribute">httpGet</span>:</span><br><span class="line">            <span class="attribute">path</span>: /readiness</span><br><span class="line">            <span class="attribute">port</span>: <span class="number">8080</span></span><br><span class="line">          <span class="attribute">initialDelaySeconds</span>: <span class="number">20</span></span><br><span class="line">          <span class="attribute">timeoutSeconds</span>: <span class="number">5</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建Service，用于集群内服务的相互访问</p>
+<p>通过以下命令可以快速创建一个servicea的svc资源，在集群内部可以其它容器可以通过<strong>service.namespace.svc.cluster.local</strong>进行访问。在同一namespace下的可以直接使用service进行访问。</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl expose deployment/servicea <span class="comment">--port 8081</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3><span id="创建api-gateway实例">创建API Gateway实例</span></h3><ol>
+<li><p>基于Spring Cloud Zuul创建API Gateway代理应用</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@EnableZuulProxy</span></span><br><span class="line"><span class="variable">@SpringBootApplication</span></span><br><span class="line">public class GatewayApplication &#123;</span><br><span class="line">    <span class="selector-tag">public</span> <span class="selector-tag">static</span> <span class="selector-tag">void</span> <span class="selector-tag">main</span>(String[] args) &#123;</span><br><span class="line">        <span class="selector-tag">SpringApplication</span><span class="selector-class">.run</span>(GatewayApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置关闭基于Eureka的服务发现</p>
+<p>默认情况下Zuul会自动完成基于Eureka的服务发现能力对接，这里需要关闭相关功能</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># application.yml</span></span><br><span class="line"><span class="attr">ribbon:</span></span><br><span class="line"><span class="attr">  eureka:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置Zuul反向代理的Http Header穿透</p>
+<p>在某些情况下需要设置哪些Http Header可以通过代理层下发到服务中</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">zuul:</span></span><br><span class="line">  sensitiveHeaders: Cookie,<span class="keyword">Set</span>-Cookie</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置根服务路由</p>
+<p>代理根路径请求(<a href="http://gateway:8080/)到特定服务时使用在routes节点下使用root" target="_blank" rel="noopener">http://gateway:8080/)到特定服务时使用在routes节点下使用root</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  routes:</span></span><br><span class="line"><span class="attr">    root:</span></span><br><span class="line"><span class="attr">      path:</span> <span class="string">/api/**</span></span><br><span class="line"><span class="attr">      url:</span> <span class="attr">http://api_server:16060</span></span><br><span class="line"><span class="attr">      stripPrefix:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置其他服务路由</p>
+<p>设置其他服务的router代理路径，如下所示客户端可以通过访问api gateway的/servicea将请求代理到servicea（<a href="http://gatewat:8080/servicea/api/xxx" target="_blank" rel="noopener">http://gatewat:8080/servicea/api/xxx</a> -&gt; <a href="http://servicea:8081/api/xxx）" target="_blank" rel="noopener">http://servicea:8081/api/xxx）</a></p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">zuul</span>:</span><br><span class="line">  <span class="attribute">routes</span>:</span><br><span class="line">    <span class="attribute">servicea</span>:</span><br><span class="line">      <span class="attribute">url</span>: <span class="attribute">http</span>:<span class="comment">//servicea:8081</span></span><br><span class="line">    <span class="attribute">serviceb</span>:</span><br><span class="line">      <span class="attribute">url</span>: <span class="attribute">http</span>:<span class="comment">//serviceb:8082</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置基于DNS的路由请求超时时长</p>
+<p>对于API Gateway设施合理的超时时间，可以在服务发生异常时，快速失败。</p>
+<ul>
+<li>当使用服务发现时，通过设置ribbon.ReadTimeout和ribbon.SocketTimeout可以配置服务的超时时间。</li>
+<li>当使用URL进行路由时，则需要设施zuul.host.connect-timeout-millis和zuul.host.socket-timeout-millis来控制超时时间。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  host:</span></span><br><span class="line"><span class="attr">    socket-timeout-millis:</span> <span class="number">10000</span> <span class="comment">#ms</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3><span id="要点小结">要点小结</span></h3><ul>
+<li>简化代理过程：使用DNS减少服务代理过程中的请求数，提高效率降低风险；</li>
+<li>反脆弱性：在Kubernetes下对服务添加liveness和readness探针；</li>
+<li>合理设施代理超时时间，避免因为不合理的超时时间导致正常调用失败，由于服务变慢导致系统变慢；</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/tags/Spring-Cloud/" rel="tag"># Spring Cloud</a>
+          
+            <a href="/tags/Spring-Cloud-Zuul/" rel="tag"># Spring Cloud Zuul</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/19/microservice-with-grpc/" rel="next" title="使用gRPC-Gateway快速构建微服务">
+                <i class="fa fa-chevron-left"></i> 使用gRPC-Gateway快速构建微服务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/13/about-cncf-cka-exam/" rel="prev" title="关于CNCF的CKA认证考试">
+                关于CNCF的CKA认证考试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">两种服务发现模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">在Kubernetes下使用Zuul创建API网关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">创建服务实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">创建API Gateway实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">要点小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/';
+        this.page.identifier = '2017/11/28/zuul-timeout-config-with-dns-router/';
+        this.page.title = '在Kubernetes下实现API网关';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

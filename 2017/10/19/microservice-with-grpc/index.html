@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="gRPC,gRPC-Gateway," />
+
+
+<meta name="description" content="“鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway">
+<meta name="keywords" content="gRPC,gRPC-Gateway">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用gRPC-Gateway快速构建微服务">
+<meta property="og:url" content="http://yunlzheng.github.io/2017/10/19/microservice-with-grpc/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="“鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+<meta property="og:image" content="http://7xj61w.com1.z0.glb.clouddn.com/grpc-logo.png">
+<meta property="og:image" content="https://camo.githubusercontent.com/e75a8b46b078a3c1df0ed9966a16c24add9ccb83/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f3132687034435071724e5046686174744c5f63496f4a707446766c41716d35774c513067677149356d6b43672f7075623f773d37343926683d333730">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/grpc-gateway-example.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用gRPC-Gateway快速构建微服务">
+<meta name="twitter:description" content="“鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2017/10/19/microservice-with-grpc/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>使用gRPC-Gateway快速构建微服务 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2017/10/19/microservice-with-grpc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">使用gRPC-Gateway快速构建微服务</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-19T21:43:31+08:00">2017-10-19</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/19/microservice-with-grpc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/10/19/microservice-with-grpc/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>“鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway</p>
+<a id="more"></a>
+<h2><span id="微服务独立的去中心化的架构模式">微服务：独立的，去中心化的架构模式</span></h2><blockquote>
+<p>独立的，去中心化的，围绕业务组织服务和管理数据，并且使用轻量级通讯机制</p>
+</blockquote>
+<p>按照业务领域组织服务并且提供Restful接口，服务与服务之间通过轻量级通讯方式(Restful)进行数据交换和调用，对外使用轻量级网关简化客户端访问复杂度。基于服务发现和注册中心，完成服务之间的相互发现以及实现服务自身的横向扩展。</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png"></p>
+<h2><span id="grpc-通用的高性能的rpc框架">gRPC： 通用的，高性能的RPC框架</span></h2><p><img src="http://7xj61w.com1.z0.glb.clouddn.com/grpc-logo.png" alt="http://7xj61w.com1.z0.glb.clouddn.com/grpc-logo.png"></p>
+<blockquote>
+<p>Google开发的基于HTTP/2标准设计的一个通用的，高性能的RPC框架</p>
+</blockquote>
+<ul>
+<li>基于HTTP/2协议提供了更好的强的应用性能（节省带宽，减少TCP请求连接数）</li>
+<li><p>基于ProtoBuf定义服务，面向接口对服务进行顶层设计</p>
+  <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"><span class="keyword">package</span> example;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">StringMessage</span> </span>&#123;</span><br><span class="line"><span class="built_in">string</span> value = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">YourService</span> </span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">rpc</span> Echo(StringMessage) <span class="keyword">returns</span> (StringMessage) &#123;&#125;</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>支持主流的编程语言，C++,Java,Python,Go,Ruby,Node.js，PHP等, 基于ProtoBuf生成相应的服务端和客户端代码。</p>
+</li>
+</ul>
+<p>相比在使用Restful方式完成服务之间的相互访问，GRPC能提供更好的性能，更低的延迟，并且生来适合与分布式系统。<br>同时基于标准化的IDL（ProtoBuf）来生成服务器端和客户端代码, ProtoBuf服务定义可以作为服务契约，因此可以更好的支持团队与团队之间的接口设计，开发，测试，协作等等。</p>
+<p>因此在很多对于应用性能有较高要求的情况下，对外使用Restful提供API接口以支持不同的客户端渠道（Web, Mobile）而服务与服务之间则采用RPC方式进行交互。</p>
+<h2><span id="扩展你的grpc定义">扩展你的gRPC定义</span></h2><p>使用gRPC基于Protobuf可以实现服务间的标准化定义，同时可以能够提供更好的应用性能，而在某些情况下我们依然希望我们的服务接口是能够支持Restful API的，比如在第一个图中，我们需要对外支持不同的渠道。因此我们可以在原有的Protobuf服务定义文件中添加更多的扩展，来讲Protobuf在定义服务的同时定义相应的Restful接口即可：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> syntax = <span class="string">"proto3"</span>;</span><br><span class="line"> <span class="keyword">package</span> example;</span><br><span class="line">+</span><br><span class="line">+<span class="keyword">import</span> <span class="string">"google/api/annotations.proto"</span>;</span><br><span class="line">+</span><br><span class="line"> <span class="class"><span class="keyword">message</span> <span class="title">StringMessage</span> </span>&#123;</span><br><span class="line">   <span class="built_in">string</span> value = <span class="number">1</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> <span class="class"><span class="keyword">service</span> <span class="title">YourService</span> </span>&#123;</span><br><span class="line">-  <span class="function"><span class="keyword">rpc</span> Echo(StringMessage) <span class="keyword">returns</span> (StringMessage) &#123;&#125;</span></span><br><span class="line"><span class="function">+  <span class="keyword">rpc</span> Echo(StringMessage) <span class="keyword">returns</span> (StringMessage) &#123;</span></span><br><span class="line"><span class="function">+    option (google.api.http) = &#123;</span></span><br><span class="line"><span class="function">+      post: "/v1/example/echo"</span></span><br><span class="line"><span class="function">+      body: "*"</span></span><br><span class="line"><span class="function">+    &#125;</span>;</span><br><span class="line">+  &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其中google/api/annotations.proto出自<a href="https://github.com/googleapis/googleapis，是Google提供的用于定义REST和gRPC的标准接口定义" target="_blank" rel="noopener">https://github.com/googleapis/googleapis，是Google提供的用于定义REST和gRPC的标准接口定义</a></p>
+</blockquote>
+<h2><span id="grpc-gateway-从grpc到http">gRPC-Gateway: 从gRPC到HTTP</span></h2><p>通过google提供的标准接口google/api/annotations.proto我们可以有效的对Protobuf服务描述其相应的HTTP接口形式。而gRPC-Gateway则提供了基于.proto文件中的服务接口定义生成Http的反向代理的能力。因为对于同一个标准的Grpc服务定义，除了基本的grpc client以外还能生成相应的HTTP+JSON的接口实现。</p>
+<p><img src="https://camo.githubusercontent.com/e75a8b46b078a3c1df0ed9966a16c24add9ccb83/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f3132687034435071724e5046686174744c5f63496f4a707446766c41716d35774c513067677149356d6b43672f7075623f773d37343926683d333730" alt="https://camo.githubusercontent.com/e75a8b46b078a3c1df0ed9966a16c24add9ccb83/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f3132687034435071724e5046686174744c5f63496f4a707446766c41716d35774c513067677149356d6b43672f7075623f773d37343926683d333730"></p>
+<h2><span id="示例创建支持grpc">示例：创建支持gRPC</span></h2><p><strong>1， 定义服务echo_service.proto</strong></p>
+<p>定义服务EchoService，并且Echo方法，该方法接收一个StringMessage结构的数据，并且返回StringMessage。 同时声明该方法对外提供Rest API <strong>/v1/example/echo/{value}</strong></p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> echo;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"google/api/annotations.proto"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">StringMessage</span> </span>&#123;</span><br><span class="line">  <span class="built_in">string</span> value = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">EchoService</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> Echo(StringMessage) <span class="keyword">returns</span> (StringMessage) &#123;</span></span><br><span class="line"><span class="function">      option (google.api.http) = &#123;</span></span><br><span class="line"><span class="function">        post: "/v1/example/echo/&#123;value&#125;"</span></span><br><span class="line"><span class="function">        body: "*"</span></span><br><span class="line"><span class="function">      &#125;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2, 生成Server端代码</strong></p>
+<p>这里使用gradle进行构建 build.gradle，调用构建命令基于proto文件生成服务端代码</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">|- ProjectRoot</span></span><br><span class="line">   <span class="string">|- build.gradle</span></span><br><span class="line">   <span class="string">|- src</span></span><br><span class="line">      <span class="string">|- main</span></span><br><span class="line">         <span class="string">|- proto</span></span><br><span class="line">            <span class="string">|- api</span></span><br><span class="line">              <span class="string">|- annotations.proto</span></span><br><span class="line">              <span class="string">|- http.proto</span></span><br><span class="line">            <span class="string">|- echo_service.proto</span></span><br></pre></td></tr></table></figure>
+<p>build.gradle</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'java'</span></span><br><span class="line">apply plugin: <span class="string">'maven'</span></span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'com.google.protobuf'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="comment">// ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier</span></span><br><span class="line">        <span class="comment">// gradle versions</span></span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'com.google.protobuf:protobuf-gradle-plugin:0.8.1'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">    mavenLocal()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">group</span> = <span class="string">'com.demo.grpc'</span></span><br><span class="line">version = <span class="string">'1.0-SNAPSHOT'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">description</span> = <span class="string">""</span><span class="string">"echo-service"</span><span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">sourceCompatibility</span> = <span class="number">1.5</span></span><br><span class="line"><span class="keyword">targetCompatibility</span> = <span class="number">1.5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> grpcVersion = <span class="string">'1.6.1'</span> <span class="comment">// CURRENT_GRPC_VERSION</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">compile</span> <span class="string">"com.google.api.grpc:proto-google-common-protos:0.1.9"</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">"io.grpc:grpc-netty:$&#123;grpcVersion&#125;"</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">"io.grpc:grpc-protobuf:$&#123;grpcVersion&#125;"</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">"io.grpc:grpc-stub:$&#123;grpcVersion&#125;"</span></span><br><span class="line"></span><br><span class="line">    testCompile <span class="string">"io.grpc:grpc-testing:$&#123;grpcVersion&#125;"</span></span><br><span class="line">    testCompile <span class="string">"junit:junit:4.11"</span></span><br><span class="line">    testCompile <span class="string">"org.mockito:mockito-core:1.9.5"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protobuf &#123;</span><br><span class="line">    protoc &#123;</span><br><span class="line">        artifact = <span class="string">'com.google.protobuf:protoc:3.3.0'</span></span><br><span class="line">    &#125;</span><br><span class="line">    plugins &#123;</span><br><span class="line">        grpc &#123;</span><br><span class="line">            artifact = <span class="string">"io.grpc:protoc-gen-grpc-java:$&#123;grpcVersion&#125;"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    generateProtoTasks &#123;</span><br><span class="line">        all()*.plugins &#123;</span><br><span class="line">            grpc &#123;</span><br><span class="line">                <span class="comment">// To generate deprecated interfaces and static bindService method,</span></span><br><span class="line">                <span class="comment">// turn the enable_deprecated option to true below:</span></span><br><span class="line">                option <span class="string">'enable_deprecated=false'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    generatedFilesBaseDir = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"$projectDir"</span>, <span class="string">"src"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Inform IntelliJ projects about the generated code.</span></span><br><span class="line">apply plugin: <span class="string">'maven'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Provide convenience executables for trying out the examples.</span></span><br><span class="line">apply plugin: <span class="string">'application'</span></span><br><span class="line"></span><br><span class="line">startScripts.enabled = <span class="keyword">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">task</span> echoServer(type: CreateStartScripts) &#123;</span><br><span class="line">    mainClassName = <span class="string">'com.wise2c.grpc.App'</span></span><br><span class="line">    applicationName = <span class="string">'echo-server'</span></span><br><span class="line">    outputDir = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="keyword">project</span>.buildDir, <span class="string">'tmp'</span>)</span><br><span class="line">    <span class="keyword">classpath</span> = jar.outputs.files + <span class="keyword">project</span>.<span class="keyword">configurations</span>.<span class="keyword">runtime</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">applicationDistribution.<span class="keyword">into</span>(<span class="string">'bin'</span>) &#123;</span><br><span class="line">    <span class="keyword">from</span>(echoServer)</span><br><span class="line">    fileMode = <span class="number">0755</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">./gradlew</span> build</span><br></pre></td></tr></table></figure>
+<p>3, 实现Echo接口,并且启动服务</p>
+<p>接口获取请求内容，并且生成相应内容</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">EchoImpl</span> <span class="keyword">extends</span> <span class="title">EchoServiceImplBase</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    public void echo(<span class="type">StringMessage</span> request, <span class="type">StreamObserver</span>&lt;<span class="type">StringMessage</span>&gt; responseObserver) &#123;</span><br><span class="line">        <span class="type">StringMessage</span> reply = <span class="type">StringMessage</span>.newBuilder().setValue(<span class="string">"Hello "</span> + request.getValue()).build();</span><br><span class="line">        responseObserver.onNext(reply);</span><br><span class="line">        responseObserver.onCompleted();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建启动类</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EchoServer</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = Logger.getLogger(EchoServer.class.getName());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Server <span class="keyword">server</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> start() throws IOException &#123;</span><br><span class="line">        <span class="keyword">int</span> port = <span class="number">9090</span>;</span><br><span class="line">        <span class="keyword">server</span> = ServerBuilder.forPort(port)</span><br><span class="line">                .addService(<span class="keyword">new</span> EchoImpl())</span><br><span class="line">                .build()</span><br><span class="line">                .start();</span><br><span class="line">        logger.info(<span class="string">"Server started, listening on "</span> + port);</span><br><span class="line">        Runtime.getRuntime().addShutdownHook(<span class="keyword">new</span> Thread() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> run() &#123;</span><br><span class="line">                <span class="comment">// Use stderr here since the logger may have been reset by its JVM shutdown hook.</span></span><br><span class="line">                System.err.println(<span class="string">"*** shutting down gRPC server since JVM is shutting down"</span>);</span><br><span class="line">                EchoServer.<span class="keyword">this</span>.stop();</span><br><span class="line">                System.err.println(<span class="string">"*** server shut down"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> stop() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">server</span> != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">server</span>.shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> blockUntilShutdown() throws InterruptedException &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">server</span> != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">server</span>.awaitTermination();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) throws IOException, InterruptedException &#123;</span><br><span class="line">        <span class="keyword">final</span> EchoServer <span class="keyword">server</span> = <span class="keyword">new</span> EchoServer();</span><br><span class="line">        <span class="keyword">server</span>.start();</span><br><span class="line">        <span class="keyword">server</span>.blockUntilShutdown();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行gRPC Server实例</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Oct 24, 2017 4:05:00 PM com.wise2c.grpc.EchoServer start</span><br><span class="line">信息:<span class="built_in"> Server </span>started, listening on 9090</span><br></pre></td></tr></table></figure>
+<p>4， 生成Restful反向代理（Go）代码</p>
+<p>目前gRPC-Gateway只支持生成Go的Restful反向代理</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc -I<span class="regexp">/usr/</span>local<span class="regexp">/include -I. -I$GOPATH/</span>src -I<span class="variable">$GOPATH</span><span class="regexp">/src/gi</span>thub.com<span class="regexp">/grpc-ecosystem/g</span>rpc-gateway<span class="regexp">/third_party/g</span>oogleapis --grpc-gateway_out=logtostderr=true:. echo<span class="regexp">/echo_service.proto</span></span><br></pre></td></tr></table></figure>
+<p>5, 创建Restful代理启动类</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"flag"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	gw <span class="string">"git.wise2c.com/grpc-gateway-example/echo"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/golang/glog"</span></span><br><span class="line">	<span class="string">"github.com/grpc-ecosystem/grpc-gateway/runtime"</span></span><br><span class="line">	<span class="string">"golang.org/x/net/context"</span></span><br><span class="line">	<span class="string">"google.golang.org/grpc"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	echoEndpoint = flag.String(<span class="string">"echo_endpoint"</span>, <span class="string">"localhost:9090"</span>, <span class="string">"endpoint of YourService"</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	ctx := context.Background()</span><br><span class="line">	ctx, cancel := context.WithCancel(ctx)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">	mux := runtime.NewServeMux()</span><br><span class="line">	opts := []grpc.DialOption&#123;grpc.WithInsecure()&#125;</span><br><span class="line">	err := gw.RegisterEchoServiceHandlerFromEndpoint(ctx, mux, *echoEndpoint, opts)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> http.ListenAndServe(<span class="string">":8080"</span>, mux)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	flag.Parse()</span><br><span class="line">	<span class="keyword">defer</span> glog.Flush()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err := run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		glog.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动Restful接口</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bee <span class="keyword">run</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/grpc-gateway-example.png" alt="grpc-example"></p>
+<h2><span id="小结">小结</span></h2><p>至此，以Kubernetes下部署为例：</p>
+<ul>
+<li>对于每个微服务创建Deployment包含两个容器，该服务的gRPC Server实现以及其对应的反向代理。并且以此为单位进行伸缩（同一Pod内容器共享公网，存储资源，直接使用127.0.0.1访问即可）。</li>
+<li>创建Service并且代理Deployment的Http端口以及RPC端口（对内同时暴露Http和RPC服务）。</li>
+<li>对于无状态服务而言，系统内部服务之间以Service作为DNS，实现RPC的远程调用。</li>
+<li>对于有状态服务，需要添加额外的服务发现和注册中心如Consul或Eureka。实现点对点调用。</li>
+<li>对外基于API Gateway对外部客户端（浏览器，H5）提供Rest API。</li>
+</ul>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png"></p>
+<p>在诸如Spring Cloud这样的微服务框架当中，每一个服务默认基于HTTP协议对外提供Restful API,从而对外对内的提供服务能力。 而在某些场景下，我们既需要保持Restful的简单性，又想充分提升应用内部的性能以及可靠性，采用gRPC可以帮助我们实现是这样的目的，而使用gRPC-Gateway这样的工具我们可以很快速的基于proto接口定义，在使用RPC的同时对外提供Restful，实现软件架构的小步优化以及应用性能的提升。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gRPC/" rel="tag"># gRPC</a>
+          
+            <a href="/tags/gRPC-Gateway/" rel="tag"># gRPC-Gateway</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/07/prometheus-exporter-example-go/" rel="next" title="Prometheus的基本数据类型">
+                <i class="fa fa-chevron-left"></i> Prometheus的基本数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/28/zuul-timeout-config-with-dns-router/" rel="prev" title="在Kubernetes下实现API网关">
+                在Kubernetes下实现API网关 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">微服务：独立的，去中心化的架构模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">gRPC： 通用的，高性能的RPC框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">扩展你的gRPC定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">gRPC-Gateway: 从gRPC到HTTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">示例：创建支持gRPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2017/10/19/microservice-with-grpc/';
+        this.page.identifier = '2017/10/19/microservice-with-grpc/';
+        this.page.title = '使用gRPC-Gateway快速构建微服务';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

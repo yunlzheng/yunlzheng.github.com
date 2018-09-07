@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="DevOps,Prometheus,Alertmanager," />
+
+
+<meta name="description" content="在某些情况下除了Alertmanager已经内置的集中告警通知方式以外，对于不同的用户和组织而言还需要一些自定义的告知方式支持。通过Alertmanager提供的webhook支持可以轻松实现这一类的扩展。除了用于支持额外的通知方式，webhook还可以与其他第三方系统集成实现运维自动化，或者弹性伸缩等。">
+<meta name="keywords" content="DevOps,Prometheus,Alertmanager">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Webhook扩展Alertmanager(钉钉版)">
+<meta property="og:url" content="http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="在某些情况下除了Alertmanager已经内置的集中告警通知方式以外，对于不同的用户和组织而言还需要一些自定义的告知方式支持。通过Alertmanager提供的webhook支持可以轻松实现这一类的扩展。除了用于支持额外的通知方式，webhook还可以与其他第三方系统集成实现运维自动化，或者弹性伸缩等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/dingding-group-robot.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/dingtalk-robot-create-webhook.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/dingtalk-message-test.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/alertmanager-dingtalk-test-result.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Webhook扩展Alertmanager(钉钉版)">
+<meta name="twitter:description" content="在某些情况下除了Alertmanager已经内置的集中告警通知方式以外，对于不同的用户和组织而言还需要一些自定义的告知方式支持。通过Alertmanager提供的webhook支持可以轻松实现这一类的扩展。除了用于支持额外的通知方式，webhook还可以与其他第三方系统集成实现运维自动化，或者弹性伸缩等。">
+<meta name="twitter:image" content="http://p2n2em8ut.bkt.clouddn.com/dingding-group-robot.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>使用Webhook扩展Alertmanager(钉钉版) | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">使用Webhook扩展Alertmanager(钉钉版)</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-01T21:58:33+08:00">2018-03-01</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/01/alertmanager-webhook-dingtalk/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/01/alertmanager-webhook-dingtalk/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在某些情况下除了Alertmanager已经内置的集中告警通知方式以外，对于不同的用户和组织而言还需要一些自定义的告知方式支持。通过Alertmanager提供的webhook支持可以轻松实现这一类的扩展。除了用于支持额外的通知方式，webhook还可以与其他第三方系统集成实现运维自动化，或者弹性伸缩等。</p>
+<a id="more"></a>
+<p>在Alertmanager中可以使用如下配置定义基于webhook的告警接收器receiver。一个receiver可以对应一组webhook配置。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">&lt;string&gt;</span></span><br><span class="line"><span class="attr">webhook_configs:</span></span><br><span class="line">  <span class="string">[</span> <span class="bullet">-</span> <span class="string">&lt;webhook_config&gt;,</span> <span class="string">...</span> <span class="string">]</span></span><br></pre></td></tr></table></figure>
+<p>每一项webhook_config的具体配置格式如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Whether or not to notify about resolved alerts.</span></span><br><span class="line"><span class="string">[</span> <span class="attr">send_resolved:</span> <span class="string">&lt;boolean&gt;</span> <span class="string">| default = true ]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># The endpoint to send HTTP POST requests to.</span></span><br><span class="line"><span class="string"></span><span class="attr">url:</span> <span class="string">&lt;string&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The HTTP client's configuration.</span></span><br><span class="line"><span class="string">[</span> <span class="attr">http_config:</span> <span class="string">&lt;http_config&gt;</span> <span class="string">| default = global.http_config ]</span></span><br></pre></td></tr></table></figure>
+<p>send_resolved用于指定是否在告警消除时发送回执消息。url则是用于接收webhook请求的地址。http_configs则是在需要对请求进行SSL配置时使用。</p>
+<p>当用户定义webhook用于接收告警信息后，当告警被触发时，Alertmanager会按照以下格式向这些url地址发送HTTP Post请求，请求内容如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"4"</span>,</span><br><span class="line">  "groupKey": &lt;string&gt;,    // key identifying the group of alerts (e.g. to deduplicate)</span><br><span class="line">  "status": "&lt;resolved|firing&gt;",</span><br><span class="line">  "receiver": &lt;string&gt;,</span><br><span class="line">  "groupLabels": &lt;object&gt;,</span><br><span class="line">  "commonLabels": &lt;object&gt;,</span><br><span class="line">  "commonAnnotations": &lt;object&gt;,</span><br><span class="line">  "externalURL": &lt;string&gt;,  // backlink to the Alertmanager.</span><br><span class="line">  "alerts": [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"labels"</span>: &lt;object&gt;,</span><br><span class="line">      <span class="attr">"annotations"</span>: &lt;object&gt;,</span><br><span class="line">      <span class="attr">"startsAt"</span>: <span class="string">"&lt;rfc3339&gt;"</span>,</span><br><span class="line">      <span class="attr">"endsAt"</span>: <span class="string">"&lt;rfc3339&gt;"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="使用golang创建webhook服务">使用Golang创建webhook服务</span></h3><p>首先我们尝试使用Golang创建用于接收webhook告警通知的服务。首先创建model包，用于映射ALertmanager发送的告警信息，Alertmanager的一个通知中根据配置的group_by规则可能会包含多条告警信息Alert。创建告警通知对应的结构体Notification。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"time"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Alert <span class="keyword">struct</span> &#123;</span><br><span class="line">	Labels      <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> <span class="string">`json:"labels"`</span></span><br><span class="line">	Annotations <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> <span class="string">`json:annotations`</span></span><br><span class="line">	StartsAt    time.Time         <span class="string">`json:"startsAt"`</span></span><br><span class="line">	EndsAt      time.Time         <span class="string">`json:"endsAt"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Notification <span class="keyword">struct</span> &#123;</span><br><span class="line">	Version           <span class="keyword">string</span>            <span class="string">`json:"version"`</span></span><br><span class="line">	GroupKey          <span class="keyword">string</span>            <span class="string">`json:"groupKey"`</span></span><br><span class="line">	Status            <span class="keyword">string</span>            <span class="string">`json:"status"`</span></span><br><span class="line">	Receiver          <span class="keyword">string</span>            <span class="string">`json:receiver`</span></span><br><span class="line">	GroupLabels       <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> <span class="string">`json:groupLabels`</span></span><br><span class="line">	CommonLabels      <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> <span class="string">`json:commonLabels`</span></span><br><span class="line">	CommonAnnotations <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> <span class="string">`json:commonAnnotations`</span></span><br><span class="line">	ExternalURL       <span class="keyword">string</span>            <span class="string">`json:externalURL`</span></span><br><span class="line">	Alerts            []Alert           <span class="string">`json:alerts`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用gin-gonic框架创建用于接收Webhook通知的Web服务。定义路由/webhook接收来自Alertmanager的POST请求。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/gin-gonic/gin"</span></span><br><span class="line">	model <span class="string">"github.com/yunlzheng/alertmanaer-dingtalk-webhook/model"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line">	router.POST(<span class="string">"/webhook"</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">var</span> notification model.Notification</span><br><span class="line"></span><br><span class="line">		err := c.BindJSON(&amp;notification)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			c.JSON(http.StatusBadRequest, gin.H&#123;<span class="string">"error"</span>: err.Error()&#125;)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		c.JSON(http.StatusOK, gin.H&#123;<span class="string">"message"</span>: <span class="string">" successful receive alert notification message!"</span>&#125;)</span><br><span class="line"></span><br><span class="line">	&#125;)</span><br><span class="line">	router.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="与钉钉集成">与钉钉集成</span></h3><p>钉钉，阿里巴巴出品，专为中国企业打造的免费智能移动办公平台，提供了即时通讯以及移动办公等丰富的功能。</p>
+<p><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.8M9OKD&amp;treeId=257&amp;articleId=105733&amp;docType=1" target="_blank" rel="noopener">钉钉群机器人</a>是钉钉群的高级扩展功能。群机器人可以将第三方服务的信息聚合到群聊中，实现自动化的信息同步。例如：通过聚合GitHub，GitLab等源码管理服务，实现源码更新同步；通过聚合Trello，JIRA等项目协调服务，实现项目信息同步。不仅如此，群机器人支持Webhook协议的自定义接入，支持更多可能性。这里我们将演示如果将Alertmanager运维报警提醒通过自定义机器人聚合到钉钉群。</p>
+<p>这里将继续扩展webhook服务，以支持将Alertmanager的告警通知转发到钉钉平台。完整的示例代码可以从github仓库<a href="https://github.com/yunlzheng/alertmanaer-dingtalk-webhook" target="_blank" rel="noopener">https://github.com/yunlzheng/alertmanaer-dingtalk-webhook</a>中获取。</p>
+<h5><span id="自定义webhook群机器人">自定义webhook群机器人</span></h5><p>通过钉钉客户端（如：桌面或者手机）进入到群设置后选择“群机器人”。将显示如下界面：</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/dingding-group-robot.png" alt="群机器人"></p>
+<p>选择“自定义机器人”，并且按照提示填写机器人名称，获取机器人webhook地址，如下所示：</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/dingtalk-robot-create-webhook.png" alt="获取webhook地址"></p>
+<p>webhook机器人创建成功后，用户就可以使用任何方式向该地址发起HTTP POST请求，即可实现向该群主发送消息。目前自定义机器人支持文本(text)，连接(link)，markdown三种消息类型。</p>
+<p>例如，可以向webhook地址以POST形式发送以下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">     <span class="attr">"msgtype"</span>: <span class="string">"markdown"</span>,</span><br><span class="line">     <span class="attr">"markdown"</span>: &#123;</span><br><span class="line">         <span class="attr">"title"</span>:<span class="string">"Prometheus告警信息"</span>,</span><br><span class="line">         <span class="attr">"text"</span>: <span class="string">"#### 监控指标\n"</span> +</span><br><span class="line">                 <span class="string">"&gt; 监控描述信息\n\n"</span> +</span><br><span class="line">                 <span class="string">"&gt; ###### 告警时间 \n"</span></span><br><span class="line">     &#125;,</span><br><span class="line">    <span class="attr">"at"</span>: &#123;</span><br><span class="line">        <span class="attr">"atMobiles"</span>: [</span><br><span class="line">            <span class="string">"156xxxx8827"</span>,</span><br><span class="line">            <span class="string">"189xxxx8325"</span></span><br><span class="line">        ], </span><br><span class="line">        <span class="attr">"isAtAll"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>可以使用curl验证钉钉webhook是否能够成功调用：</p>
+<figure class="highlight flix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl -l -H <span class="string">"Content-type: application/json"</span> -X POST -d '&#123;<span class="string">"msgtype"</span>: <span class="string">"markdown"</span>,<span class="string">"markdown"</span>: &#123;<span class="string">"title"</span>:<span class="string">"Prometheus告警信息"</span>,<span class="string">"text"</span>: <span class="string">"#### 监控指标\n&gt; 监控描述信息\n\n&gt; ###### 告警时间 \n"</span>&#125;,<span class="string">"at"</span>: &#123;<span class="string">"isAtAll"</span>: <span class="literal">false</span>&#125;&#125;' https:<span class="comment">//oapi.dingtalk.com/robot/send?access_token=xxxx</span></span><br><span class="line">&#123;<span class="string">"errcode"</span>:<span class="number">0</span>,<span class="string">"errmsg"</span>:<span class="string">"ok"</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>调用成功后，可以在钉钉应用群消息中接收到类似于如下通知消息:</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/dingtalk-message-test.png" alt="测试消息"></p>
+<h5><span id="定义转换器将告警通知转化为dingtalk消息对象">定义转换器将告警通知转化为Dingtalk消息对象</span></h5><p>这里定义结构体DingTalkMarkdown用于映射Dingtalk的消息体。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> At <span class="keyword">struct</span> &#123;</span><br><span class="line">	AtMobiles []<span class="keyword">string</span> <span class="string">`json:"atMobiles"`</span></span><br><span class="line">	IsAtAll   <span class="keyword">bool</span>     <span class="string">`json:"isAtAll"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> DingTalkMarkdown <span class="keyword">struct</span> &#123;</span><br><span class="line">	MsgType  <span class="keyword">string</span>    <span class="string">`json:"msgtype"`</span></span><br><span class="line">	At       *At       <span class="string">`json:at`</span></span><br><span class="line">	Markdown *Markdown <span class="string">`json:"markdown"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Markdown <span class="keyword">struct</span> &#123;</span><br><span class="line">	Title <span class="keyword">string</span> <span class="string">`json:"title"`</span></span><br><span class="line">	Text  <span class="keyword">string</span> <span class="string">`json:"text"`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义转换器将Alertmanager发送的告警通知转换为Dingtalk的消息体。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> transformer</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"bytes"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/yunlzheng/alertmanaer-dingtalk-webhook/model"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// TransformToMarkdown transform alertmanager notification to dingtalk markdow message</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TransformToMarkdown</span><span class="params">(notification model.Notification)</span> <span class="params">(markdown *model.DingTalkMarkdown, err error)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	groupKey := notification.GroupKey</span><br><span class="line">	status := notification.Status</span><br><span class="line"></span><br><span class="line">	annotations := notification.CommonAnnotations</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> buffer bytes.Buffer</span><br><span class="line"></span><br><span class="line">	buffer.WriteString(fmt.Sprintf(<span class="string">"### 通知组%s(当前状态:%s) \n"</span>, groupKey, status))</span><br><span class="line"></span><br><span class="line">	buffer.WriteString(fmt.Sprintf(<span class="string">"#### 告警项:\n"</span>))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, alert := <span class="keyword">range</span> notification.Alerts &#123;</span><br><span class="line">		annotations := alert.Annotations</span><br><span class="line">		buffer.WriteString(fmt.Sprintf(<span class="string">"##### %s\n &gt; %s\n"</span>, annotations[<span class="string">"summary"</span>], annotations[<span class="string">"description"</span>]))</span><br><span class="line">		buffer.WriteString(fmt.Sprintf(<span class="string">"\n&gt; 开始时间：%s\n"</span>, alert.StartsAt.Format(<span class="string">"15:04:05"</span>)))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	markdown = &amp;model.DingTalkMarkdown&#123;</span><br><span class="line">		MsgType: <span class="string">"markdown"</span>,</span><br><span class="line">		Markdown: &amp;model.Markdown&#123;</span><br><span class="line">			Title: fmt.Sprintf(<span class="string">"通知组：%s(当前状态:%s)"</span>, groupKey, status),</span><br><span class="line">			Text:  buffer.String(),</span><br><span class="line">		&#125;,</span><br><span class="line">		At: &amp;model.At&#123;</span><br><span class="line">			IsAtAll: <span class="literal">false</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5><span id="创建dingtalk通知发送包">创建Dingtalk通知发送包</span></h5><p>notifier包中使用golang的net/http包实现与Dingtalk群机器人的交互。Send方法包含两个参数：接收到的告警通知结构体指针，以及Dingtalk群机器人的Webhook地址。</p>
+<p>通过包transformer.TransformToMarkdown将Alertmanager告警通知与Dingtalk消息进行映射。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> notifier</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"bytes"</span></span><br><span class="line">	<span class="string">"encoding/json"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/yunlzheng/alertmanaer-dingtalk-webhook/model"</span></span><br><span class="line">	<span class="string">"github.com/yunlzheng/alertmanaer-dingtalk-webhook/transformer"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Send</span><span class="params">(notification model.Notification, dingtalkRobot <span class="keyword">string</span>)</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	markdown, err := transformer.TransformToMarkdown(notification)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	data, err := json.Marshal(markdown)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	req, err := http.NewRequest(</span><br><span class="line">		<span class="string">"POST"</span>,</span><br><span class="line">		dingtalkRobot,</span><br><span class="line">		bytes.NewBuffer(data))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	req.Header.Set(<span class="string">"Content-Type"</span>, <span class="string">"application/json"</span>)</span><br><span class="line">	client := &amp;http.Client&#123;&#125;</span><br><span class="line">	resp, err := client.Do(req)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">defer</span> resp.Body.Close()</span><br><span class="line">	fmt.Println(<span class="string">"response Status:"</span>, resp.Status)</span><br><span class="line">	fmt.Println(<span class="string">"response Headers:"</span>, resp.Header)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5><span id="扩展启动函数">扩展启动函数</span></h5><p>首先为程序添加命令行参数支持，用于在启动时添加全局的Dingtalk群聊机器人地址。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"flag"</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="string">"github.com/yunlzheng/alertmanaer-dingtalk-webhook/notifier"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	h            <span class="keyword">bool</span></span><br><span class="line">	defaultRobot <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	flag.BoolVar(&amp;h, <span class="string">"h"</span>, <span class="literal">false</span>, <span class="string">"help"</span>)</span><br><span class="line">	flag.StringVar(&amp;defaultRobot, <span class="string">"defaultRobot"</span>, <span class="string">""</span>, <span class="string">"global dingtalk robot webhook"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	flag.Parse()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> h &#123;</span><br><span class="line">		flag.Usage()</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同时通过notifier包的Send方法将告警通知发送给Dingtalk群聊机器人</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  err = notifier.<span class="type">Send</span>(notification, defaultRobot)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">c</span>.<span class="type">JSON</span>(http.<span class="type">StatusBadRequest</span>, gin.<span class="type">H</span>&#123;<span class="string">"error"</span>: err.<span class="type">Error</span>()&#125;)</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">c</span>.<span class="type">JSON</span>(http.<span class="type">StatusOK</span>, gin.<span class="type">H</span>&#123;<span class="string">"message"</span>: <span class="string">"send to dingtalk successful!"</span>&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5><span id="使用dingtalk扩展">使用Dingtalk扩展</span></h5><p>运行并启动dingtalk webhook服务之后，修改Alertmanager配置文件, 为default-receiver添加webhook配置，如下所示：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">receivers</span>:</span><br><span class="line">  - <span class="attribute">name</span>: default-receiver</span><br><span class="line">    <span class="attribute">email_configs</span>:</span><br><span class="line">      - <span class="attribute">to</span>: yunl.zheng<span class="variable">@wise2c</span>.com</span><br><span class="line">	<span class="attribute">webhook_configs</span>:</span><br><span class="line">	  - <span class="attribute">url</span>: <span class="attribute">http</span>:<span class="comment">//localhost:8080/webhook</span></span><br></pre></td></tr></table></figure>
+<p>重启Alertmanager服务后，手动拉高虚拟机CPU使用率触发告警条件，此时Dingtalk即可接收到相应的告警通知信息:</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/alertmanager-dingtalk-test-result.png" alt="钉钉群机器人告警信息"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DevOps/" rel="tag"># DevOps</a>
+          
+            <a href="/tags/Prometheus/" rel="tag"># Prometheus</a>
+          
+            <a href="/tags/Alertmanager/" rel="tag"># Alertmanager</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/02/monitor-best-praticase4-golden-signals/" rel="next" title="监控什么？4个黄金指标/RED方法/USE方法">
+                <i class="fa fa-chevron-left"></i> 监控什么？4个黄金指标/RED方法/USE方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/06/promethus-local-storage/" rel="prev" title="Prometheus高可用(1)：理解本地存储">
+                Prometheus高可用(1)：理解本地存储 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">使用Golang创建webhook服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">与钉钉集成</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.1.</span> <span class="nav-text">自定义webhook群机器人</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.2.</span> <span class="nav-text">定义转换器将告警通知转化为Dingtalk消息对象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.3.</span> <span class="nav-text">创建Dingtalk通知发送包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.4.</span> <span class="nav-text">扩展启动函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#undefined"><span class="nav-number">2.0.5.</span> <span class="nav-text">使用Dingtalk扩展</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/';
+        this.page.identifier = '2018/03/01/alertmanager-webhook-dingtalk/';
+        this.page.title = '使用Webhook扩展Alertmanager(钉钉版)';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

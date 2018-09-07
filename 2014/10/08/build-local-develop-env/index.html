@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="DevOps," />
+
+
+<meta name="description" content="作为软件开发者，在软件开发过程中我们是否会经常遇到如下几种情况：  项目需要各种各样的服务和中间件依赖，我要花大量的时间去安装配置这些东西； 每一次项目组有新成员加入了，我花了好多时间用来帮组他搭建一个可以工作的本地开发环境； 我的天啊，为什么每次环境配置都会遇到各种各样的奇葩问题；  上面的情况总结下来就是大部分的软件项目往往都需要依赖各种各样的第三方工具和软件，而安装配置这些工具和软件的过程又">
+<meta name="keywords" content="DevOps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速构建一致的开发环境">
+<meta property="og:url" content="http://yunlzheng.github.io/2014/10/08/build-local-develop-env/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="作为软件开发者，在软件开发过程中我们是否会经常遇到如下几种情况：  项目需要各种各样的服务和中间件依赖，我要花大量的时间去安装配置这些东西； 每一次项目组有新成员加入了，我花了好多时间用来帮组他搭建一个可以工作的本地开发环境； 我的天啊，为什么每次环境配置都会遇到各种各样的奇葩问题；  上面的情况总结下来就是大部分的软件项目往往都需要依赖各种各样的第三方工具和软件，而安装配置这些工具和软件的过程又">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://31.media.tumblr.com/a59d6b34ea69d612fc5ca9fe45054dff/tumblr_inline_nd3sfuyJqW1sosno0.png">
+<meta property="og:image" content="https://31.media.tumblr.com/22d2f5b110b56633922c7aba98adc63e/tumblr_inline_nd3shcFCcC1sosno0.png">
+<meta property="og:image" content="https://31.media.tumblr.com/0efe53332677785488b5ea5e4e9edcff/tumblr_inline_nd3sirWB4l1sosno0.png">
+<meta property="og:image" content="https://31.media.tumblr.com/0efe53332677785488b5ea5e4e9edcff/tumblr_inline_nd3sk0Hp641sosno0.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="快速构建一致的开发环境">
+<meta name="twitter:description" content="作为软件开发者，在软件开发过程中我们是否会经常遇到如下几种情况：  项目需要各种各样的服务和中间件依赖，我要花大量的时间去安装配置这些东西； 每一次项目组有新成员加入了，我花了好多时间用来帮组他搭建一个可以工作的本地开发环境； 我的天啊，为什么每次环境配置都会遇到各种各样的奇葩问题；  上面的情况总结下来就是大部分的软件项目往往都需要依赖各种各样的第三方工具和软件，而安装配置这些工具和软件的过程又">
+<meta name="twitter:image" content="https://31.media.tumblr.com/a59d6b34ea69d612fc5ca9fe45054dff/tumblr_inline_nd3sfuyJqW1sosno0.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2014/10/08/build-local-develop-env/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>快速构建一致的开发环境 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2014/10/08/build-local-develop-env/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">快速构建一致的开发环境</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-10-08T09:58:45+08:00">2014-10-08</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/10/08/build-local-develop-env/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2014/10/08/build-local-develop-env/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>作为软件开发者，在软件开发过程中我们是否会经常遇到如下几种情况：</p>
+<ul>
+<li>项目需要各种各样的服务和中间件依赖，我要花大量的时间去安装配置这些东西；</li>
+<li>每一次项目组有新成员加入了，我花了好多时间用来帮组他搭建一个可以工作的本地开发环境；</li>
+<li>我的天啊，为什么每次环境配置都会遇到各种各样的奇葩问题；</li>
+</ul>
+<p>上面的情况总结下来就是大部分的软件项目往往都需要依赖各种各样的第三方工具和软件，而安装配置这些工具和软件的过程又是极其烦琐耗时且容易出错的。</p>
+<a id="more"></a>
+<p>除此以上的情况之外，作为一个程序员我们的使命告诉我们，我们往往需要工作的不同的项目中。 当你沉浸当前项目愉快的编码中时，突然有领导告诉你，之前的项目出现了几个bug需要你去协助修改一下。Ok，对于万能的程序员当然不在话下，可以当动手时才发现，重新搭建以前的开发环境是一件多么痛苦的事情。 下面一张图展示了一般情况下我们程序员是本地开发环境是如何工作的：</p>
+<p><img src="https://31.media.tumblr.com/a59d6b34ea69d612fc5ca9fe45054dff/tumblr_inline_nd3sfuyJqW1sosno0.png" alt=""></p>
+<p>如上图所示，一个程序员的本地开发环因为不同项目设计的不同而同时存在各种类型和版本的第三方软件依赖。 环境依赖导致我们的整个的本地开发环境混乱，并且无法保证我们的本地开发环境能与生成环境保持一致，从而导致各种奇怪的问题。</p>
+<p>那么我们理想的本地开发环境应该是什么样子的呢？如下所示</p>
+<p><img src="https://31.media.tumblr.com/22d2f5b110b56633922c7aba98adc63e/tumblr_inline_nd3shcFCcC1sosno0.png" alt=""></p>
+<p>我们希望每一个应用程序的本地开发环境能与我们的生产环境保持一致，同时不同项目之间本地开发环境能保证的其相互隔离。在此同时作为软件开发人员我们需要能够非常方便快捷的搭建应用程序所需的本地开发环境。</p>
+<h2><span id="二除了代码还有可运行的环境">二，除了代码还有可运行的环境</span></h2><p>正如之前所说的那样，传统的软件开发实践过程中我们往往更多的关注与编写可运行的代码，而忽略了作为一个可用软件的另外一个重要组成部分：可运行的环境。<br>这个时候我们重新思考一下我们的源码仓库，在传统的软件开发实践过程中我们通常只包含我们的项目源代码本身。 如下图所示，在这里我们提倡除了代码之外我们还应该包含程序运行环境的描述信息，这个时候软件开发人员应该和运维人员就应该是一起协同工作，在软件人员设计软件架构的同时，运维人员也能一起设计相应的环境架构。</p>
+<p><img src="https://31.media.tumblr.com/0efe53332677785488b5ea5e4e9edcff/tumblr_inline_nd3sirWB4l1sosno0.png" alt=""></p>
+<p>当我们的软件仓库中除了代码以外也包含了足够详细的运行环境描述信息时，无论当我们是加入到一个新的项目，或者是因为某些原因你需要修改旧的项目时，我们都能根据这些环境描述信息在本地利用虚拟化技术快速的构建起一个隔离的且一致的开发环境，并且无需担心不同项目之间的环境依赖关系。</p>
+<h2><span id="三隔离的本地开发环境">三，隔离的本地开发环境</span></h2><p>我们使用Vagrant构建我们的本地虚拟化开发环境，Vagrant是一个基于Ruby的工具，用于创建和部署虚拟化开发环境。使用Vagrant我们可以非常快捷创建本地虚拟化环境，运行vagrant init ubuntu/trusty64我们将得到一个用以描述虚拟主机基本信息的Vagrantfile文件，文件内容如下所示：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># -*- <span class="keyword">mode</span>: <span class="keyword">ruby</span> -*-</span><br><span class="line"># <span class="keyword">vi</span>: <span class="keyword">set</span> ft=<span class="keyword">ruby</span> :</span><br><span class="line"></span><br><span class="line">VAGRANTFILE_API_VERSION = “<span class="number">2</span><span class="comment">"</span></span><br><span class="line"></span><br><span class="line">Vagrant.configure(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|</span><br><span class="line"></span><br><span class="line">  config.<span class="keyword">vm</span>.box = <span class="string">"ubuntu/trusty64"</span></span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>Vagrantfile文件将会告诉Vagrant在初次启动该虚拟机时，我们将使用ubuntu/trusty64作为基础镜像创建我们的虚拟主机。</p>
+<p>在完成初始化操作之后，我们可以使用vagrant up启动虚拟机，在工作完成之后我们可以使用vagrant halt关闭虚拟主机减少不必要的资源浪费。 当我们不再需要该虚拟主机的时候我们可以使用vagrant destroy彻底删除该虚拟主机。</p>
+<p>四，一致的本地开发环境</p>
+<p>在使用Vagrant完成本地虚拟环境的搭建之后我们需要思考的问题是如何让这个干净的虚拟机能够达到可用的状态。这是我们关注Vagrant的另外一个特性Provision。所谓的Provision是指我们将一台完全干净的主机安装配置成可用状态的一个过程。Vagrant支持在初次启动虚拟主机或者调用vagrant provision命令时使用诸如：Shell, Chef，Puppet以及Ansible等工具自动配置虚拟主机。</p>
+<p>这里我们主要结合Ansible这个自动化工具和Vagrant向大家展示如何构建一个一致的本地开发环境。</p>
+<p>修改Vagrantfile，添加一下内容，我们将告诉Vagrant在初次创建虚拟机或者使用vagrant provision命令时，我们将根据playbook.yml所定义的内容自动配置虚拟机。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># -*- <span class="keyword">mode</span>: <span class="keyword">ruby</span> -*-</span><br><span class="line"># <span class="keyword">vi</span>: <span class="keyword">set</span> ft=<span class="keyword">ruby</span> :</span><br><span class="line"></span><br><span class="line">VAGRANTFILE_API_VERSION = <span class="string">"2"</span></span><br><span class="line">Vagrant.configure(VAGRANTFILE_API_VERSION) <span class="keyword">do</span> |config|</span><br><span class="line"></span><br><span class="line">  config.<span class="keyword">vm</span>.box = <span class="comment">"ubuntu/trusty64”</span></span><br><span class="line"></span><br><span class="line">  config.<span class="keyword">vm</span>.provision <span class="string">"ansible"</span> <span class="keyword">do</span> |ansible|</span><br><span class="line">     ansible.playbook = “playbook.yml<span class="comment">"</span></span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>在自动化脚本编写方面Ansible选择了根据有可读性的yaml格式描述我们的自动化过程，而不像puppet和chef的自动化脚本具有浓烈的编程语言背景。<br>同时由于Ansible它本身是基于Python开发的同时所有的自动化过程都是基于SSH实现，所以对Ansible而言，搭建一个可用的自动化管理环境只需要使用pip install ansible即可。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">- hosts:</span> <span class="string">all</span></span><br><span class="line"><span class="attr">  sudo:</span> <span class="literal">yes</span></span><br><span class="line"><span class="attr">  remote_user:</span> <span class="string">vagrant</span></span><br><span class="line"><span class="attr">  tasks:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">install</span> <span class="string">tree</span> <span class="string">tools</span></span><br><span class="line"><span class="attr">      shell:</span> <span class="string">echo</span> <span class="string">hello</span> <span class="string">world</span></span><br></pre></td></tr></table></figure>
+<p>如上所示，是一个最基本的Ansible自动化脚本的基本内容</p>
+<ul>
+<li>hosts：用于指定playbook定义的内容对哪些主机生效, all表示对所有主机生效</li>
+<li>remote_user：指定远程服务器的用户</li>
+<li>sudo：指定任务时候使用sudo权限执行</li>
+<li>tasks：定义了所有的我们需要在服务器上执行的操作列表，在ansible中所有的tasks都是按照顺序依次执行</li>
+</ul>
+<p>通过ansible我们可以将我们的整个运行环境信息用playbook的形式进行加以描述。</p>
+<p>在结合使用Vagrant和Ansible之后我们的项目结构如下所示,我们的源码仓库中除了代码以外，Vagrantfile描述了我们所需的服务器环境基本类型，playbook则记录了项目运行环境搭建的自动化过程。</p>
+<p><img src="https://31.media.tumblr.com/0efe53332677785488b5ea5e4e9edcff/tumblr_inline_nd3sk0Hp641sosno0.png" alt=""></p>
+<p>更完整的Demo可以查看我的github：<a href="https://github.com/yunlzheng/ansible_django_example" target="_blank" rel="noopener">https://github.com/yunlzheng/ansible_django_example</a> 这里使用ansible自动构建一个Django的本地开发环境。</p>
+<h2><span id="五总结">五，总结</span></h2><p>通过结合Ansible和Vagrant我们可以快速构建隔离且具有一致性的本地开发测试环境，帮助程序开发人员能够更加的专注于项目本身。同时如果将话题衍生到持续交付领域，这种软件开发实践方式的变化同样能起到非常重要的作用，这里我们不做更多的讨论。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DevOps/" rel="tag"># DevOps</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/08/08/vagrant-with-ansible/" rel="next" title="利用Ansible将开发环境纳入版本管理">
+                <i class="fa fa-chevron-left"></i> 利用Ansible将开发环境纳入版本管理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/10/19/intro-xvfn-ubuntu/" rel="prev" title="如何在Vagrant/Docker中运行Firefox">
+                如何在Vagrant/Docker中运行Firefox <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">二，除了代码还有可运行的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">三，隔离的本地开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">五，总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2014/10/08/build-local-develop-env/';
+        this.page.identifier = '2014/10/08/build-local-develop-env/';
+        this.page.title = '快速构建一致的开发环境';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="react.js,web," />
+
+
+<meta name="description" content="React.js 入坑记：快速上手，组件化，高复用，高性能。">
+<meta name="keywords" content="react.js,web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React入坑指南">
+<meta property="og:url" content="http://yunlzheng.github.io/2015/06/09/rock-with-react/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="React.js 入坑记：快速上手，组件化，高复用，高性能。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React入坑指南">
+<meta name="twitter:description" content="React.js 入坑记：快速上手，组件化，高复用，高性能。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2015/06/09/rock-with-react/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>React入坑指南 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2015/06/09/rock-with-react/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">React入坑指南</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-06-09T20:08:18+08:00">2015-06-09</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/06/09/rock-with-react/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/06/09/rock-with-react/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>React.js 入坑记：快速上手，组件化，高复用，高性能。</p>
+<a id="more"></a>
+<h3><span id="11创建你的第一个react应用">1.1，创建你的第一个React应用</span></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"build/react.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"build/JSXTransformer.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"example"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/jsx"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">      <span class="keyword">var</span> HelloWorld = React.createClass(&#123;</span></span><br><span class="line"><span class="actionscript">          render:<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span></span><br><span class="line"><span class="actionscript">            <span class="keyword">return</span> (</span></span><br><span class="line"><span class="handlebars"><span class="xml">              <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span></span><br><span class="line"><span class="undefined">            );</span></span><br><span class="line"><span class="undefined">          &#125;</span></span><br><span class="line"><span class="undefined">      &#125;);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">      React.render(</span></span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="tag">&lt;<span class="name">HelloWorld</span>/&gt;</span>,</span></span></span><br><span class="line"><span class="javascript">        <span class="built_in">document</span>.getElementById(<span class="string">'example'</span>)</span></span><br><span class="line"><span class="undefined">      );</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>在应用中使用React依赖两个文件react.js和JSXTransformer.js文件。一个是框架本身，另一个用于支持JSX语法；</strong></li>
+<li><strong>React在组件中使用JSX语法（js和html混合语法），当然不用JSX也行；</strong></li>
+<li><strong>当然官方也并不推荐你直接使用JSX语法,请参考<a href="http://facebook.github.io/react/docs/tooling-integration.html#jsx" target="_blank" rel="noopener">jsx预处理工工具</a>；</strong></li>
+<li><strong>引用JSX脚本或者代码，script标签type为”text/jsx”;</strong></li>
+</ul>
+<h3><span id="12程序入口reactrender">1.2，程序入口React.render()</span></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">React.render(</span><br><span class="line">  &lt;h1&gt;hello world&lt;<span class="regexp">/h1&gt;,</span></span><br><span class="line"><span class="regexp">  document.getElementById("example")</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<p>React.render在React中算是程序的最基本入口，会将React模板转换为页面内容，添加到document.getElementById(“example”)当中，并且返回该组件的引用。</p>
+<h3><span id="13创建组件reactcreateclass">1.3，创建组件React.createClass()</span></h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> HelloWorld = React.createClass(&#123;</span><br><span class="line">    render:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;h1&gt;Hello World&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">      );</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;);</span></span><br></pre></td></tr></table></figure>
+<p>React.createClass(object specification)方法将会根据specification创建一个组件类，一个组件必须要继承render方法，并且返回组件模板。创建完成组件之后我们就可以像应用html一样的使用组件。</p>
+<ul>
+<li><p>可以直接在render中使用;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">React.render(</span><br><span class="line">  &lt;HelloWorld/&gt;</span><br><span class="line">  <span class="built_in">document</span>.getElementById(<span class="string">"example"</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>也可以在其他组件中嵌套使用;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Header = React.crrateClass(&#123;</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;<span class="xml"><span class="tag">&lt;<span class="name">HelloWorld</span>/&gt;</span></span><span class="xml"><span class="tag">&lt;<span class="name">HelloWorld</span>/&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对于返回的内容必须要是闭合的子模板。如下所示：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#这是对的</span></span><br><span class="line"><span class="symbol">render:</span>function()&#123;</span><br><span class="line">  return (</span><br><span class="line">    <span class="params">&lt;ul&gt;</span><span class="params">&lt;li&gt;</span><span class="params">&lt;/li&gt;</span><span class="params">&lt;/ul&gt;</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta"># 这是错的</span></span><br><span class="line"><span class="symbol">render:</span>function()&#123;</span><br><span class="line">  return (</span><br><span class="line">    <span class="params">&lt;div&gt;</span><span class="params">&lt;/div&gt;</span></span><br><span class="line">    <span class="params">&lt;div&gt;</span><span class="params">&lt;/div&gt;</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="2组件详解">2，组件详解</span></h2><h3><span id="21组件的属性thisprops">2.1，组件的属性this.props</span></h3><p>通过React.createClass()方法我们可以创建自己的组件，和组件本身的使用和直接使用html标签是非常相似的。最主要的区别在于组件的属性值可以是一个javascript对象（JSX语法）</p>
+<p>在组件内使用this.props.attributeName可以获取到组件特定属性的值。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Menu = React.createClass(&#123;</span><br><span class="line">  render: function()&#123;</span><br><span class="line">    <span class="keyword">var</span> className = <span class="keyword">this</span>.props.active ? <span class="string">"active"</span> : <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;li className=&#123;className&#125;&gt;</span><br><span class="line">        &lt;a href=&#123;<span class="keyword">this</span>.props.href&#125;&gt;&lt;i className=&#123;<span class="keyword">this</span>.props.icon&#125;/&gt;&#123;<span class="keyword">this</span>.props.value&#125;&lt;/a&gt;</span><br><span class="line">      &lt;/li&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">React.render(</span><br><span class="line">  &lt;Menu active=&#123;<span class="literal">true</span>&#125; href=<span class="string">'/login'</span> icon=<span class="string">'fa fa-weixin'</span> value=<span class="string">'登录'</span>/&gt;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Tips：JSX支持javascript和html的混合语法。在JSX模板解析过程中,当遇到{}则使用js语法进行解析，其他则以html语法解析</p>
+</blockquote>
+<h3><span id="22-获取组件子节点内容thispropschildren">2.2， 获取组件子节点内容this.props.children</span></h3><p>既然我们可以像使用html标签一样的去使用React组件，那么一定是能够通过如下形式使用组件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Menus</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Menu</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">Menu</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Menu</span>&gt;</span>博客<span class="tag">&lt;/<span class="name">Menu</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Menu</span>&gt;</span>归档<span class="tag">&lt;/<span class="name">Menu</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Menus</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在React中我们可以使用{this.props.children}获取组件中的子内容</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Menu = React.createClass(&#123;</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;li className=<span class="string">'normal'</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">a</span>&gt;</span>&#123;this.props.children&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Menus = React.createClass(&#123;</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;ul&gt;&#123;<span class="keyword">this</span>.props.children&#125;&lt;<span class="regexp">/ul&gt;</span></span><br><span class="line"><span class="regexp">    )</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">&#125;);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">React.render(</span></span><br><span class="line"><span class="regexp">  &lt;Menus&gt;</span></span><br><span class="line"><span class="regexp">    &lt;Menu&gt;首页&lt;/</span>Menu&gt;</span><br><span class="line">    &lt;Menu&gt;博客&lt;<span class="regexp">/Menu&gt;</span></span><br><span class="line"><span class="regexp">    &lt;Menu&gt;归档&lt;/</span>Menu&gt;</span><br><span class="line">  &lt;<span class="regexp">/Menus&gt;,</span></span><br><span class="line"><span class="regexp">  document.getElementById("menus")</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Tips: 由于class和for是javascript的关键字，所以在JSX模板中使用className和htmlFor</p>
+</blockquote>
+<h3><span id="23-遍历">2.3, 遍历</span></h3><p>上面的Menus菜单的例子，在实际情况中菜单一般会根据当前状态比如用户是否登录动态的现实菜单项目。重写上面的例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Menu = React.createClass(&#123;</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;li&gt;<span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&#123;this.props.link&#125;</span>&gt;</span>&#123;this.props.children&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Menus = React.createClass(&#123;</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> menus = <span class="keyword">this</span>.props.items.map(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;Menu link=&#123;item.link&#125;&gt;&#123;item.text&#125;&lt;<span class="regexp">/Menu&gt;</span></span><br><span class="line"><span class="regexp">      )</span></span><br><span class="line"><span class="regexp">    &#125;);</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">        &lt;ul&gt;&#123;menus&#125;&lt;/u</span>l&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">React.render(</span><br><span class="line">  &lt;Menus items=&#123;[</span><br><span class="line">    &#123;<span class="attr">text</span>:<span class="string">'首页'</span>,<span class="attr">link</span>:<span class="string">'/'</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">text</span>:<span class="string">'博客'</span>,<span class="attr">link</span>:<span class="string">'/blogs'</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">text</span>:<span class="string">'归档'</span>,<span class="attr">link</span>:<span class="string">'artive'</span>&#125;</span><br><span class="line">  ]&#125;&gt;</span><br><span class="line">  &lt;<span class="regexp">/Menus&gt;,</span></span><br><span class="line"><span class="regexp">  document.getElementById("menus")</span></span><br><span class="line"><span class="regexp">)</span></span><br></pre></td></tr></table></figure>
+<p>这里我们为Menus创建了一个items属性，该属性是一个数组，用来保存菜单项。</p>
+<p>在Menus组件中我们通过this.props.items获取到菜单项的数组，这个使用js的map方法遍历items,每一次遍历返回一个Menu对象。最终返回一个ReactElement的数组menus. 从而实现动态的创建菜单列表。</p>
+<h3><span id="24组件的生命周期与事件处理">2.4，组件的生命周期与事件处理</span></h3><p>到目前为止，我们可以通过render去加载组件，并且可以通过this.props去获取组件相关的属性以及子内容。但是对于组件而言props是不可变的。但是对于一个组件而言它通常是会包含多种状态，<br>例如以Button为例子，就有enable和disabled的状态。</p>
+<p>在React中，每一个组件都包含一个<strong>this.state</strong>属性，当通过<strong>this.setState()</strong> 方法设置组件的状态之后，React都会调用Render方法重绘组件。而在这个过程中React将会通过diff算法比较虚拟的DOM树与实际的DOM并且只变更之间差异的部分，从而保证高性能的局部刷新。</p>
+<p>而对于每一个组件而言，都有其主要的生命周期主要包含以下3各部分：</p>
+<ul>
+<li>Mounting： 组件将要插入到DOM当中；<br>对应的处理函数：<ul>
+<li>getInitialState()：object在组件mounted之前调用，返回组件的初始状态</li>
+<li>componentWillMount()</li>
+<li>componentDidMount()</li>
+</ul>
+</li>
+<li>Updating：组件在重绘render时(必要时)；<ul>
+<li>componentWillReceiveProps()</li>
+<li>shouldComponentUpdate()</li>
+<li>componentWillUpdate()</li>
+<li>componentDidUpdate()</li>
+</ul>
+</li>
+<li>Unmounting：组件将会从DOM众移除时；<ul>
+<li>componentWillUnmount</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Tips: Javascrippt是基于事件驱动模型，假如在连续两次<strong>this.setState()</strong> 之后，React发现DOM没有变更，此时React并不会触发render方法</p>
+</blockquote>
+<p>在介绍完组件的生命周期以及状态state之后，我们遍可以根据这些方法创建一个有状态的组件。 同样是针对Menus和Menu组件，我们希望当点击Menu菜单项时能够设置该菜单项为active的状态。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Menu = React.createClass(&#123;</span><br><span class="line">  handleClick: <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//调用回调函数</span></span><br><span class="line">    event.preventDefault();</span><br><span class="line">    <span class="keyword">this</span>.props.onSelect(<span class="keyword">this</span>.props.link);</span><br><span class="line">  &#125;,</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;li className=&#123;<span class="keyword">this</span>.props.active&#125;&gt;</span><br><span class="line">        &lt;a href=&#123;<span class="keyword">this</span>.props.link&#125; onClick=&#123;<span class="keyword">this</span>.handleClick&#125;&gt;&#123;<span class="keyword">this</span>.props.children&#125;&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>li&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Menus = React.createClass(&#123;</span><br><span class="line">  getInitialState:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="attr">link</span>: <span class="string">'/'</span>&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  handleClick: <span class="function"><span class="keyword">function</span>(<span class="params">link</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;<span class="attr">link</span>: link&#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">var</span> menus = <span class="keyword">this</span>.props.items.map(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;</span><br><span class="line">      <span class="comment">// 将Menus的handleClick方法作为回调函数，用以触发Menus的重绘</span></span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        &lt;Menu link=&#123;item.link&#125; active=&#123;that.state.link == item.link&#125; onSelect=&#123;that.handleClick&#125;&gt;&#123;item.text&#125;&lt;<span class="regexp">/Menu&gt;</span></span><br><span class="line"><span class="regexp">      )</span></span><br><span class="line"><span class="regexp">    &#125;);</span></span><br><span class="line"><span class="regexp">    return (</span></span><br><span class="line"><span class="regexp">        &lt;ul&gt;&#123;menus&#125;&lt;/u</span>l&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Menus组件：</p>
+<p>针对Menus组件我们覆盖了getInitialState()方法，返回Menus组件的初始状态为{link:’/‘}。</p>
+<p>同时添加了自定义的handleClick方法，传入link参数。在handleClick方法中我们使用this.setState方法。假如该方法被调用组件就会触发Render事件进行重绘。</p>
+<p>Menu组件：</p>
+<p>对于Menu组件我们添加了两个新的属性active和onSelect，分别用于设置Menu组件的class以及点击后的毁掉。 而这里我们的回调函数就是Menus组件的handleClick方法。这样当Menu点击时我们能够触发Menus的setState方法，对菜单进行重绘。</p>
+<blockquote>
+<p>在React中每一个组件事件上就是一个状态机，当状态发生变化时。组件触发render事件，对组件进行重绘</p>
+</blockquote>
+<h3><span id="25与dom的交互">2.5，与Dom的交互</span></h3><p>除此之外，当组件处于mounted状态时，我们可以通过React.findDOMNode()方法获取实际的DOM对象，此方法特别适用于处理诸如表单提交时，需要获取表单内容的情况。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Component = React.createClass(&#123;</span><br><span class="line">  handleSubmit: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">    React.findDOMNode(<span class="keyword">this</span>.refs.InputText).value.trim();</span><br><span class="line">  &#125;,</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;form&gt;</span><br><span class="line">          &lt;input type=<span class="string">"text"</span> ref=<span class="string">"InputText"</span>/&gt;</span><br><span class="line">          &lt;button type=<span class="string">"submit"</span> value=<span class="string">"提交"</span> onClick=&#123;<span class="keyword">this</span>.handleSubmit&#125;/&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2><span id="3组件化的开发模式复用复用还是复用">3，组件化的开发模式，复用，复用还是复用</span></h2><p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png" alt=""></p>
+<p>以一个简单页面，当我们使用React将页面组件化之后，对于一个新的页面而言我们要做的事情就是进行组装。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> PageOne = React.createClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Header&gt;</span><br><span class="line">          &lt;Menus/&gt;</span><br><span class="line">        &lt;<span class="regexp">/Header&gt;</span></span><br><span class="line"><span class="regexp">        &lt;SomeForm/</span>&gt;</span><br><span class="line">        &lt;Footer&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">&#125;);</span></span><br><span class="line"><span class="regexp">React.render(</span></span><br><span class="line"><span class="regexp">    PageOne,</span></span><br><span class="line"><span class="regexp">    document.getElementById('pageOne')</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<p>当然如果在另外一个页面我们也可以通过同样的方式，通过组件定义一个新的页面。</p>
+<blockquote>
+<p>Tips：用React是做单页应用还是多页应用？ 何苦呢，又不是只会用js一种语言，对于前段框架的使用我跟喜欢服务器端模板与前段模板混合的模式，各取所长。</p>
+</blockquote>
+<h2><span id="5结论">5，结论</span></h2><p>通过组件化的开发方式，我们可以将我们的关注点从一个复杂的应用逻辑，转变对每一个组件本身。 同时组件化也以为着更小的功能块，以及更好的可测试性。 当然对于React本身而言其上手快，易学习以及诸如React Native这样的Mobile开发框架，相信React的路一定会走的非常顺畅。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react-js/" rel="tag"># react.js</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/06/dev-python-with-docker-compose/" rel="next" title="使用docker-compose进行python开发">
+                <i class="fa fa-chevron-left"></i> 使用docker-compose进行python开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/06/15/code-review-guide/" rel="prev" title="Code Review Guide">
+                Code Review Guide <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.1，创建你的第一个React应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">1.2，程序入口React.render()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">1.3，创建组件React.createClass()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">2，组件详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">2.1，组件的属性this.props</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.2， 获取组件子节点内容this.props.children</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">2.3, 遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">2.4，组件的生命周期与事件处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">2.5，与Dom的交互</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">3，组件化的开发模式，复用，复用还是复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">5，结论</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2015/06/09/rock-with-react/';
+        this.page.identifier = '2015/06/09/rock-with-react/';
+        this.page.title = 'React入坑指南';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

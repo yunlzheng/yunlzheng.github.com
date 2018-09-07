@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="DevOps,CNCF,Kubernetes," />
+
+
+<meta name="description" content="最近花了些时间完成了CNCF官方基金会推出的CKA(Certified Kubernetes Administrator)认证考试，这边文章就简单说一下CKA认证考试是撒，以及参加考试一些准备过程。">
+<meta name="keywords" content="DevOps,CNCF,Kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于CNCF的CKA认证考试">
+<meta property="og:url" content="http://yunlzheng.github.io/2017/12/13/about-cncf-cka-exam/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="最近花了些时间完成了CNCF官方基金会推出的CKA(Certified Kubernetes Administrator)认证考试，这边文章就简单说一下CKA认证考试是撒，以及参加考试一些准备过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/kca.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于CNCF的CKA认证考试">
+<meta name="twitter:description" content="最近花了些时间完成了CNCF官方基金会推出的CKA(Certified Kubernetes Administrator)认证考试，这边文章就简单说一下CKA认证考试是撒，以及参加考试一些准备过程。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/kca.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2017/12/13/about-cncf-cka-exam/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>关于CNCF的CKA认证考试 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2017/12/13/about-cncf-cka-exam/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">关于CNCF的CKA认证考试</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-13T16:47:06+08:00">2017-12-13</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/13/about-cncf-cka-exam/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/13/about-cncf-cka-exam/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近花了些时间完成了CNCF官方基金会推出的CKA(Certified Kubernetes Administrator)认证考试，这边文章就简单说一下CKA认证考试是撒，以及参加考试一些准备过程。</p>
+<a id="more"></a>
+<blockquote>
+<p>更多详细信息，请参考本文末尾的参考资料部分的<strong>CKA candidate handbook</strong></p>
+</blockquote>
+<h2><span id="关于cka考试">关于CKA考试</span></h2><p>CKA(Certified Kubernetes Administrator)是CNCF基金会(Cloud Native Computing Foundation)官方推出的Kubernetes管理员认证计划，用于证明持有人有履行Kubernetes管理的知识，技能等相关的能力。<br>除了对于个人技能提供认证以外，如果企业想要加入CNCF基金会的KCSP计划（Kubernetes认证服务提供商）也需要企业至少有3名及以上工程师的通过CKA认证考试。</p>
+<ul>
+<li><a href="https://www.cncf.io/certification/expert/" target="_blank" rel="noopener">考试注册地址</a></li>
+</ul>
+<h2><span id="cka考试费用">CKA考试费用</span></h2><p>参与人员需要支付<strong>300$</strong>的考试费用，因此一张双币信用卡是必须的。</p>
+<h2><span id="cka考试范围">CKA考试范围</span></h2><p>CKA考试主要考察参与认证人员对于Kubernetes的系统管理能力，主要考察的范围以及比例大致如下：</p>
+<ul>
+<li>应用生命周期管理 8%</li>
+<li>安装, 配置 &amp; 校验 12%</li>
+<li>核心概念 19%</li>
+<li>网络 11%</li>
+<li>调度管理 5%</li>
+<li>安全 12%</li>
+<li>集群维护 11%</li>
+<li>日志 / 监控 5%</li>
+<li>存储 7%</li>
+<li>故障定位 10%</li>
+</ul>
+<p>考试时，需要参与在认证系统提供的云环境中，实际完成考试题目给定的目标，如：</p>
+<ul>
+<li>在提供的k8s集群下完成对k8s下各种资源的创建，使用以及管理</li>
+<li>部署以及配置新的K8s集群</li>
+<li>对于已存在的k8s集群故障进行问题分析，并且解决集群中的故障</li>
+</ul>
+<p>因此参与考试认证的人员需要充分了解Kubernetes中的核心概念，并且有足够的实际动手操作能力，完成对k8s集群以及资源的管理维护。</p>
+<h2><span id="cka考试形式">CKA考试形式</span></h2><p>CKA考试时间为<strong>3个小时</strong>，在3小时内需要完成<strong>24道题目</strong>，如果<strong>正确率在75%及以上</strong>即可通过考试，得到认证。在进行考试时需要参与人员登录到考试系统，并且有专门的监考官对考试过程进行全程监督，在考试过程中需要全程打开摄像头，以及共享桌面。考试之前监考官也会通过视频对考试环境进行检查，以确保考试环境是满足要求的。</p>
+<p>CKA考试对于考试时间和位置的选择相对比较宽松，参与考试的人员可以根据自己的实际情况选择考试时间和地点。</p>
+<p>需要注意的几个点：</p>
+<ul>
+<li>考试之前考官会要求参与考试人员出示护照或者身份证来确认参与考试人员的身份</li>
+<li>进行考试的房间必须是比较私人的位置，并且确保考试过程中不能有任何人进出房间。因此比如咖啡馆，商店这种位置是不允许的。</li>
+<li>桌面必须得干净的，不能有任何比如笔记本，手机，以及其他电子设备，包括水杯等</li>
+<li>考试过程中是可以kubernetes.io/github上查找相关的资料的</li>
+<li>过于国内参与考试的人员需要自带科学上网技能包，并且网络质量一定要高（!!!）</li>
+</ul>
+<h2><span id="准备过程">准备过程</span></h2><h3><span id="手动部署过程实际操练">手动部署过程实际操练</span></h3><p>总所周知安装部署Kubernetes最主要的问题是关于如何在国内实现“本土化”安装，但是往往这个过程既没效率非常低，明明很简单的事情，非要做很久。AWS对于新注册的用户提供了免费一年的使用套餐（需要信用卡注册），所以直接通过在AWS利用国外虚拟主机进行练习，过程及快捷又方便。</p>
+<ul>
+<li><a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster" target="_blank" rel="noopener">https://github.com/opsnull/follow-me-install-kubernetes-cluster</a></li>
+</ul>
+<h3><span id="kubernetes官方文档">Kubernetes官方文档</span></h3><p>Kubernetes官方文档按照SETUP,CONCEPTS,TASKS,TUTORIALS,FRDERENCE几个部分，内容相对比较分散。可以利用思维导图重新整理一下Kubernetes相关的知识点。当然足够熟悉官方文档也可以在考试过程中提升效率。毕竟3个小时24道题，时间还是非常紧张的。</p>
+<ul>
+<li><a href="https://kubernetes.io/docs/home/" target="_blank" rel="noopener">https://kubernetes.io/docs/home/</a></li>
+</ul>
+<h3><span id="command-command-command">Command, Command, Command</span></h3><p>由于考试时间相对紧张，使用YAML创建K8S资源效率真的很低，使用命令行可以快速创建资源，在基础结构上再对资源进行编辑可以充分提高效率</p>
+<ul>
+<li><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/" target="_blank" rel="noopener">https://kubernetes.io/docs/reference/kubectl/cheatsheet/</a></li>
+</ul>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">//</span> 创建Deployment</span><br><span class="line">kubectl run nginx <span class="params">--image=nginx</span></span><br><span class="line"><span class="string">//</span> 创建Service</span><br><span class="line">kubectl expose nginx <span class="params">--port=80</span> <span class="params">--target-port=8000</span></span><br></pre></td></tr></table></figure>
+<h2><span id="获取证书">获取证书</span></h2><p>在完成CKA考试，后CNCF官方会在36小时以内以邮件的形式通知考试结果，如果正确率能够在75%以上那恭喜你，通过了考试，并且邮件会附带由CNCF基金会颁发的证书。</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/kca.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/kca.png"></p>
+<h2><span id="参考资料">参考资料</span></h2><ul>
+<li><a href="http://7xj61w.com1.z0.glb.clouddn.com/CKA_Candidate_Handbook_v1.4_.pdf" target="_blank" rel="noopener">CKA candidate handbook</a></li>
+<li><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/" target="_blank" rel="noopener">Kubectl cheatsheet</a></li>
+<li><a href="[https://kubernetes.io/docs/home/">Kubernetes documents</a></li>
+<li><a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster" target="_blank" rel="noopener">Follow me install kubernetes cluster</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DevOps/" rel="tag"># DevOps</a>
+          
+            <a href="/tags/CNCF/" rel="tag"># CNCF</a>
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/28/zuul-timeout-config-with-dns-router/" rel="next" title="在Kubernetes下实现API网关">
+                <i class="fa fa-chevron-left"></i> 在Kubernetes下实现API网关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/17/prometheus-sd-and-relabel/" rel="prev" title="Prometheus中的服务发现和relabel">
+                Prometheus中的服务发现和relabel <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">关于CKA考试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">CKA考试费用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">CKA考试范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">CKA考试形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">准备过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">手动部署过程实际操练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.2.</span> <span class="nav-text">Kubernetes官方文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.3.</span> <span class="nav-text">Command, Command, Command</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">获取证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2017/12/13/about-cncf-cka-exam/';
+        this.page.identifier = '2017/12/13/about-cncf-cka-exam/';
+        this.page.title = '关于CNCF的CKA认证考试';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

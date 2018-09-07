@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="openstack," />
+
+
+<meta name="description" content="关于OpenStack的镜像创建官方已经提供了非常详细的说明，这里主要是记录一下如何使用KVM创建Windows系列镜像的基本过程；本文以创建Window7为例，其他版本类似，不同之处会在案例中进行说明；">
+<meta name="keywords" content="openstack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack创建Windows镜像">
+<meta property="og:url" content="http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="关于OpenStack的镜像创建官方已经提供了非常详细的说明，这里主要是记录一下如何使用KVM创建Windows系列镜像的基本过程；本文以创建Window7为例，其他版本类似，不同之处会在案例中进行说明；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://filehost.qiniudn.com/openstack-images-windows-001.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/openstack-images-windows-002.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/openstack-windows-windows-004.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/penstack-images-windows-005.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/openstack-images-window-007.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/kvm-load-file.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack创建Windows镜像">
+<meta name="twitter:description" content="关于OpenStack的镜像创建官方已经提供了非常详细的说明，这里主要是记录一下如何使用KVM创建Windows系列镜像的基本过程；本文以创建Window7为例，其他版本类似，不同之处会在案例中进行说明；">
+<meta name="twitter:image" content="http://filehost.qiniudn.com/openstack-images-windows-001.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>OpenStack创建Windows镜像 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">OpenStack创建Windows镜像</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-02-10T10:09:00+08:00">2015-02-10</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/02/10/openstack-create-windows-images/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/02/10/openstack-create-windows-images/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>关于OpenStack的镜像创建官方已经提供了非常详细的说明，这里主要是记录一下如何使用KVM创建Windows系列镜像的基本过程；本文以创建Window7为例，其他版本类似，不同之处会在案例中进行说明；</p>
+<a id="more"></a>
+<h2><span id="1准备基础环境">1，准备基础环境</span></h2><ul>
+<li>系统环境：ubuntu 14.04</li>
+<li>window7版本iso源文件；</li>
+<li>virtio驱动程序virtio-win-0.1-94.iso（下载地址：<a href="http://alt.fedoraproject.org/pub/alt/virtio-win/latest/）；" target="_blank" rel="noopener">http://alt.fedoraproject.org/pub/alt/virtio-win/latest/）；</a></li>
+</ul>
+<h2><span id="2安装相关软件包">2，安装相关软件包</span></h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-<span class="builtin-name">get</span> install vncviewer kvm qemu-kvm</span><br></pre></td></tr></table></figure>
+<p>注意：由于使用到KVM需要打开主机的Intel VT-x/EPT支持，否则无法使用kvm模块</p>
+<h2><span id="3创建windows7镜像">3，创建windows7镜像</span></h2><p>这里默认建立具有20G存储空间的镜像,在实际使用中假如没有提供Cinder存储服务，虚拟机的磁盘空间往往不能满足使用需求</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-<span class="selector-tag">img</span> create -f qcow windows7<span class="selector-class">.qcow2</span> <span class="number">20</span>G</span><br></pre></td></tr></table></figure>
+<p>使用kvm创建虚拟机</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kvm -<span class="keyword">m</span> 2048 -<span class="keyword">no</span>-reboot -<span class="keyword">boot</span> <span class="keyword">order</span>=<span class="keyword">d</span> -drive <span class="keyword">file</span>=windows7.qcow2,<span class="keyword">if</span>=virtio,<span class="keyword">boot</span>=off -drive <span class="keyword">file</span>=windows7.iso,media=cdrom,<span class="keyword">boot</span>=<span class="keyword">on</span> -drive <span class="keyword">file</span>=virtio-<span class="keyword">win</span>-0.1-94.iso,media=cdrom,<span class="keyword">boot</span>=off -<span class="keyword">net</span> nic,model=virtio -nographic -vnc :1</span><br></pre></td></tr></table></figure>
+<p>ubuntu examples:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kvm -m 1024 -cdrom ubuntu-14.04.1-desktop-amd64.iso -drive <span class="attribute">file</span>=ubuntu-14.04-desktop-amd64.qcow2 -boot d -nographic -vnc :2</span><br><span class="line"><span class="comment"># restart</span></span><br><span class="line">kvm -m 1024 -drive <span class="attribute">file</span>=ubuntu-14.04-desktop-amd64.qcow2 -boot d -nographic -vnc :2</span><br></pre></td></tr></table></figure>
+<p>之后可以通过vnc客户端连接到虚拟机</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vncviewer</span> <span class="comment"># localhost:1</span></span><br></pre></td></tr></table></figure>
+<p>进入之后实际上就和我们安装操作系统的流程一致，安装windows7操作系统即可。</p>
+<ul>
+<li>安装中的第一个问题就是提示找不到任何磁盘安装操作系统，这里就是virtio发挥作用的地方之一</li>
+</ul>
+<p><img src="http://filehost.qiniudn.com/openstack-images-windows-001.png" alt=""></p>
+<p>点击加载驱动程序，确认</p>
+<p><img src="http://filehost.qiniudn.com/openstack-images-windows-002.png" alt=""></p>
+<p>按理来说应该是选择WIN7目录下的AMD64,不过似乎window2008和这个兼容也没出什么问题。</p>
+<p>这里实际上需要根据你当前的操作系统类型和架构进行选择即可</p>
+<p><img src="http://filehost.qiniudn.com/openstack-windows-windows-004.png" alt=""></p>
+<p>加载完成驱动之后，就可以开始继续我们的windows操作系统的安装</p>
+<p><img src="http://filehost.qiniudn.com/penstack-images-windows-005.png" alt=""><br><img src="http://filehost.qiniudn.com/openstack-images-window-007.png" alt=""></p>
+<h2><span id="4安装网卡驱动程序">4，安装网卡驱动程序</span></h2><p>当完成系统安装之后，你会惊喜的发现windows系统找不到本地网络驱动设备，也就是说这个镜像依然无法在opensatck中正常使用。</p>
+<p>这是virtio发挥作用的第二个地方，安装网卡驱动。 你只需要进入windows的设备管理器，你会发现网卡设备上的一个黄色感叹号，点击安装驱动程序即可。</p>
+<p>当然驱动程序你可以在CDROM下面找到自己相应版本的操作系统驱动程序即可。 这里就不截图了（mei de jie）。</p>
+<h2><span id="5开放windows部分防火墙">5，开放windows部分防火墙</span></h2><p>由于OpenStack使用到安装组（Securiyu Group进行安装管理），所以对于windows的操作系统镜像需要至少打开TCP3389和ICMP。</p>
+<h2><span id="6加载文件内容">6，加载文件内容</span></h2><p>在完成基础的镜像制作之后（操作系统安装，网卡驱动安装），我们往往需要对虚拟机镜像进行一些其他操作诸如：激活操作系统，安装软件等定制化。 这时候需要我们能上传文件到虚拟机内部。</p>
+<p>此时采取的策略与加载virto驱动相识，我们实现创建好一个iso文件，并包含我们必要的文件内容。 在使用kvm启动虚拟机时以CDROM的方式加载ISO文件即可</p>
+<h3><span id="61创建临时文件目录">6.1，创建临时文件目录</span></h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /tmp/<span class="built_in">directory</span></span><br></pre></td></tr></table></figure>
+<p>将需要的文件保存到/tmp/directory目录下，建议按照不同操作系统分目录如：</p>
+<hr>
+<ul>
+<li>window7<br>|– amd64<br>|– x86</li>
+<li>window8<br>|– amd64<br>|– x86</li>
+</ul>
+<h3><span id="62将目录保存为iso文件如tmpcdiso">6.2，将目录保存为iso文件，如/tmp/cd.iso</span></h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkisofs -o <span class="regexp">/tmp/</span>cd.iso  <span class="regexp">/tmp/</span>directory</span><br></pre></td></tr></table></figure>
+<h3><span id="63将cdiso作为cdrom加载到虚拟机">6.3，将cd.iso作为CDROM加载到虚拟机</span></h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kvm -<span class="keyword">m</span> 2048 -<span class="keyword">no</span>-reboot -<span class="keyword">boot</span> <span class="keyword">order</span>=<span class="keyword">d</span> -drive <span class="keyword">file</span>=windows7.qcow2,<span class="keyword">if</span>=virtio,<span class="keyword">boot</span>=off -drive <span class="keyword">file</span>=virtio-<span class="keyword">win</span>-0.1-94.iso,media=cdrom -drive <span class="keyword">file</span>=<span class="keyword">cd</span>.iso,media=cdrom -<span class="keyword">net</span> nic,model=virtio -nographic -vnc :1</span><br></pre></td></tr></table></figure>
+<p><img src="http://filehost.qiniudn.com/kvm-load-file.png" alt=""></p>
+<h2><span id="7导入">7，导入</span></h2><p>接下来你就可以使用glance的cli命令上传镜像到OpenStack并且进行测试了。</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">glance </span><span class="string">image-create </span><span class="built_in">--name</span> <span class="string">"windows7-x86_64"</span> <span class="built_in">--disk-format</span> <span class="string">qcow2 </span><span class="built_in">--container-format</span> <span class="string">bare </span><span class="built_in">--is-public</span> <span class="string">True </span><span class="built_in">--progress</span> &lt; <span class="string">windows7.</span><span class="string">qcow2</span></span><br></pre></td></tr></table></figure>
+<p>对于不同类型版本的windows操作系统，只需要选择相应的驱动程序即可。 Enjoy Your OpenStack;</p>
+<h2><span id="8其他">8，其他</span></h2><p>For Linux 安装官方文档制作Linux虚拟机时，文档提供的shell脚本有部分错误，修改如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># This script will be executed *after* all the other init scripts.</span></span><br><span class="line"><span class="comment"># You can put your own initialization stuff in here if you don't</span></span><br><span class="line"><span class="comment"># want to do the full Sys V style init stuff.</span></span><br><span class="line"><span class="keyword">if</span> [ ! -d /root/.ssh ]; <span class="keyword">then</span></span><br><span class="line">mkdir -p /root/.ssh</span><br><span class="line">chmod 700 /root/.ssh</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">ATTEMPTS=30</span><br><span class="line">FAILED=0</span><br><span class="line"><span class="keyword">while</span> [ ! -f /root/.ssh/authorized_keys ]; <span class="keyword">do</span></span><br><span class="line">curl -f http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key &gt; /tmp/metadata-key 2&gt;/dev/null</span><br><span class="line"><span class="keyword">if</span> [ \$? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">cat /tmp/metadata-key &gt;&gt; /root/.ssh/authorized_keys</span><br><span class="line">chmod 0600 /root/.ssh/authorized_keys</span><br><span class="line">restorecon /root/.ssh/authorized_keys</span><br><span class="line">rm -f /tmp/metadata-key</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"Successfully retrieved public key from instance metadata"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"*****************"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"AUTHORIZED KEYS"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"*****************"</span></span><br><span class="line">cat /root/.ssh/authorized_keys</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"*****************"</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">touch /var/loc/subsys/<span class="built_in">local</span></span><br><span class="line"></span><br><span class="line">/sbin/black_box.sh &gt;&gt; /var/<span class="built_in">log</span>/bbox.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/openstack/" rel="tag"># openstack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/01/openstack-novnc-architecture/" rel="next" title="OpenStack Console 设计">
+                <i class="fa fa-chevron-left"></i> OpenStack Console 设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/17/template-engine-thymeleaf/" rel="prev" title="Java轻量级模板引擎Thymeleaf">
+                Java轻量级模板引擎Thymeleaf <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1，准备基础环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2，安装相关软件包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3，创建windows7镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">4，安装网卡驱动程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">5，开放windows部分防火墙</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">6，加载文件内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.1.</span> <span class="nav-text">6.1，创建临时文件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.2.</span> <span class="nav-text">6.2，将目录保存为iso文件，如/tmp/cd.iso</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.3.</span> <span class="nav-text">6.3，将cd.iso作为CDROM加载到虚拟机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">7，导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">8，其他</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/';
+        this.page.identifier = '2015/02/10/openstack-create-windows-images/';
+        this.page.title = 'OpenStack创建Windows镜像';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

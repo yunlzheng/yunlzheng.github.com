@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="angular," />
+
+
+<meta name="description" content="Angulare及Ember之后又一前端MVC的一大力作，同时也越来越多的应用到现在Web应用开发当中，这里我们来了解一下Angular中非常重要的一块Derective">
+<meta name="keywords" content="angular">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular 不完全参考手册">
+<meta property="og:url" content="http://yunlzheng.github.io/2014/07/31/angular-directive/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="Angulare及Ember之后又一前端MVC的一大力作，同时也越来越多的应用到现在Web应用开发当中，这里我们来了解一下Angular中非常重要的一块Derective">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular 不完全参考手册">
+<meta name="twitter:description" content="Angulare及Ember之后又一前端MVC的一大力作，同时也越来越多的应用到现在Web应用开发当中，这里我们来了解一下Angular中非常重要的一块Derective">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2014/07/31/angular-directive/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Angular 不完全参考手册 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2014/07/31/angular-directive/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Angular 不完全参考手册</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2014-07-31T15:30:25+08:00">2014-07-31</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2014/07/31/angular-directive/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2014/07/31/angular-directive/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Angulare及Ember之后又一前端MVC的一大力作，同时也越来越多的应用到现在Web应用开发当中，这里我们来了解一下Angular中非常重要的一块Derective</p>
+<a id="more"></a>
+<p>用简单的方式理解Directive就是通过标记（例如通过 属性, 标签, 或者css的 class）特定的DOM元素，为其提供额外功能的方法。</p>
+<pre><code>angular.module(&quot;myApp&quot;)
+  .directive(&quot;myDirective&quot;, function(){
+
+    // directive define here
+
+  });
+</code></pre><p>申明一个指令需要两个元素：</p>
+<p><strong>name(string)</strong></p>
+<p>Directive的名称</p>
+<p><strong>factory_function(function)</strong></p>
+<p>工厂方法需要返回一个用于定义指令行为的对象。</p>
+<pre><code>angular.module(&quot;myApp&quot;)
+  .directive(&quot;myDirective&quot;, function(){
+
+    // directive define here
+    return {
+      // directive definition options
+    };
+
+  });
+</code></pre><p>当Angular启动以后，Angular的compiler将会解析document通过匹配标签，属性，或者css类需找directive，当找到相应的元素，则通过我们定义的指令方法作用于标签之上。</p>
+<pre><code>&lt;div my-directive&gt;&lt;/div&gt;
+</code></pre><p>实例见:<a href="http://jsbin.com/kovak/7/" target="_blank" rel="noopener">http://jsbin.com/kovak/7/</a></p>
+<h2><span id="directive参数详解">Directive参数详解</span></h2><pre><code>angular.module(&apos;myApp&apos;, [])
+.directive(&apos;myDirective&apos;, function() {
+    return {
+        restrict: String,
+        priority: Number,
+        terminal: Boolean,
+        template: String or Template Function:
+            function(tElement, tAttrs) (...},
+        templateUrl: String,
+        replace: Boolean or String,
+        scope: Boolean or Object,
+        transclude: Boolean,
+        controller: String or
+            function(scope, element, attrs, transclude, otherInjectables) { ... },
+        controllerAs: String,
+        require: String,
+        link: function(scope, iElement, iAttrs) { ... },
+        compile: return an Object OR
+            function(tElement, tAttrs, transclude) {
+            return {
+                pre: function(scope, iElement, iAttrs, controller) { ... },
+                post: function(scope, iElement, iAttrs, controller) { ... }
+            }
+            // or
+            return function postLink(...) { ... }
+        }
+    };
+});
+</code></pre><p><strong>restrict(string)</strong></p>
+<p>可选参数，定义将使用哪种方式(element, attribute, class, comment)在DOM中申明一个指令,默认情况下Angular使用attribute申明directive, 申明的可选值</p>
+<ul>
+<li>E 作为元素</li>
+<li>A 作为属性</li>
+<li>C 作为类</li>
+<li>M 作为注释</li>
+</ul>
+<p>example:</p>
+<pre><code>&lt;my-directive&gt;&lt;/my-directive&gt;
+&lt;div my-directive&gt;&lt;/div&gt;
+&lt;div class=&quot;my-directive:express;&quot;&gt;&lt;/div&gt;
+&lt;!-- directive: my-directive express&gt; --&gt;
+</code></pre><p>example:</p>
+<pre><code>angular.module(&apos;myApp&apos;, []);
+angular.module(&quot;myApp&quot;)
+  .directive(&quot;myDirective&quot;, function(){
+    // directive define here
+    return {
+      // directive definition options
+      restrict: &apos;AE&apos;
+    };
+});
+</code></pre><p>在页面中通过如下方式调用：</p>
+<pre><code>&lt;-- as an attribute --&gt;
+&lt;div my-directive&gt;&lt;/div&gt;
+&lt;-- or as an element --&gt;
+&lt;my-directive&gt;&lt;/my-directive&gt;
+</code></pre><blockquote>
+<p>注意事项，请慎用Element的定义方式. IE你懂得~</p>
+</blockquote>
+<p><strong>priority(numver)</strong></p>
+<p>可选参数，默认值0. 该属性定义了指令的优先级，当同一个dom元素定义了多个指令，优先级高的先执行，一般情况下大部分指令是忽略了这个值得，只有特殊的如<strong>ng-repeat</strong>设置为1000,如此ng-repeat总能在其它指令之前先运行，而保证不出先一些怪异的情况</p>
+<p><strong>terminal(boolean)</strong></p>
+<p>可选参数，默认值。 当定义了该参数后，diretive将会告诉Angular，停止执行之后的有更高priority的指令，而不影响其他相同优先级的directive。</p>
+<blockquote>
+<p>注意，在定义的terminal参数的指令元素上，加入优先级更高的指令时，优先级更高的指令将不会执行。</p>
+</blockquote>
+<p><strong>template(string|function)</strong></p>
+<p>可选参数。directive的模版，必须是以下类型之一</p>
+<ul>
+<li>string: HTML的字符串表示</li>
+<li>function(tElement, tAttrs)： 一个函数并且返回值必须为一个HTML的字符串，这里的tElement, tAttrs是正对模版的，不同于申明了指令的dom元素。</li>
+</ul>
+<p>example:</p>
+<pre><code>template: &apos;&lt;div&gt;&lt;h1&gt;When using two elements, wrap them in a parent element&lt;/h1&gt;&lt;/div&gt;&apos;
+</code></pre><blockquote>
+<p>对angular而言，处理模版和处理其他的html是一样的，模版中我们同样可以使用angular的标记如</p>
+</blockquote>
+<p><strong>templateUrl(string|function)</strong></p>
+<p>可选参数，如果提供必须是一下类型之一：</p>
+<ul>
+<li>string: 指向html模版的路径</li>
+<li>function(tElement, tAttrs)：返回html模版的路径</li>
+</ul>
+<p>默认情况下，当directive被调用时，将使用ajax请求相应的模版文件</p>
+<blockquote>
+<p>注意1，在本地开发时为了防止CORS错误，应该使用静态资源服务器WebStorm自带了一个build-in server在开发时会方便</p>
+</blockquote>
+<blockquote>
+<p>注意2：模版文件是同步加载的，这意味着compilation和link函数会在模版加载完成之后才开始运行</p>
+</blockquote>
+<p>大量的同步加载模版将会使客户端速度和体验明显下降，这时我们应该考虑缓存模版，这时候你应该考虑使用<a href="http://docs.angularjs.org/api/ng/service/$templateCache" target="_blank" rel="noopener">$templateCache</a></p>
+<p><strong>replace</strong>(boolean)</p>
+<p>可选参数，默认值为false; 默认情况下指令的模版将作为子元素添加到申明了指令的Dom元素之中</p>
+<p>js:</p>
+<pre><code>angular.module(&apos;myApp&apos;, []);
+
+angular.module(&quot;myApp&quot;)
+  .directive(&quot;myDirective&quot;, function(){
+
+    // directive define here
+    return {
+      restrict: &apos;EA&apos;,
+      // directive definition options
+      template: &apos;&lt;div&gt;some stuff here&lt;/div&gt;&apos;
+    };
+
+  });
+</code></pre><p> html:</p>
+<pre><code>&lt;div my-directive&gt;&lt;/div&gt;
+</code></pre><p> 生成的html如下所示：</p>
+<pre><code>&lt;div my-directive=&quot;&quot;&gt;&lt;div&gt;some stuff here&lt;/div&gt;&lt;/div&gt;
+</code></pre><p>当replace为true时，生成的html如下所示</p>
+<pre><code>&lt;div my-directive=&quot;&quot;&gt;some stuff here&lt;/div&gt;
+</code></pre><p><strong>指令的Sope(域)</strong></p>
+<p>为了更好的理解，剩下的参数，我们有必要了解一下scope是如何工作的。</p>
+<p>当在DOM中申明ng-app指令时，一个特殊的对象$rootscope将会被创建</p>
+<pre><code>&lt;div ng-app=&quot;myApp&quot; ng-init=&quot;someProperty=&apos;some data&apos;&quot;&gt;&lt;/div&gt;
+
+&lt;div ng-init=&quot;siblingProperty = &apos;more data&apos;&quot;&gt;
+   Inside Div Two
+   &lt;div ng-init=&quot;aThirdProperty&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre><p>如上代码所示，我们在rootsocpe上创建了3个属性：someProperty， siblingProperty， aThirdProperty。</p>
+<p>从这里开始，每一个在DOM中的directive将会：</p>
+<ul>
+<li>直接使用这些属性</li>
+<li>创建一个新的对象并且集成rootscope对象</li>
+<li>创建一个完全独立与rootscope的对象</li>
+</ul>
+<p>实例展示的是第一种情况，第二个div是一个兄弟节点它可以直接set和get$rootScope. 此外，在第二个div中的div同样有访问同一个rootScope的权利。 默认情况下子指令具有访问它们父节点的scope的的权限。</p>
+<p>而指令也仅仅是作为内嵌在其他指令下，并不意味着scope对象被改变了。到这里也就可以理解为什么申明指令时scope参数是默认为false了。</p>
+<blockquote>
+<p>提示：关于scope集成的问题可以参考Javascript的原型集成模型</p>
+</blockquote>
+<p><strong>scope(boolean|object)</strong></p>
+<p>可选参数，默认值False. 可以设置为true或者一个object {}.</p>
+<p>当设置为true时，指令的scope将会原型集成自父节点scope</p>
+<p>内置的 ng-controller指令存在的目的就在于创建一个原型继承自父scope的scope.下面是一个例子：</p>
+<p>html:</p>
+<pre><code>&lt;div ng-init=&quot;someProperty = &apos;some data&apos;&quot;&gt;&lt;/div&gt;
+  &lt;div ng-init=&quot;siblingProperty = &apos;more data&apos;&quot;&gt;
+    Inside Div Two: {{ aThirdProperty }}
+  &lt;div ng-init=&quot;aThirdProperty = &apos;data for 3rd property&apos;&quot; ng-controller=&quot;SomeController&quot;&gt;
+    Inside Div Three: {{ aThirdProperty }}
+    &lt;div ng-init=&quot;aFourthProperty&quot;&gt;
+    Inside Div Four: {{ aThirdProperty }}
+    &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre><p>js:</p>
+<pre><code>angular.module(&apos;myApp&apos;, []);
+
+angular.module(&apos;myApp&apos;)
+  .controller(&apos;SomeController&apos;, function($scope){
+
+  });
+</code></pre><p>result:</p>
+<pre><code>Inside Div Two:
+Inside Div Three: data for 3rd property
+Inside Div Four: data for 3rd property
+</code></pre><p>如上所示，ng-controller的socpe集成自rootScope. 在对ng-controller的scope添加属性后，不会影响rootScope的属性</p>
+<blockquote>
+<p>再次提醒：JavaScript的原型集成模型</p>
+</blockquote>
+<p>html:</p>
+<pre><code>&lt;div ng-init=&quot;someProperty = &apos;some data&apos;&quot;&gt;&lt;/div&gt;
+  &lt;div ng-init=&quot;siblingProperty = &apos;more data&apos;&quot;&gt;
+    Inside Div Two: {{ aThirdProperty }}
+      &lt;div ng-init=&quot;aThirdProperty = &apos;data for 3rd property&apos;&quot; ng-controller=&quot;SomeController&quot;&gt;
+          Inside Div Three: {{ aThirdProperty }}
+          &lt;div ng-controller=&quot;SecondController&quot;&gt;
+            Inside Div Four: {{ aThirdProperty }}
+            &lt;br&gt;
+            Outside myDirective: {{ myProperty }}
+            &lt;div my-directive ng-init=&quot;myProperty = &apos;wow, this is cool&apos;&quot;&gt;
+              Inside myDirective: {{ myProperty }}
+            &lt;/div&gt;
+          &lt;/div&gt;
+      &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre><p>js:如下所示我们定义了一个SecondController，定义了一个新的指令myDirective并且设置scope为true,这意味着myDirective的域将会原型集成自父节点的域。</p>
+<pre><code>angular.module(&apos;myApp&apos;, []);
+
+angular.module(&apos;myApp&apos;)
+  .controller(&apos;SomeController&apos;, function($scope){
+
+  })
+  .controller(&apos;SecondController&apos;, function($scope){
+
+  })
+  .directive(&apos;myDirective&apos;, function() {
+    return {
+        restrict: &apos;A&apos;,
+        scope: true
+    };
+});
+</code></pre><p>result:</p>
+<pre><code>Inside Div Two:
+Inside Div Three: data for 3rd property
+Inside Div Four: data for 3rd property
+Outside myDirective:
+Inside myDirective: wow, this is cool
+</code></pre><p>完整代码请点击<br><a href="http://jsbin.com/lehan/31/" target="_blank" rel="noopener">http://jsbin.com/lehan/31/</a>希望上面的例子能对你理解socpe是如何工作的有所帮助。</p>
+<p><strong>隔离Scope</strong></p>
+<p>隔离的scope可能是最容易让人疑惑，同时也是最强大的工具之一，最主要的用例是创建可重用的组件。 避免不经意间污染其他的父scope对象。</p>
+<p>为了创建一个具有隔离Scope的指令，我们需要设置指令的scope属性为一个空对象{},如此设置之后指令的模版将不能使用任何父scope的属性。</p>
+<p>html:</p>
+<pre><code>&lt;div ng-controller=&apos;MainController&apos;&gt;
+  Outside myDirective: {{ myProperty }}
+  &lt;div my-directive ng-init=&quot;myProperty = &apos;wow, this is cool&apos;&quot;&gt;
+  Inside myDirective: {{ myProperty }}
+  &lt;div&gt;
+&lt;/div&gt;
+</code></pre><p>js:</p>
+<pre><code>angular.module(&apos;myApp&apos;, [])
+    .controller(&apos;MainController&apos;, function($scope) {})
+    .directive(&apos;myDirective&apos;, function() {
+      return {
+        restrict: &apos;A&apos;,
+        scope: {},
+        template: &apos;&lt;div&gt;Inside myDirective {{ myProperty }}&lt;/div&gt;&apos;
+      };
+  });
+</code></pre><p>result:</p>
+<pre><code>Outside myDirective: hello world
+Inside myDirective
+</code></pre><p>完整代码参考<a href="http://jsbin.com/gisoz/61/" target="_blank" rel="noopener">http://jsbin.com/gisoz/61/</a></p>
+<p><strong>Transclude</strong></p>
+<p>可选参数，默认值false;如果提供必须设置为true.<br>Transclue经常被用来创建可重用的组件，一个很好的例子就是如modal box以及导航条。</p>
+<p>html:</p>
+<pre><code>&lt;div sidebox title=&quot;Links&quot;&gt;
+  &lt;ul&gt;
+    &lt;li&gt;First link&lt;/li&gt;
+    &lt;li&gt;Second link&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre><p>js:</p>
+<pre><code>angular.module(&apos;myApp&apos;, [])
+  .directive(&apos;sidebox&apos;, function() {
+    return {
+      restrict: &apos;EA&apos;,
+      scope: {
+        title: &apos;@&apos;
+      },
+      transclude: true,
+      template: &apos;&lt;div class=&quot;sidebox&quot;&gt;&lt;div class=&quot;content&quot;&gt;&lt;h2 class=&quot;header&quot;&gt;{{ title }}&lt;/h2&gt;&lt;span class=&quot;content&quot; ng-transclude&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&apos;
+    };
+});
+</code></pre><p>上面的代码将会告诉Angular的编译器寻找模版中的<strong>ng-transclude</strong>指令，并将DOM内的元素作为子元素添加到ng-transclude标签下。</p>
+<p>上述代码生成的Html结果如下所示：</p>
+<pre><code>&lt;div sidebox=&quot;&quot; title=&quot;Links&quot; class=&quot;ng-isolate-scope&quot;&gt;
+  &lt;div class=&quot;sidebox&quot;&gt;
+    &lt;div class=&quot;content&quot;&gt;
+    &lt;h2 class=&quot;header ng-binding&quot;&gt;Links&lt;/h2&gt;
+    &lt;span class=&quot;content&quot; ng-transclude=&quot;&quot;&gt;
+      &lt;ul class=&quot;ng-scope&quot;&gt;
+        &lt;li&gt;First link&lt;/li&gt;
+        &lt;li&gt;Second link&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre><p>完整代码参考<a href="http://jsbin.com/gisoz/73/" target="_blank" rel="noopener">http://jsbin.com/gisoz/73/</a></p>
+<p><strong>controller(string|function)</strong></p>
+<p>可选参数，可以设置为：</p>
+<ul>
+<li><p>string: Angular将会根据名字找到相应的已经注册的Controller;</p>
+<pre><code>angular.module(&apos;myApp&apos;, [])
+.directive(&apos;myDirective&apos;, function() {
+    restrict: &apos;A&apos;, // always required
+    controller: &apos;SomeController&apos;
+});
+
+angular.module(&apos;myApp&apos;)
+    .controller(&apos;SomeController&apos;, function($scope, $element, $attrs, $transclude) {
+        // controller logic goes here
+});
+</code></pre></li>
+<li><p>function($scope, $element, $attrs, $transclude): 定义内联的controller</p>
+</li>
+</ul>
+<pre><code>angular.module(&apos;myApp&apos;, [])
+.directive(&apos;myDirective&apos;, function() {
+    restrict: &apos;A&apos;,
+    controller:
+    function($scope, $element, $attrs, $transclude) {
+        // controller logic goes here
+    }
+});
+</code></pre><p>一般情况下link 和controller是可以互换的，而使用controller的主要用例是希望controller可以在多个directive中重复使用。</p>
+<ul>
+<li><p>参数</p>
+<ul>
+<li>$scope: 当前指令的scope</li>
+<li>$element: 当前指令所在的dom节点对象</li>
+<li><p>$attrs: 当前 dom 节点的属性</p>
+<pre><code>&lt;div id=&quot;aDiv&quot; class=&quot;box&quot;&gt;&lt;/div&gt;
+</code></pre><p>  属性为：</p>
+<pre><code>{
+    id: &quot;aDiv&quot;,
+    class: &quot;box&quot;
+}
+</code></pre></li>
+<li><p>$transclude:</p>
+<p>  js:</p>
+<pre><code>angular.module(&quot;myApp&quot;, []);
+
+angular.module(&apos;myApp&apos;)
+.directive(&apos;link&apos;, function() {
+  return {
+    restrict: &apos;EA&apos;,
+    transclude: true,
+    controller:
+    function($scope, $element, $transclude) {
+      $transclude(function(clone) {
+
+        var a = angular.element(&apos;&lt;a&gt;&apos;);
+        a.attr(&apos;href&apos;, clone.text());
+        a.text(clone.text());
+        $element.append(a);
+      });
+    }
+  };
+});
+</code></pre><p>  html:</p>
+<pre><code>&lt;div link&gt;aaaaaa&lt;/div&gt;
+</code></pre><p>  result:</p>
+<pre><code>&lt;div link=&quot;&quot;&gt;&lt;a href=&quot;aaaaaa&quot;&gt;aaaaaa&lt;/a&gt;&lt;/div&gt;
+</code></pre><p>  完整代码见<a href="http://jsbin.com/gisoz/104/" target="_blank" rel="noopener">http://jsbin.com/gisoz/104/</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>controllerAs(string)</strong></p>
+<p>可选参数，该参数允许我们为controller设置别名</p>
+<pre><code>angular.module(&apos;myApp&apos;)
+  .directive(&apos;myDirective&apos;, function() {
+    return {
+      restrict: &apos;A&apos;,
+      template: &apos;&lt;h4&gt;{{ myController.msg }}&lt;/h4&gt;&apos;,
+      controllerAs: &apos;myController&apos;,
+      controller: function() {
+        this.msg = &quot;Hello World&quot;;
+      }
+    };
+});
+</code></pre><p><strong>require(string|array)</strong></p>
+<p>可选参数，可以设置为一个string或者一个string数组，这些string代表了当前指令所依赖的其他指令</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/angular/" rel="tag"># angular</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/07/31/flex-file-upload/" rel="next" title="Flex Fileupload With Java">
+                <i class="fa fa-chevron-left"></i> Flex Fileupload With Java
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/07/31/fabric-overview/" rel="prev" title="Fabric Overview">
+                Fabric Overview <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Directive参数详解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2014/07/31/angular-directive/';
+        this.page.identifier = '2014/07/31/angular-directive/';
+        this.page.title = 'Angular 不完全参考手册';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

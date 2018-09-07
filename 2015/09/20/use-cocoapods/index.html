@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="swift,ios,xcode," />
+
+
+<meta name="description" content="笔者断断续续接触IOS开始有小几个月，中间也遇到了许多问题，这里主要记录一下与依赖管理相关的内容。">
+<meta name="keywords" content="swift,ios,xcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XCode依赖管理刨坑记">
+<meta property="og:url" content="http://yunlzheng.github.io/2015/09/20/use-cocoapods/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="笔者断断续续接触IOS开始有小几个月，中间也遇到了许多问题，这里主要记录一下与依赖管理相关的内容。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods2.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods3.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods5.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XCode依赖管理刨坑记">
+<meta name="twitter:description" content="笔者断断续续接触IOS开始有小几个月，中间也遇到了许多问题，这里主要记录一下与依赖管理相关的内容。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2015/09/20/use-cocoapods/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>XCode依赖管理刨坑记 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2015/09/20/use-cocoapods/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">XCode依赖管理刨坑记</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-20T14:52:22+08:00">2015-09-20</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/09/20/use-cocoapods/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/09/20/use-cocoapods/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>笔者断断续续接触IOS开始有小几个月，中间也遇到了许多问题，这里主要记录一下与依赖管理相关的内容。</p>
+<a id="more"></a>
+<h2><span id="ios依赖管理">IOS依赖管理</span></h2><p>在进行程序开发过程中，我们经常会用到各种各样的开源工具。 比如IOS开发中经常使用的Alamofire。那这个时候我们如何在我们项目中使用这些第三方开源代码呢？</p>
+<h3><span id="手动管理">手动管理</span></h3><p>初入IOS坑，必须经历一下手动管理依赖的洗礼，</p>
+<p>以Alamofire为例，我们可以使用git submodule来添加依赖</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule <span class="built_in">add</span> http<span class="variable">s:</span>//github.<span class="keyword">com</span>/Alamofire/Alamofire.git</span><br></pre></td></tr></table></figure>
+<p>之后的过程就是手动将Alamofire目录下的Alamofire.xcodeproj文件拖入到项目中</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png" alt="cocoapods1.png"></p>
+<p>选择项目的Targets</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods2.png" alt="cocoapods2.png"></p>
+<p>在Embeded Binaries中添加依赖的包</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods3.png" alt="cocoapods3.png"></p>
+<blockquote>
+<p>这里可以看到有连个Alamofire的包，两个中任意选择一个即可，上面的包是IOS，下面的包是给OSX的，选择即可</p>
+</blockquote>
+<p>上面的过程中其实忽略了很多其他的问题，包括依赖第三方包得版本，第三方包得Build target信息等等，所以你想真正用上Alamofire提供的功能还有很多曲折的路要走</p>
+<p>总之手动管理XCode第三方依赖，缺失够折磨人得</p>
+<h3><span id="尝鲜之选carthage">尝鲜之选Carthage</span></h3><p>目前笔者已知的XCode依赖管理工具<a href="https://cocoapods.org/" target="_blank" rel="noopener">Cocoapods</a>和<a href="https://github.com/Carthage/Carthage" target="_blank" rel="noopener">Carthage</a>.</p>
+<p>本着“选新不选旧”，”选轻不选重”的原则，笔者尝试使用了Carthage，</p>
+<p>Carthage工具使用本身不复杂</p>
+<p>Mac用户直接使用brew进行安装即可，其工作模式是根据用户提供的Cartfile定义的依赖，使用xcodebuild编译依赖的项目成framework包，再直接引入到项目中使用</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">brew </span><span class="keyword">install </span>carthage</span><br></pre></td></tr></table></figure>
+<p>以Alamofire为例，我们只需要在项目根目录下创建Cartfile文件，并添加如下内容</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">github <span class="string">"Alamofire/Alamofire"</span><span class="function"> ~&gt;</span> <span class="number">2.0</span></span><br></pre></td></tr></table></figure>
+<p>运行carthage update命令下载，并且编译依赖的项目</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 更新下载依赖</span></span><br><span class="line">carthage update</span><br><span class="line"><span class="meta">#</span><span class="bash"> 构建</span></span><br><span class="line">carthage build</span><br></pre></td></tr></table></figure>
+<p>生成的目录结构如下：</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">|- DemoApplication1.xcodeproj</span></span><br><span class="line"><span class="string">|- Cartfile</span></span><br><span class="line"><span class="string">|- Cartfile.resolved</span></span><br><span class="line"><span class="string">|- Carthage</span></span><br><span class="line">   <span class="string">|- Build</span></span><br><span class="line">      <span class="string">|- iOS</span></span><br><span class="line">        <span class="string">|- xxx.framework</span></span><br><span class="line">      <span class="string">|- Mac</span></span><br><span class="line">        <span class="string">|- xxx.framework</span></span><br><span class="line">   <span class="string">|- Checkouts</span></span><br><span class="line">      <span class="string">|- Alamofire</span></span><br></pre></td></tr></table></figure>
+<p>之后就可以直接依赖Carthage/Build/IOS下的framework包即可</p>
+<p>目前Carthage只支持Github源，并且至少的笔者本机进行使用时会出现各种错误信息，比如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">➜  DemoApplication1 git:(master) ✗ carthage <span class="keyword">update</span></span><br><span class="line">*** Fetching Alamofire</span><br><span class="line">*** Checking <span class="keyword">out</span> Alamofire <span class="keyword">at</span> <span class="string">"2.0.1"</span></span><br><span class="line">*** xcodebuild <span class="keyword">output</span> can be <span class="keyword">found</span> <span class="keyword">in</span> /<span class="keyword">var</span>/folders/<span class="number">5</span>q/xkj0b13j7195yb_74vgymr2r0000gn/T/carthage-xcodebuild.NOiC68.log</span><br><span class="line">*** Building scheme <span class="string">"Alamofire watchOS"</span> <span class="keyword">in</span> Alamofire.xcworkspace</span><br><span class="line"><span class="number">2015</span><span class="number">-09</span><span class="number">-20</span> <span class="number">15</span>:<span class="number">43</span>:<span class="number">01.731</span> xcodebuild[<span class="number">3402</span>:<span class="number">86145</span>] [MT] iPhoneSimulator: SimVerifier returned: <span class="keyword">Error</span> <span class="keyword">Domain</span>=NSPOSIXErrorDomain Code=<span class="number">53</span> <span class="string">"Simulator verification failed."</span> UserInfo=<span class="number">0x7fc625dadf50</span> &#123;NSLocalizedFailureReason=A <span class="keyword">connection</span> <span class="keyword">to</span> the simulator verification service could <span class="keyword">not</span> be established., NSLocalizedRecoverySuggestion=Ensure that Xcode.app <span class="keyword">is</span> installed <span class="keyword">on</span> a volume <span class="keyword">with</span> ownership enabled., NSLocalizedDescription=Simulator verification failed.&#125;</span><br><span class="line">xcodebuild: <span class="keyword">error</span>: <span class="keyword">Failed</span> <span class="keyword">to</span> <span class="keyword">build</span> workspace Alamofire <span class="keyword">with</span> scheme Alamofire watchOS.</span><br><span class="line">	Reason: The run destination My Mac <span class="keyword">is</span> <span class="keyword">not</span> valid <span class="keyword">for</span> Running the scheme <span class="string">'Alamofire watchOS'</span>.</span><br><span class="line">A shell task <span class="keyword">failed</span> <span class="keyword">with</span> <span class="keyword">exit</span> code <span class="number">70</span></span><br></pre></td></tr></table></figure>
+<p>以及其他的错误，所以在折腾了好一段之后，果断还是放弃了。</p>
+<p>使用Carthage最终宣告失败</p>
+<h3><span id="老牌依赖管理工具cocoapods">老牌依赖管理工具Cocoapods</span></h3><p>在几经周折，还是回到老牌XCode依赖管理工具Cocoapods怀抱中，cocoapods是基于ruby实现的XCode依赖管理工具</p>
+<p>安装使用如下命令即可：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem <span class="keyword">install</span> cocoapods</span><br></pre></td></tr></table></figure>
+<p>在项目根目录下创建Podfile文件</p>
+<p>添加以下内容</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="string">'https://github.com/CocoaPods/Specs.git'</span></span><br><span class="line"><span class="keyword">platform</span> :ios, <span class="string">'8.0'</span></span><br><span class="line">use_frameworks!</span><br><span class="line"></span><br><span class="line">pod <span class="string">'Alamofire'</span>, <span class="string">'~&gt; 2.0'</span></span><br></pre></td></tr></table></figure>
+<p>运行pod install即可下载并且编译相关的依赖文件</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Updating <span class="keyword">local</span> specs repositories</span><br><span class="line"></span><br><span class="line">CocoaPods 0.39.0.beta.4 is available.</span><br><span class="line">To <span class="keyword">update</span> <span class="keyword">use</span>: `sudo gem install cocoapods --pre`</span><br><span class="line">[!] This is a <span class="keyword">test</span> <span class="keyword">version</span> we'<span class="keyword">d</span> love you to try.</span><br><span class="line"></span><br><span class="line"><span class="keyword">For</span> <span class="keyword">more</span> information see http:<span class="comment">//blog.cocoapods.org</span></span><br><span class="line">and the CHANGELOG <span class="keyword">for</span> this <span class="keyword">version</span> http:<span class="comment">//git.io/BaH8pQ.</span></span><br><span class="line"></span><br><span class="line">Analyzing dependencies</span><br><span class="line">Downloading dependencies</span><br><span class="line">Installing Alamofire (2.0.1)</span><br><span class="line">Generating Pods project</span><br><span class="line">Integrating client project</span><br><span class="line"></span><br><span class="line">[!] Please <span class="keyword">close</span> any current Xcode sessions and <span class="keyword">use</span> `DemoApplication1.xcworkspace` <span class="keyword">for</span> this project from now <span class="keyword">on</span>.</span><br><span class="line">Sending stats</span><br></pre></td></tr></table></figure>
+<p>Cocoapods会在当前目录下创建应用的xcworkspace，打开生成的workspace即可在项目中使用构建出的第三方项目</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods5.png" alt=""></p>
+<p>折腾到这里，基本上能够正常的使用Cocoapods管理并且使用第三方库</p>
+<p>需要注意的一点是对于在Swift中使用Objective-c的第三方库，在Podfile文件中我们使用了,这样一个配置</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use_frameworks!</span><br></pre></td></tr></table></figure>
+<p>强制将第三方库作为framework使用</p>
+<p>在一般情况下，我们使用-Bridging-Header.h文件我们可以导入Objective-c实现swift和objective-c的混合使用。<br>当添加了use_frameworks之后，pod会将objective-c的代码编译成framework,所以我们可以直接在项目的swift代码中使用import导入相应的库</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+            <a href="/tags/ios/" rel="tag"># ios</a>
+          
+            <a href="/tags/xcode/" rel="tag"># xcode</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/15/code-review-guide/" rel="next" title="Code Review Guide">
+                <i class="fa fa-chevron-left"></i> Code Review Guide
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/20/residemenu-with-swift/" rel="prev" title="Swift中使用RESideMenu">
+                Swift中使用RESideMenu <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">IOS依赖管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">手动管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">尝鲜之选Carthage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">老牌依赖管理工具Cocoapods</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2015/09/20/use-cocoapods/';
+        this.page.identifier = '2015/09/20/use-cocoapods/';
+        this.page.title = 'XCode依赖管理刨坑记';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

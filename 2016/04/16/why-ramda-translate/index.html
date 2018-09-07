@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Yunlong, Agile, DevOps" />
+
+
+<meta name="description" content="译文，原文地址：http://fr.umio.us/why-ramda/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（译）Why Ramda">
+<meta property="og:url" content="http://yunlzheng.github.io/2016/04/16/why-ramda-translate/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="译文，原文地址：http://fr.umio.us/why-ramda/">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（译）Why Ramda">
+<meta name="twitter:description" content="译文，原文地址：http://fr.umio.us/why-ramda/">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2016/04/16/why-ramda-translate/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>（译）Why Ramda | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2016/04/16/why-ramda-translate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">（译）Why Ramda</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-16T11:37:51+08:00">2016-04-16</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/16/why-ramda-translate/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/04/16/why-ramda-translate/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>译文，原文地址：<a href="http://fr.umio.us/why-ramda/" target="_blank" rel="noopener">http://fr.umio.us/why-ramda/</a></p>
+<a id="more"></a>
+<p>当buzzdecafe最近向大家介绍了Ramda之后，这里基本上存在两种截然不同的反应。那些已经习惯在Javascript或者其它语言中使用函数式编程的人大部分反应是“Cool”. 他们可能会感到兴奋或者只是注意到Ramda可能作为另一个工具，并且他们理解这是什么。</p>
+<p>而另一类的人的反应则是:Huh?这是什么鬼？</p>
+<p>对于那些不适用函数式编程的人而言，Ramda似乎并没有存在的意义。而且它大部分的能力已经被Underscore以及LoDash实现了。</p>
+<p>当然，对于那些想要保持使用OO编码风格的人而言，他们并没有错。Ramda并不能向你提供太多的帮助。</p>
+<p>当时它确实提供了另外一种截然不同编码风格，是一种纯粹的函数式编程语言的风格。Ramda使得你可以轻松的通过功能组合构建复杂逻辑。需要注意的是对于任何允许你通过组合函数的库都能使你可以完成功能组合；这里的关键问题在于，“如果让它变得简单”。</p>
+<p>接下来，让我们来看看Ramda是如何工作的。</p>
+<p>“TODO List”似乎经常用于比较不同的Web框架，所以我们也会使用这个例子来向大家展示Ramda的能力；首先我们想要能够过滤TODO列表中已经完成的项。</p>
+<p>使用原生的Array方法，我们可能写出这样的代码:</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incompleteTasks = tasks.filter(<span class="function"><span class="keyword">function</span><span class="params">(task)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !tasks.complete;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>而使用LoDash,这个将会更简单</p>
+<figure class="highlight golo"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incompleteTasks = _.<span class="keyword">filter</span>(tasks, &#123;complete: <span class="literal">false</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>在这些例子中我们都将能够得到过滤后的列表。</p>
+<p>而在Ramda中，我们可能通过这种方式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incomplete = <span class="type">R</span>.<span class="built_in">filter</span>(<span class="type">R</span>.<span class="keyword">where</span>(&#123;complete: <span class="literal">false</span>&#125;));</span><br></pre></td></tr></table></figure>
+<p>你有注意到他们的区别吗？在代码当中没有涉及到任何的任务列表，Ramda代码只提供了一个函数。</p>
+<p>为了能够得到过滤后的task集合，我们仍然需要在调用该函数时提供task列表。</p>
+<p>由于我们当前得到的是一个函数，所以我们可以非常轻易的将它运用在其他任何的数据操作当中。想想一下如果我们已经存在一个函数叫<code>groupByUser</code>,这个函数可以更具用户对TODO列表进行分组，那么现在我们可以非常简单的创建一个新的函数：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">var</span> activeByUser = R.compose(groupByUser, incomplete)</span><br></pre></td></tr></table></figure>
+<p>这个函数可以帮助我们过滤出所有的未完成的task列表，并且按照用户进行组合。</p>
+<p>当然，由于这个函数功能本身非常简单。如果愿意，我们也可以写出同样功能的代码如下：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> activeByUser = <span class="function"><span class="keyword">function</span><span class="params">(tasks)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> groupByUser(incomplete(tasks))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>组合作为函数式编程的关键技术，可以让我们实现相同功能的同时，避免手动就组合不同的函数功能。让我们来看看当我们想要给这个函数添加一些新功能时会发生什么？ 如果我们需要按照截止时间对TODO列表进行排序？</p>
+<figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var sortUserTaks = <span class="keyword">R</span>.compose(<span class="keyword">R</span>.map(<span class="keyword">R</span>.sortBy(<span class="keyword">R</span>.prop(<span class="string">"dueDate"</span>))), activeByUser)</span><br></pre></td></tr></table></figure>
+<h3><span id="all-in-one">All in one?</span></h3><p>细心的读者可能已经注意到了我们的compose函数允许多个参数，所以为什么我们通过一个调用来完成以上的功能？</p>
+<figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var sortUserTasks = <span class="keyword">R</span>.compose(<span class="keyword">R</span>.mapObj(<span class="keyword">R</span>.sortBy(<span class="keyword">R</span>.prop(<span class="string">'dueDate'</span>))), groupByUser, <span class="keyword">R</span>.filter(<span class="keyword">R</span>.where(&#123;complete: false&#125;)))</span><br></pre></td></tr></table></figure>
+<p>我的回答是，如果这里没有任何其他地方需要调用中间函数activeByUser以及incomplete可能是你这样使用的理由之一。但是这样会使得我们的函数非常难于调试，并且并没有为我们的diamante增加任何的可读性。</p>
+<p>事实上，我想说的是我们在一个函数内容使用了相当复杂的内容，并且这部分内容是可能服用的，所以如果按照下面的方式来完成同样的功能可能会更好。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var sortByDate</span> = R.sortBy(R.prop(<span class="string">'dueDate'</span>));</span><br><span class="line"><span class="attribute">var sortUserTasks</span> = R.compose(R.mapObj(sortByDate), activeByUser);</span><br></pre></td></tr></table></figure>
+<p>现在我们可以在任何需要通过due date对task进行排序的地方使用sortByDate这个函数了（事实上，我们基本上可以对于任何对象中包含dueDate的对象集合进行排序）</p>
+<p>Oh, 但是等等，是不是有人说过我们需要通过逆序的方式来对due date进行排序呢？</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var sortByDateDescend</span> = R.compose(R.reverse, sortByDate);</span><br><span class="line"><span class="attribute">var sortUserTasks</span> = R.compose(R.mapObj(sortByDateDescend), activeByUser);</span><br></pre></td></tr></table></figure>
+<p>当然如果我们事先知道我们需要通过逆序的方式对列表进行排序，我们可能只会声明一个sortByDayeDescend的方法，但是我个人更习惯于保持着两个方法，这样可以防止需求改变对代码的影响，当然这都取决于你自己。</p>
+<h3><span id="wheres-the-data">Where’s the Data?</span></h3><p>到目前为止我们还没有使用任何的实际数据. 那这里到底发生了什么? 在没有数据的情况下进行了数据处理，这里恐怕需要你的一点耐心来理解这个事情。 当你使用函数式编程时，你的所有函数形成的是一个管道，每一个函数处理完数据之后就将结果传递给下一个函数，直到所有流程处理完后你才得到你所需要的结果。</p>
+<p>到目前为止我们所构建的只是一个函数的集合</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. <span class="selector-tag">incomplete</span>: <span class="selector-attr">[Task]</span> <span class="selector-tag">-</span>&gt; <span class="selector-attr">[Task]</span></span><br><span class="line">2. <span class="selector-tag">sortByDate</span>: <span class="selector-attr">[Task]</span> <span class="selector-tag">-</span>&gt; <span class="selector-attr">[Task]</span></span><br><span class="line">3. <span class="selector-tag">sortByDateDescend</span>: <span class="selector-attr">[Task]</span> <span class="selector-tag">-</span>&gt; <span class="selector-attr">[Task]</span></span><br><span class="line">4. <span class="selector-tag">activeByUser</span>: <span class="selector-attr">[Task]</span> <span class="selector-tag">-</span>&gt; &#123;<span class="attribute">String</span>: [Task]&#125;</span><br><span class="line">5. <span class="selector-tag">sortUserTasks</span>: &#123;<span class="attribute">String</span>: [Task]&#125; <span class="selector-tag">-</span>&gt; &#123;<span class="attribute">String</span>: [Task]&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然我们已经使用之前创建的函数构造了一个新的函数sortUserTasks， 并且这些函数都有明确的用途。 而这里我们似乎掩盖了一些事情，我们只是告诉你假如我们已经有了一个函数gourpByUser并且通过这个函数构建了activeByUser; 但是我们并没有真正的看到这个函数。 那么我们如何构建一个呢？</p>
+<p>这里是一种可能性：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var groupByUser</span> = R.partition(R.prop(<span class="string">'username'</span>));</span><br></pre></td></tr></table></figure>
+<p>partition函数使用了Ramda提供的<em>reduce</em>, Ramda中的<em>reduce</em>与<em>Array.prototype.reduce</em>非常像是。在其他的许多函数式编程语言当中，也被称为<em>fold1</em>。 这里我们并不打算深入的讨论这个特性。 prop(‘username’)依次从每个对象中解析”username”属性，而partition函数将包含相同key的项添加到子列表当中</p>
+<p>（这里是是不是通过一个闪亮的新函数分散了你的注意力？目前为止我还不打算提及真正的数据，抱歉，但是值得期待的是接下来马上又会有更多的强大的函数出现）</p>
+<h3><span id="but-wait-theres-more">But Wait, There’s More</span></h3><p>我们可以接着处理数据，直到我们满意为止，如果我们想象选取前5个列表元素，那么我们可以使用Ramda的take函数。所以如果我们要一次得到每一个用户的前5个列表项我们可以像下面这样处理：</p>
+<figure class="highlight tp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var topFiveUserTasks = <span class="keyword">R</span>.compose(<span class="keyword">R</span>.mapObj(<span class="keyword">R</span>.take(<span class="number">5</span>)), sortUserTasks);</span><br></pre></td></tr></table></figure>
+<p>我们还可以只返回对象的属性的子集，比如我们只需要task项的title和due date，在这个数据结构中username是明显对于的属性，并且我们也并不需要其它系统知道这些属性。</p>
+<p>这里我们可以使用Ramda提供的类似于SQL的select函数，这里我们叫做project:</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var importantFields</span> = R.project([<span class="string">'title'</span>, <span class="string">'dueDate'</span>]);</span><br><span class="line"><span class="attribute">var topDataAllUsers</span> = R.compose(R.mapObj(importantFields), topFiveUserTasks);</span><br></pre></td></tr></table></figure>
+<p>我们在这里创建的这些函数似乎可以非常轻易的在其它的需要类似TODO应用的系统中进行复用。现在我们回顾一下我们完成的所有代码，如下所示：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="attribute">var incomplete</span> = R.filter(R.where(&#123;complete: false&#125;));</span><br><span class="line"><span class="attribute">var sortByDate</span> = R.sortBy(R.prop(<span class="string">'dueDate'</span>));</span><br><span class="line"><span class="attribute">var sortByDateDescend</span> = R.compose(R.reverse, sortByDate);</span><br><span class="line"><span class="attribute">var importantFields</span> = R.project([<span class="string">'title'</span>, <span class="string">'dueDate'</span>]);</span><br><span class="line"><span class="attribute">var groupByUser</span> = R.partition(R.prop(<span class="string">'username'</span>));</span><br><span class="line"><span class="attribute">var activeByUser</span> = R.compose(groupByUser, incomplete);</span><br><span class="line"><span class="attribute">var topDataAllUsers</span> = R.compose(R.mapObj(R.compose(importantFields,</span><br><span class="line">    R.take(5), sortByDateDescend)), activeByUser);</span><br></pre></td></tr></table></figure>
+<h3><span id="all-right-already-my-i-see-some-data">All Right, Already! My I See Some Data?</span></h3><p>是的，当然可以。</p>
+<p>现在已经是时候将数据导入我们的函数当中。但是需要注意的一点是，这些函数都接收相同的数据类型，一个TODO对象的集合。我们并没有明确的支出这个TODO的具体数据结构，但是我们清楚他们至少应该包含以下属性：</p>
+<ul>
+<li>complete: Boolean</li>
+<li>dueDate: String, 满足 YYYY-MM-DD格式</li>
+<li>title: String</li>
+<li>userName: String</li>
+</ul>
+<p>那么如果我们有了一个 tasks的集合，我们如何使用呢？ 非常简单：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var results</span> = topDataAllUsers(tasks);</span><br></pre></td></tr></table></figure>
+<p>就是这样？</p>
+<p>恐怕确实是的，results对象可能的结构如下所示：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attribute">Michael</span>: [</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-22'</span>, <span class="attribute">title</span>: <span class="string">'Integrate types with main code'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-15'</span>, <span class="attribute">title</span>: <span class="string">'Finish algebraic types'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-06'</span>, <span class="attribute">title</span>: <span class="string">'Types infrastucture'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-05-24'</span>, <span class="attribute">title</span>: <span class="string">'Separating generators'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-05-17'</span>, <span class="attribute">title</span>: <span class="string">'Add modulo function'</span>&#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attribute">Richard</span>: [</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-22'</span>, <span class="attribute">title</span>: <span class="string">'API documentation'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-15'</span>, <span class="attribute">title</span>: <span class="string">'Overview documentation'</span>&#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attribute">Scott</span>: [</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-22'</span>, <span class="attribute">title</span>: <span class="string">'Complete build system'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-15'</span>, <span class="attribute">title</span>: <span class="string">'Determine versioning scheme'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-09'</span>, <span class="attribute">title</span>: <span class="string">'Add `mapObj`'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-05'</span>, <span class="attribute">title</span>: <span class="string">'Fix `and`/`or`/`not`'</span>&#125;,</span><br><span class="line">        &#123;<span class="attribute">dueDate</span>: <span class="string">'2014-06-01'</span>, <span class="attribute">title</span>: <span class="string">'Fold algebra branch back in'</span>&#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有趣的是，你还可以在incomplete函数中使用，用过过滤列表：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var incompleteTasks</span> = incomplete(tasks);</span><br></pre></td></tr></table></figure>
+<p>也许就会得到如下的结果：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        username: <span class="symbol">'Scott</span>',</span><br><span class="line">        title: <span class="symbol">'Add</span> `mapObj`',</span><br><span class="line">        dueDate: <span class="symbol">'2014-06-09</span>',</span><br><span class="line">        complete: false,</span><br><span class="line">        effort: <span class="symbol">'low</span>',</span><br><span class="line">        priority: <span class="symbol">'medium</span>'</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">        username: <span class="symbol">'Michael</span>',</span><br><span class="line">        title: <span class="symbol">'Finish</span> algebraic types',</span><br><span class="line">        dueDate: <span class="symbol">'2014-06-15</span>',</span><br><span class="line">        complete: true,</span><br><span class="line">        effort: <span class="symbol">'high</span>',</span><br><span class="line">        priority: <span class="symbol">'high</span>'</span><br><span class="line">    &#125; /*, ... */</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>当然同样可以使用这个集合应用到sortBydate，sortByDateDescend，importantFields，byUser或者是activeByUser。 因为他们都支持同样的数据结构，一个tasks的集合。通过简单的组合我们就可以构建一个庞大的工具集合</p>
+<h3><span id="new-requirements">New Requirements</span></h3><p>在刚才的游戏当中，你已经学会了根据你的需求为函数添加新的特性。 你需要过滤所有的tasks并且按照用户组成集合，接着运行同样的过滤，排序并且获得特定用户的tasks列表，之后将生成的列表与之前产生的username产生mapping.</p>
+<p>这些所有的逻辑目前都嵌套在topDataAllUsers当中，这个可能将我们的函数组合功能显得太激进了。但是我们可以非常轻易的对这个函数进行重构。正如平时一样，最困难的事情其实是如何给我们的新函数去一个好的名字。”gloss”可能并不合适，但是现在正是深夜，我已经尽力了。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">var gloss</span> = R.compose(importantFields, R.take(5), sortByDateDescend);</span><br><span class="line"><span class="attribute">var topData</span> = R.compose(gloss, incomplete);</span><br><span class="line"><span class="attribute">var topDataAllUsers</span> = R.compose(R.mapObj(gloss), activeByUser);</span><br><span class="line"><span class="attribute">var byUser</span> = R.use(R.filter).over(R.propEq(<span class="string">"username"</span>));</span><br></pre></td></tr></table></figure>
+<p>接下来当你可以这样进行调用：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var results = topData(<span class="name">byUser</span>('Scott', tasks))</span><br></pre></td></tr></table></figure>
+<h3><span id="i-just-want-my-data-thanks">I just Want My Data, Thanks</span></h3><p>“好了，好了，这些功能确实很酷，但是现在我只想得到我的数据。 我不希望产生一堆只是在将来产生数据的函数，或者我能不能直接使用Ramda?”</p>
+<p>当然可以。</p>
+<p>来让我们看看我们最先完成的函数：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incomplete = <span class="type">R</span>.<span class="built_in">filter</span>(<span class="type">R</span>.<span class="keyword">where</span>(&#123;complete: <span class="literal">false</span>&#125;))</span><br></pre></td></tr></table></figure>
+<p>那么我们如何将这个转换一下然后得到我们需要的数据呢？ 非常简单：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> incompleteTasks = <span class="type">R</span>.<span class="built_in">filter</span>(<span class="type">R</span>.<span class="keyword">where</span>(&#123;complete: <span class="literal">false</span>&#125;), tasks);</span><br></pre></td></tr></table></figure>
+<p>上面的方式对于我们刚才所有的其他函数都适用：只需要在调用时将tasks作为最后一个参数，这个时候你就能得到你所需要的数据。</p>
+<h3><span id="what-just-happened">What Just Happened?</span></h3><p>这是Ramda的另外一个主要的特定。所有Ramda提供的函数都是自动柯里化的。 这就意味着如果在调用函数时没有提供函数的所有参数，我们将只是返回给你一个新的函数，而这个函数所需的参数则是之前未调用未提供的参数。 所以对于<em>filter</em>函数，在定义时涉及到两个参数，一个是数组array，另外一个是用于过滤数组的布尔函数function。 在第一个班中中，我们并没有向filter提供values参数，所以filter只是简单的返回一个以array为参数的数组的新函数。 而在第二个版本中，我们在调用时传入了array参数，这个时候filter将会使用布尔函数进行计算，过滤出我们所需要的结果。</p>
+<p>自动柯里化是的Ramda的函数以及function-first, data-last的API涉及使得Ramda能够非常容易的实现函数组合的编程风格。</p>
+<p>更多的关于Ramda柯里化得资料可以参考一些其他的文章<a href="http://hughfdjackson.com/javascript/why-curry-helps/" target="_blank" rel="noopener">Why Curry Helps</a></p>
+<h3><span id="come-on-does-this-stuff-really-work">Come On, Does this Stuff Really Work?</span></h3><p>好吧，下面就是我们刚才讨论代码在JSFiddle中的运行结果：</p>
+<script async src="//jsfiddle.net/CrossEye/Gk6uu/embed/"></script>
+
+<p>简洁的代码也正是我们使用Ramda的另一个很好的理由。</p>
+<h3><span id="using-ramda">Using Ramda</span></h3><p>你可以通过Github或者NPM获得 Ramda的代码。</p>
+<p>如果需要在Node中使用，只需要如下操作：</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">npm</span> install ramda</span><br><span class="line"><span class="keyword">var</span> R = <span class="built_in">require</span>(<span class="string">'ramda'</span>)</span><br></pre></td></tr></table></figure>
+<p>如果想在浏览器中使用，只需要引入即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"path/to/yourCopyOf/ramda.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当然我们也会尝试将Ramda尽快托管在某些CDN服务中。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/20/residemenu-with-swift/" rel="next" title="Swift中使用RESideMenu">
+                <i class="fa fa-chevron-left"></i> Swift中使用RESideMenu
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/21/consul-in-practice-01/" rel="prev" title="Consul In Practice 1 [概述]">
+                Consul In Practice 1 [概述] <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">All in one?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Where’s the Data?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">But Wait, There’s More</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">All Right, Already! My I See Some Data?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">New Requirements</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">I just Want My Data, Thanks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">What Just Happened?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">Come On, Does this Stuff Really Work?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">Using Ramda</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2016/04/16/why-ramda-translate/';
+        this.page.identifier = '2016/04/16/why-ramda-translate/';
+        this.page.title = '（译）Why Ramda';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="docker," />
+
+
+<meta name="description" content="如果你有一下需求，请阅读本文：  想要理解Docker Registry V2认证机制 想要根据自己的业务构建企业级镜像仓库 想要理解Haboar这类工具的实现方式，不甘只是工具的使用者">
+<meta name="keywords" content="docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker Registry V2浅析">
+<meta property="og:url" content="http://yunlzheng.github.io/2016/11/29/docker-registry-details/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="如果你有一下需求，请阅读本文：  想要理解Docker Registry V2认证机制 想要根据自己的业务构建企业级镜像仓库 想要理解Haboar这类工具的实现方式，不甘只是工具的使用者">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/registry_v2_auth_server.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Registry V2浅析">
+<meta name="twitter:description" content="如果你有一下需求，请阅读本文：  想要理解Docker Registry V2认证机制 想要根据自己的业务构建企业级镜像仓库 想要理解Haboar这类工具的实现方式，不甘只是工具的使用者">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/registry_v2_auth_server.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2016/11/29/docker-registry-details/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Docker Registry V2浅析 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2016/11/29/docker-registry-details/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Docker Registry V2浅析</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-29T21:56:41+08:00">2016-11-29</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/11/29/docker-registry-details/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/11/29/docker-registry-details/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>如果你有一下需求，请阅读本文：</p>
+<ul>
+<li>想要理解Docker Registry V2认证机制</li>
+<li>想要根据自己的业务构建企业级镜像仓库</li>
+<li>想要理解Haboar这类工具的实现方式，不甘只是工具的使用者</li>
+</ul>
+<a id="more"></a>
+<h2><span id="docker-registry-v2的认证过程">Docker Registry V2的认证过程</span></h2><p>首先我们来了解一下当我们尝试从docker registry拉取镜像时实际的流程是什么样的？如下图所示</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/registry_v2_auth_server.png" alt=""></p>
+<ol>
+<li>docker daemon尝试从docker registry拉取镜像；</li>
+<li>如果docker registry需要进行授权时，registry将会放回401 Unauthorized响应，同时在返回的头信息中包含了docker client如何进行认证的信息</li>
+<li>docker client根据registry返回的信息，向auth server发送请求获取认证token</li>
+<li>auth server则根据自己的业务实现去验证提交的用户信息查询用户数据仓库中是否存在相关信息（数据库或者LDAP）</li>
+<li>用户数据仓库返回用户的相关信息</li>
+<li>auth server将会根据查询的用户信息，生成token令牌，以及当前用户所具有的相关权限信息</li>
+<li>docker client携带auth server返回的token令牌再次尝试访问docker registry.</li>
+<li>docker registry验证用户提交的token令牌信息，通过后则开始镜像的pull或者push动作</li>
+</ol>
+<h2><span id="配置并启用docker-registry启用用户认证">配置并启用Docker Registry启用用户认证</span></h2><p>默认情况下docker registry将会从/etc/docker/registry/config.yml读取所有的配置信息。</p>
+<p>完整的registry配置信息如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="number">0.1</span></span><br><span class="line"><span class="attr">log:</span></span><br><span class="line"><span class="attr">  level:</span> <span class="string">debug</span></span><br><span class="line"><span class="attr">  formatter:</span> <span class="string">text</span></span><br><span class="line"><span class="attr">  fields:</span></span><br><span class="line"><span class="attr">    service:</span> <span class="string">registry</span></span><br><span class="line"><span class="attr">    environment:</span> <span class="string">staging</span></span><br><span class="line"><span class="attr">  hooks:</span></span><br><span class="line"><span class="attr">    - type:</span> <span class="string">mail</span></span><br><span class="line"><span class="attr">      disabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">      levels:</span></span><br><span class="line"><span class="bullet">        -</span> <span class="string">panic</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        smtp:</span></span><br><span class="line"><span class="attr">          addr:</span> <span class="string">mail.example.com:25</span></span><br><span class="line"><span class="attr">          username:</span> <span class="string">mailuser</span></span><br><span class="line"><span class="attr">          password:</span> <span class="string">password</span></span><br><span class="line"><span class="attr">          insecure:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">        from:</span> <span class="string">sender@example.com</span></span><br><span class="line"><span class="attr">        to:</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">errors@example.com</span></span><br><span class="line"><span class="attr">loglevel:</span> <span class="string">debug</span> <span class="comment"># deprecated: use "log"</span></span><br><span class="line"><span class="attr">storage:</span></span><br><span class="line"><span class="attr">  filesystem:</span></span><br><span class="line"><span class="attr">    rootdirectory:</span> <span class="string">/var/lib/registry</span></span><br><span class="line">	<span class="attr">maxthreads:</span> <span class="number">100</span></span><br><span class="line"><span class="attr">  azure:</span></span><br><span class="line"><span class="attr">    accountname:</span> <span class="string">accountname</span></span><br><span class="line"><span class="attr">    accountkey:</span> <span class="string">base64encodedaccountkey</span></span><br><span class="line"><span class="attr">    container:</span> <span class="string">containername</span></span><br><span class="line"><span class="attr">  gcs:</span></span><br><span class="line"><span class="attr">    bucket:</span> <span class="string">bucketname</span></span><br><span class="line"><span class="attr">    keyfile:</span> <span class="string">/path/to/keyfile</span></span><br><span class="line"><span class="attr">    rootdirectory:</span> <span class="string">/gcs/object/name/prefix</span></span><br><span class="line"><span class="attr">    chunksize:</span> <span class="number">5242880</span></span><br><span class="line"><span class="attr">  s3:</span></span><br><span class="line"><span class="attr">    accesskey:</span> <span class="string">awsaccesskey</span></span><br><span class="line"><span class="attr">    secretkey:</span> <span class="string">awssecretkey</span></span><br><span class="line"><span class="attr">    region:</span> <span class="string">us-west-1</span></span><br><span class="line"><span class="attr">    regionendpoint:</span> <span class="attr">http://myobjects.local</span></span><br><span class="line"><span class="attr">    bucket:</span> <span class="string">bucketname</span></span><br><span class="line"><span class="attr">    encrypt:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    keyid:</span> <span class="string">mykeyid</span></span><br><span class="line"><span class="attr">    secure:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    v4auth:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    chunksize:</span> <span class="number">5242880</span></span><br><span class="line"><span class="attr">    rootdirectory:</span> <span class="string">/s3/object/name/prefix</span></span><br><span class="line"><span class="attr">  swift:</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">username</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">password</span></span><br><span class="line"><span class="attr">    authurl:</span> <span class="attr">https://storage.myprovider.com/auth/v1.0</span> <span class="string">or</span> <span class="attr">https://storage.myprovider.com/v2.0</span> <span class="string">or</span> <span class="attr">https://storage.myprovider.com/v3/auth</span></span><br><span class="line"><span class="attr">    tenant:</span> <span class="string">tenantname</span></span><br><span class="line"><span class="attr">    tenantid:</span> <span class="string">tenantid</span></span><br><span class="line"><span class="attr">    domain:</span> <span class="string">domain</span> <span class="string">name</span> <span class="string">for</span> <span class="string">Openstack</span> <span class="string">Identity</span> <span class="string">v3</span> <span class="string">API</span></span><br><span class="line"><span class="attr">    domainid:</span> <span class="string">domain</span> <span class="string">id</span> <span class="string">for</span> <span class="string">Openstack</span> <span class="string">Identity</span> <span class="string">v3</span> <span class="string">API</span></span><br><span class="line"><span class="attr">    insecureskipverify:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    region:</span> <span class="string">fr</span></span><br><span class="line"><span class="attr">    container:</span> <span class="string">containername</span></span><br><span class="line"><span class="attr">    rootdirectory:</span> <span class="string">/swift/object/name/prefix</span></span><br><span class="line"><span class="attr">  oss:</span></span><br><span class="line"><span class="attr">    accesskeyid:</span> <span class="string">accesskeyid</span></span><br><span class="line"><span class="attr">    accesskeysecret:</span> <span class="string">accesskeysecret</span></span><br><span class="line"><span class="attr">    region:</span> <span class="string">OSS</span> <span class="string">region</span> <span class="string">name</span></span><br><span class="line"><span class="attr">    endpoint:</span> <span class="string">optional</span> <span class="string">endpoints</span></span><br><span class="line"><span class="attr">    internal:</span> <span class="string">optional</span> <span class="string">internal</span> <span class="string">endpoint</span></span><br><span class="line"><span class="attr">    bucket:</span> <span class="string">OSS</span> <span class="string">bucket</span></span><br><span class="line"><span class="attr">    encrypt:</span> <span class="string">optional</span> <span class="string">data</span> <span class="string">encryption</span> <span class="string">setting</span></span><br><span class="line"><span class="attr">    secure:</span> <span class="string">optional</span> <span class="string">ssl</span> <span class="string">setting</span></span><br><span class="line"><span class="attr">    chunksize:</span> <span class="string">optional</span> <span class="string">size</span> <span class="string">valye</span></span><br><span class="line"><span class="attr">    rootdirectory:</span> <span class="string">optional</span> <span class="string">root</span> <span class="string">directory</span></span><br><span class="line"><span class="attr">  inmemory:</span>  <span class="comment"># This driver takes no parameters</span></span><br><span class="line"><span class="attr">  delete:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  redirect:</span></span><br><span class="line"><span class="attr">    disable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  cache:</span></span><br><span class="line"><span class="attr">    blobdescriptor:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">  maintenance:</span></span><br><span class="line"><span class="attr">    uploadpurging:</span></span><br><span class="line"><span class="attr">      enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">      age:</span> <span class="number">168</span><span class="string">h</span></span><br><span class="line"><span class="attr">      interval:</span> <span class="number">24</span><span class="string">h</span></span><br><span class="line"><span class="attr">      dryrun:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">    readonly:</span></span><br><span class="line"><span class="attr">      enabled:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">auth:</span></span><br><span class="line"><span class="attr">  silly:</span></span><br><span class="line"><span class="attr">    realm:</span> <span class="string">silly-realm</span></span><br><span class="line"><span class="attr">    service:</span> <span class="string">silly-service</span></span><br><span class="line"><span class="attr">  token:</span></span><br><span class="line"><span class="attr">    realm:</span> <span class="string">token-realm</span></span><br><span class="line"><span class="attr">    service:</span> <span class="string">token-service</span></span><br><span class="line"><span class="attr">    issuer:</span> <span class="string">registry-token-issuer</span></span><br><span class="line"><span class="attr">    rootcertbundle:</span> <span class="string">/root/certs/bundle</span></span><br><span class="line"><span class="attr">  htpasswd:</span></span><br><span class="line"><span class="attr">    realm:</span> <span class="string">basic-realm</span></span><br><span class="line"><span class="attr">    path:</span> <span class="string">/path/to/htpasswd</span></span><br><span class="line"><span class="attr">middleware:</span></span><br><span class="line"><span class="attr">  registry:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">ARegistryMiddleware</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        foo:</span> <span class="string">bar</span></span><br><span class="line"><span class="attr">  repository:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">ARepositoryMiddleware</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        foo:</span> <span class="string">bar</span></span><br><span class="line"><span class="attr">  storage:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">cloudfront</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        baseurl:</span> <span class="attr">https://my.cloudfronted.domain.com/</span></span><br><span class="line"><span class="attr">        privatekey:</span> <span class="string">/path/to/pem</span></span><br><span class="line"><span class="attr">        keypairid:</span> <span class="string">cloudfrontkeypairid</span></span><br><span class="line"><span class="attr">        duration:</span> <span class="number">3000</span><span class="string">s</span></span><br><span class="line"><span class="attr">  storage:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">redirect</span></span><br><span class="line"><span class="attr">      options:</span></span><br><span class="line"><span class="attr">        baseurl:</span> <span class="attr">https://example.com/</span></span><br><span class="line"><span class="attr">reporting:</span></span><br><span class="line"><span class="attr">  bugsnag:</span></span><br><span class="line"><span class="attr">    apikey:</span> <span class="string">bugsnagapikey</span></span><br><span class="line"><span class="attr">    releasestage:</span> <span class="string">bugsnagreleasestage</span></span><br><span class="line"><span class="attr">    endpoint:</span> <span class="string">bugsnagendpoint</span></span><br><span class="line"><span class="attr">  newrelic:</span></span><br><span class="line"><span class="attr">    licensekey:</span> <span class="string">newreliclicensekey</span></span><br><span class="line"><span class="attr">    name:</span> <span class="string">newrelicname</span></span><br><span class="line"><span class="attr">    verbose:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">http:</span></span><br><span class="line"><span class="attr">  addr:</span> <span class="attr">localhost:5000</span></span><br><span class="line"><span class="attr">  prefix:</span> <span class="string">/my/nested/registry/</span></span><br><span class="line"><span class="attr">  host:</span> <span class="attr">https://myregistryaddress.org:5000</span></span><br><span class="line"><span class="attr">  secret:</span> <span class="string">asecretforlocaldevelopment</span></span><br><span class="line"><span class="attr">  relativeurls:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  tls:</span></span><br><span class="line"><span class="attr">    certificate:</span> <span class="string">/path/to/x509/public</span></span><br><span class="line"><span class="attr">    key:</span> <span class="string">/path/to/x509/private</span></span><br><span class="line"><span class="attr">    clientcas:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/path/to/ca.pem</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/path/to/another/ca.pem</span></span><br><span class="line"><span class="attr">    letsencrypt:</span></span><br><span class="line"><span class="attr">      cachefile:</span> <span class="string">/path/to/cache-file</span></span><br><span class="line"><span class="attr">      email:</span> <span class="string">emailused@letsencrypt.com</span></span><br><span class="line"><span class="attr">  debug:</span></span><br><span class="line"><span class="attr">    addr:</span> <span class="attr">localhost:5001</span></span><br><span class="line"><span class="attr">  headers:</span></span><br><span class="line"><span class="attr">    X-Content-Type-Options:</span> <span class="string">[nosniff]</span></span><br><span class="line"><span class="attr">notifications:</span></span><br><span class="line"><span class="attr">  endpoints:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">alistener</span></span><br><span class="line"><span class="attr">      disabled:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">      url:</span> <span class="attr">https://my.listener.com/event</span></span><br><span class="line"><span class="attr">      headers:</span> <span class="string">&lt;http.Header&gt;</span></span><br><span class="line"><span class="attr">      timeout:</span> <span class="number">500</span></span><br><span class="line"><span class="attr">      threshold:</span> <span class="number">5</span></span><br><span class="line"><span class="attr">      backoff:</span> <span class="number">1000</span></span><br><span class="line"><span class="attr">redis:</span></span><br><span class="line"><span class="attr">  addr:</span> <span class="attr">localhost:6379</span></span><br><span class="line"><span class="attr">  password:</span> <span class="string">asecret</span></span><br><span class="line"><span class="attr">  db:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">  dialtimeout:</span> <span class="number">10</span><span class="string">ms</span></span><br><span class="line"><span class="attr">  readtimeout:</span> <span class="number">10</span><span class="string">ms</span></span><br><span class="line"><span class="attr">  writetimeout:</span> <span class="number">10</span><span class="string">ms</span></span><br><span class="line"><span class="attr">  pool:</span></span><br><span class="line"><span class="attr">    maxidle:</span> <span class="number">16</span></span><br><span class="line"><span class="attr">    maxactive:</span> <span class="number">64</span></span><br><span class="line"><span class="attr">    idletimeout:</span> <span class="number">300</span><span class="string">s</span></span><br><span class="line"><span class="attr">health:</span></span><br><span class="line"><span class="attr">  storagedriver:</span></span><br><span class="line"><span class="attr">    enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    interval:</span> <span class="number">10</span><span class="string">s</span></span><br><span class="line"><span class="attr">    threshold:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">  file:</span></span><br><span class="line"><span class="attr">    - file:</span> <span class="string">/path/to/checked/file</span></span><br><span class="line"><span class="attr">      interval:</span> <span class="number">10</span><span class="string">s</span></span><br><span class="line"><span class="attr">  http:</span></span><br><span class="line"><span class="attr">    - uri:</span> <span class="attr">http://server.to.check/must/return/200</span></span><br><span class="line"><span class="attr">      headers:</span></span><br><span class="line"><span class="attr">        Authorization:</span> <span class="string">[Basic</span> <span class="string">QWxhZGRpbjpvcGVuIHNlc2FtZQ==]</span></span><br><span class="line"><span class="attr">      statuscode:</span> <span class="number">200</span></span><br><span class="line"><span class="attr">      timeout:</span> <span class="number">3</span><span class="string">s</span></span><br><span class="line"><span class="attr">      interval:</span> <span class="number">10</span><span class="string">s</span></span><br><span class="line"><span class="attr">      threshold:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">  tcp:</span></span><br><span class="line"><span class="attr">    - addr:</span> <span class="string">redis-server.domain.com:6379</span></span><br><span class="line"><span class="attr">      timeout:</span> <span class="number">3</span><span class="string">s</span></span><br><span class="line"><span class="attr">      interval:</span> <span class="number">10</span><span class="string">s</span></span><br><span class="line"><span class="attr">      threshold:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">proxy:</span></span><br><span class="line"><span class="attr">  remoteurl:</span> <span class="attr">https://registry-1.docker.io</span></span><br><span class="line"><span class="attr">  username:</span> <span class="string">[username]</span></span><br><span class="line"><span class="attr">  password:</span> <span class="string">[password]</span></span><br><span class="line"><span class="attr">compatibility:</span></span><br><span class="line"><span class="attr">  schema1:</span></span><br><span class="line"><span class="attr">    signingkeyfile:</span> <span class="string">/etc/registry/key.json</span></span><br></pre></td></tr></table></figure>
+<p>在本文当中我们主要关注auth部分配置</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">auth:</span></span><br><span class="line"><span class="symbol">  silly:</span></span><br><span class="line"><span class="symbol">    realm:</span> silly-realm</span><br><span class="line"><span class="symbol">    service:</span> silly-service</span><br><span class="line"><span class="symbol">  token:</span></span><br><span class="line"><span class="symbol">    realm:</span> token-realm</span><br><span class="line"><span class="symbol">    service:</span> token-service</span><br><span class="line"><span class="symbol">    issuer:</span> registry-token-issuer</span><br><span class="line"><span class="symbol">    rootcertbundle:</span> <span class="meta-keyword">/root/</span>certs/bundle</span><br><span class="line"><span class="symbol">  htpasswd:</span></span><br><span class="line"><span class="symbol">    realm:</span> basic-realm</span><br><span class="line"><span class="symbol">    path:</span> <span class="meta-keyword">/path/</span>to/htpasswd</span><br></pre></td></tr></table></figure>
+<p>auth配置部分是可选的，docker registry当前支持3种认证实现方式：silly，token，htpasswd;registry默认不开启auth配置。用户可以自定义其中一种实现来完成registry的认证配置。</p>
+<p>我们有两种方式可以实现自定义配置：</p>
+<ol>
+<li>创建新的config.xml,并覆盖默认配置</li>
+</ol>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -<span class="selector-tag">p</span> <span class="number">5000</span>:<span class="number">5000</span> --restart=always --name registry \</span><br><span class="line">  -v `pwd`/config<span class="selector-class">.yml</span>:/etc/docker/registry/config<span class="selector-class">.yml</span> \</span><br><span class="line">  registry:<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>使用环境变量覆盖默认registry配置，以docker-compose为例：</li>
+</ol>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">registry:</span><br><span class="line">  ports:</span><br><span class="line">    -<span class="ruby"> <span class="number">5000</span><span class="symbol">:</span><span class="number">5000</span>/tcp</span></span><br><span class="line"><span class="ruby">  <span class="symbol">image:</span> <span class="symbol">registry:</span><span class="number">2</span></span></span><br><span class="line"><span class="ruby">  <span class="symbol">volumes:</span></span></span><br><span class="line"><span class="ruby">    - <span class="string">"./certs:/certs:ro"</span></span></span><br><span class="line"><span class="ruby">    - <span class="string">"./registry/storage:/var/lib/registry:rw"</span></span></span><br><span class="line"><span class="ruby">  <span class="symbol">environment:</span></span></span><br><span class="line"><span class="ruby">    - REGISTRY_AUTH=token</span></span><br><span class="line"><span class="ruby">    - REGISTRY_AUTH_TOKEN_REALM=<span class="symbol">http:</span>/<span class="regexp">/172.16.137.217:8080/auth</span></span></span><br><span class="line"><span class="ruby">    - REGISTRY_AUTH_TOKEN_SERVICE=<span class="string">"Docker registry"</span></span></span><br><span class="line"><span class="ruby">    - REGISTRY_AUTH_TOKEN_ISSUER=<span class="string">"Auth Service"</span></span></span><br><span class="line"><span class="ruby">    - REGISTRY_HTTP_SECRET=secretkey</span></span><br><span class="line"><span class="ruby">    - REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE=<span class="regexp">/certs/auth</span>.crt</span></span><br><span class="line"><span class="ruby">    - REGISTRY_LOG_LEVEL=debug</span></span><br></pre></td></tr></table></figure>
+<p>为了实现registry与业务系统的集成，我们配置registry auth的实现方式为token</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">auth:</span></span><br><span class="line"><span class="symbol">  token:</span></span><br><span class="line"><span class="symbol">    realm:</span> http:<span class="comment">//172.16.137.217:8080/auth</span></span><br><span class="line"><span class="symbol">    service:</span> Docker registry</span><br><span class="line"><span class="symbol">    issuer:</span> Auth Service</span><br><span class="line"><span class="symbol">    rootcertbundle:</span> <span class="meta-keyword">/certs/</span>auth.crt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>auth.token.realm: auth server用于认证的Endpoint地址</li>
+<li>auth.token.service: 用于请求auth server的携带的service名称</li>
+<li>auth.token.issuer: registry信任的auth server名称</li>
+<li>auth.token.rootcertbundle: 用户验证token签名的公钥文件</li>
+</ul>
+<blockquote>
+<p>其中auth.crt为使用openssl生成的公钥文件，用于registry验证token的合法性</p>
+</blockquote>
+<p>以以上配置为例，我们来看看registry与auth server的实际交互过程：</p>
+<p>例如当用户尝试向registry push镜像samalba/my-app时，为了完成当前操作，用户需要对repository samalba/my-app具有push的权限，registry将会返回401 Unuthorized信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 <span class="number">401</span> Unauthorized</span><br><span class="line"><span class="attribute">Content-Type</span>: application/json; charset=utf-8</span><br><span class="line"><span class="attribute">Docker-Distribution-Api-Version</span>: registry/2.0</span><br><span class="line"><span class="attribute">Www-Authenticate</span>: Bearer realm="http://172.16.137.217:8080/auth",service="Docker registry",scope="repository:samalba/my-app:pull,push"</span><br><span class="line"><span class="attribute">Date</span>: Thu, 10 Sep 2015 19:32:31 GMT</span><br><span class="line"><span class="attribute">Content-Length</span>: 235</span><br><span class="line"><span class="attribute">Strict-Transport-Security</span>: max-age=31536000</span><br><span class="line"></span><br><span class="line">&#123;"errors":[&#123;"code":"UNAUTHORIZED","message":"access to the requested resource is not authorized","detail":[&#123;"Type":"repository","Name":"samalba/my-app","Action":"pull"&#125;,&#123;"Type":"repository","Name":"samalba/my-app","Action":"push"&#125;]&#125;]&#125;</span><br></pre></td></tr></table></figure>
+<p>其中需要注意的内容是：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Www</span>-Authenticate: <span class="keyword">Bearer </span>realm=<span class="string">"http://172.16.137.217:8080/auth"</span>,service=<span class="string">"Docker registry"</span>,scope=<span class="string">"repository:samalba/my-app:pull,push"</span></span><br></pre></td></tr></table></figure>
+<p>这里registry告诉docker client你需要从<a href="http://172.16.137.217:8080/auth获取认证信息，并且携带请求参数service以及scope" target="_blank" rel="noopener">http://172.16.137.217:8080/auth获取认证信息，并且携带请求参数service以及scope</a></p>
+<blockquote>
+<p>返回信息根据用户设置的auth配置产生</p>
+</blockquote>
+<p>Docker Client提供用户输入用户名和密码后向auth server的Endpoint发送请求：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">http:</span>//<span class="number">172.16</span><span class="meta">.137</span><span class="meta">.217</span>:<span class="number">8080</span>/auth?service=Docker registry&amp;scope=repository:samalba/my-app:pull,<span class="keyword">push</span></span><br></pre></td></tr></table></figure>
+<p>同时在http head中包含用户相关的登录信息</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">authorized</span>: <span class="keyword">Basic </span>YWtaW46cGzc3dvmcQ=</span><br></pre></td></tr></table></figure>
+<p>此时我们自己实现的auth server只需要从http head中通过base64获取登录的用户名和密码，并且验证登录信息的合法性，同时根据业务数据返回用户的实际权限(pull, push)即可.</p>
+<p>基于JWT协议规范使用私钥对返回内容签名生成相应的Token即可。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Content-Type</span>: application/json</span><br><span class="line"></span><br><span class="line">&#123;"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IlBZWU86VEVXVTpWN0pIOjI2SlY6QVFUWjpMSkMzOlNYVko6WEdIQTozNEYyOjJMQVE6WlJNSzpaN1E2In0.eyJpc3MiOiJhdXRoLmRvY2tlci5jb20iLCJzdWIiOiJqbGhhd24iLCJhdWQiOiJyZWdpc3RyeS5kb2NrZXIuY29tIiwiZXhwIjoxNDE1Mzg3MzE1LCJuYmYiOjE0MTUzODcwMTUsImlhdCI6MTQxNTM4NzAxNSwianRpIjoidFlKQ08xYzZjbnl5N2tBbjBjN3JLUGdiVjFIMWJGd3MiLCJhY2Nlc3MiOlt7InR5cGUiOiJyZXBvc2l0b3J5IiwibmFtZSI6InNhbWFsYmEvbXktYXBwIiwiYWN0aW9ucyI6WyJwdXNoIl19XX0.QhflHPfbd6eVF4lM9bwYpFZIV0PfikbyXuLx959ykRTBpe3CYnzs6YBK8FToVb5R47920PVLrh8zuLzdCr9t3w", "expires_in": 3600,"issued_at": "2009-11-10T23:00:00Z"&#125;</span><br></pre></td></tr></table></figure>
+<p>当docker client获取到token之后，client会将得到的token作为http请求头信息再次尝试访问registry，registry使用公钥解密并验证token内容，并根据token包含的权限信息完成实际的操作</p>
+<h2><span id="如何生成符合docker-registry规范的json-web-token详解">如何生成符合Docker Registry规范的Json Web Token详解</span></h2><p>生成用户加密的公私钥</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">openssl req -newkey rsa:<span class="number">4096</span> -nodes -sha256 -keyout auth.key -x509 -days <span class="number">365</span> -out auth.crt</span><br><span class="line">Generating a <span class="number">4096</span> bit RSA private key</span><br><span class="line">................................................................................................................................................................................................................++</span><br><span class="line">........................................................................++</span><br><span class="line">writing new private key to <span class="string">'auth.key'</span></span><br><span class="line">-----</span><br><span class="line">You are about to be asked to enter information that will be incorporated</span><br><span class="line">into your certificate request.</span><br><span class="line">What you are about to enter is what is called a Distinguished Name or a DN.</span><br><span class="line">There are quite a few fields but you can leave some blank</span><br><span class="line">For some fields there will be a default value,</span><br><span class="line">If you enter <span class="string">'.'</span>, the field will be left blank.</span><br><span class="line">-----</span><br><span class="line">Country Name (<span class="number">2</span> letter <span class="keyword">code</span>) [AU]:DE</span><br><span class="line">State or Province Name (full name) [Some-State]:Example State</span><br><span class="line">Locality Name (eg, city) []:Example City</span><br><span class="line">Organization Name (eg, company) [Internet Widgits Pty Ltd]:Example Company</span><br><span class="line">Organizational Unit Name (eg, section) []:Example Organizational Unit</span><br><span class="line">Common Name (e.g. server FQDN or YOUR name) []:auth.example.com</span><br><span class="line">Email Address []:admin@auth.example.com</span><br></pre></td></tr></table></figure>
+<p>此时我们将得到两个文件加密文件auth.cert和auth.key</p>
+<h3><span id="docker-registry端">Docker Registry端</span></h3><p>auth.cert对应docker registry的auth.token.rootcertbundle配置项，用户验证docker client请求时提供的token是否合法</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">auth:</span></span><br><span class="line"><span class="symbol">  token:</span></span><br><span class="line"><span class="symbol">    realm:</span> http:<span class="comment">//172.16.137.217:8080/auth</span></span><br><span class="line"><span class="symbol">    service:</span> Docker registry</span><br><span class="line"><span class="symbol">    issuer:</span> Auth Service</span><br><span class="line"><span class="symbol">    rootcertbundle:</span> <span class="meta-keyword">/certs/</span>auth.crt</span><br></pre></td></tr></table></figure>
+<h3><span id="auth-server端">Auth Server端</span></h3><p>当Auth Server拦截到到认证请求</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">http:</span>//<span class="number">172.16</span><span class="meta">.137</span><span class="meta">.217</span>:<span class="number">8080</span>/auth?service=Docker registry&amp;scope=repository:samalba/my-app:pull,<span class="keyword">push</span></span><br></pre></td></tr></table></figure>
+<p>根据请求信息验证授权完成之后，我们将根据以下规则生成json web token内容。</p>
+<p>生成token主要由3个部分组成：</p>
+<ol>
+<li>生成jwt的Header信息</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"typ"</span>: <span class="string">"JWT"</span>,</span><br><span class="line">    <span class="attr">"alg"</span>: <span class="string">"ES256"</span>,</span><br><span class="line">    <span class="attr">"kid"</span>: <span class="string">"PYYO:TEWU:V7JH:26JV:AQTZ:LJC3:SXVJ:XGHA:34F2:2LAQ:ZRMK:Z7Q6"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>typ: 当使用JWT时，typ固定为“JWT”</li>
+<li>alg: 对应私钥文件的加密方式，本示例中即对应auth.key文件的加密方式，可以通过代码读取私钥文件获取</li>
+<li>kid: 根据docker提供的规则生成公钥文件的kid,registry会根据同样的算法获取公钥的kid,如果匹配失败则认证失败</li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- Take <span class="keyword">the</span> DER encoded public key which <span class="keyword">the</span> JWT <span class="keyword">token</span> was signed against.</span><br><span class="line">- Create <span class="keyword">a</span> SHA256 hash out <span class="keyword">of</span> <span class="keyword">it</span> <span class="keyword">and</span> truncate <span class="built_in">to</span> <span class="number">240</span>bits.</span><br><span class="line">- Split <span class="keyword">the</span> <span class="built_in">result</span> <span class="keyword">into</span> <span class="number">12</span> base32 encoded groups <span class="keyword">with</span> : <span class="keyword">as</span> delimiter.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对于基于golang开发的同学而言可以直接使用<a href="https://github.com/docker/libtrust/blob/master/key.go提供的KeyID方法获取公钥的keyid" target="_blank" rel="noopener">https://github.com/docker/libtrust/blob/master/key.go提供的KeyID方法获取公钥的keyid</a></p>
+</blockquote>
+<ol start="2">
+<li>设置jwt的payload信息Claim Set</li>
+</ol>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"iss"</span>: <span class="string">"Auth Service"</span>, <span class="comment">//需要注意必须与auth.token.issuer配置保持一致</span></span><br><span class="line">    <span class="string">"sub"</span>: <span class="string">"some id"</span>, <span class="comment">//根据业务系统的规则自定义生成即可</span></span><br><span class="line">    <span class="string">"aud"</span>: <span class="string">"Docker registry"</span>,<span class="comment">// 从请求的service参数获取</span></span><br><span class="line">    <span class="string">"exp"</span>: <span class="number">1415387315</span>, <span class="comment">//过期时间</span></span><br><span class="line">    <span class="string">"nbf"</span>: <span class="number">1415387015</span>, <span class="comment">// not before 可选参数</span></span><br><span class="line">    <span class="string">"iat"</span>: <span class="number">1415387015</span>, <span class="comment">// 正式发行时间</span></span><br><span class="line">    <span class="string">"jti"</span>: <span class="string">"tYJCO1c6cnyy7kAn0c7rKPgbV1H1bFws"</span>, <span class="comment">//随机生成即可</span></span><br><span class="line">    <span class="comment">// access根据请求的scope获取，当然业务系统要判断用户的实际权限并在actions中放回</span></span><br><span class="line">    <span class="string">"access"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"type"</span>: <span class="string">"repository"</span>,</span><br><span class="line">            <span class="string">"name"</span>: <span class="string">"samalba/my-app"</span>,</span><br><span class="line">            <span class="string">"actions"</span>: [</span><br><span class="line">                <span class="string">"pull"</span>,</span><br><span class="line">                <span class="string">"push"</span></span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3,最后使用auth.key私钥进行签名</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RSASHA256(</span><br><span class="line">  base64UrlEncode(<span class="name">header</span>) + <span class="string">"."</span> +</span><br><span class="line">  base64UrlEncode(<span class="name">payload</span>),</span><br><span class="line">  'auth.key file content'  </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>从代码来看应该更容易理解</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Object</span>&gt; header = getJWTHeader();</span><br><span class="line"><span class="built_in">Map</span>&lt;<span class="built_in">String</span>, <span class="built_in">Object</span>&gt; claims = getJWTClaims();</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> Jwts.builder()</span><br><span class="line">            .setHeader(header)</span><br><span class="line">            .setClaims(claims)</span><br><span class="line">            .signWith(SignatureAlgorithm.RS256,getPrivateKey());</span><br></pre></td></tr></table></figure>
+<h2><span id="代码实现简化版">代码实现简化版</span></h2><p>添加Endpoint用于响应docker client认证请求</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RegistryAuthController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RegistryAuthServer registryAuthServer;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(<span class="meta-string">"/auth"</span>)</span></span><br><span class="line">    <span class="keyword">public</span> ResponseEntity auth(<span class="keyword">final</span> HttpServletRequest request) &#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.ok(registryAuthServer.auth(request));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>添加RegistryAuthServer实现授权验证以及生成Token令牌</p>
+<blockquote>
+<p>备注：作为示例keyid我们直接使用docker提供的libtrust库从公钥文件生成，另外代码中的硬编码，字符常量请忽略~just demo..</p>
+</blockquote>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line"><span class="keyword">public</span> class RegistryAuthServer &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> RegistryTokenResponse auth(HttpServletRequest request) &#123;</span><br><span class="line">        <span class="keyword">String</span> token = getDefaultJwtToken(request.getParameter(<span class="string">"client_id"</span>),</span><br><span class="line">                request.getParameter(<span class="string">"service"</span>),</span><br><span class="line">                getAccess(request.getParameter(<span class="string">"scope"</span>))).compact();</span><br><span class="line">        <span class="built_in">return</span> <span class="keyword">new</span> RegistryTokenResponse(token);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;AccessScope&gt; getAccess(<span class="keyword">String</span> scope) &#123;</span><br><span class="line">        <span class="built_in">return</span> Strings.isNullOrEmpty(scope) ?</span><br><span class="line">                Collections.EMPTY_LIST : Collections.singletonList(<span class="keyword">new</span> AccessScope(scope));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> JwtBuilder getDefaultJwtToken(<span class="keyword">String</span> clientId, <span class="keyword">String</span> service, List&lt;AccessScope&gt; access) &#123;</span><br><span class="line">        <span class="built_in">try</span> &#123;</span><br><span class="line">            <span class="built_in">return</span> Jwts.builder()</span><br><span class="line">                    .setHeader(getJWTHeader())</span><br><span class="line">                    .setClaims(getDefaultClaims(clientId, service, access))</span><br><span class="line">                    .signWith(SignatureAlgorithm.RS256, getPrivateKey());</span><br><span class="line"></span><br><span class="line">        &#125; <span class="built_in">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ServiceRuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Map&lt;<span class="keyword">String</span>, Object&gt; getDefaultClaims(<span class="keyword">String</span> clientId, <span class="keyword">String</span> service, List&lt;AccessScope&gt; access) &#123;</span><br><span class="line">        Map&lt;<span class="keyword">String</span>, Object&gt; claims = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"access"</span>, access);</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"iss"</span>, <span class="string">"Auth Service"</span>);</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"sub"</span>, clientId);</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"aud"</span>, service);</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"exp"</span>, <span class="keyword">new</span> Date(DateTime.now().plusDays(<span class="number">7</span>).getMillis()));</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"iat"</span>, <span class="keyword">new</span> Date());</span><br><span class="line">        claims.<span class="built_in">put</span>(<span class="string">"jti"</span>, <span class="string">"jwtid"</span>);</span><br><span class="line">        <span class="built_in">return</span> claims;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;<span class="keyword">String</span>, Object&gt; getJWTHeader() throws Exception &#123;</span><br><span class="line">        PrivateKey privateKey = <span class="keyword">this</span>.getPrivateKey();</span><br><span class="line">        HashMap&lt;<span class="keyword">String</span>, Object&gt; header = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        header.<span class="built_in">put</span>(<span class="string">"typ"</span>, <span class="string">"JWT"</span>);</span><br><span class="line">        header.<span class="built_in">put</span>(<span class="string">"alg"</span>, privateKey.getAlgorithm());</span><br><span class="line">        header.<span class="built_in">put</span>(<span class="string">"kid"</span>, getPublicKeyId());</span><br><span class="line">        <span class="built_in">return</span> header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> PublicKey getPublicCertKey() throws Exception &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = DatatypeConverter</span><br><span class="line">                .parseBase64Binary(<span class="keyword">new</span> <span class="keyword">String</span>(formatPublicKey(<span class="string">"auth.crt"</span>).getBytes(), Charset.forName(<span class="string">"UTF-8"</span>)));</span><br><span class="line">        <span class="built_in">return</span> CertificateFactory.getInstance(<span class="string">"X509"</span>).generateCertificate(<span class="keyword">new</span> ByteArrayInputStream(keyBytes)).getPublicKey();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> PrivateKey getPrivateKey() throws Exception &#123;</span><br><span class="line">        java.security.Security.addProvider(<span class="keyword">new</span> org.bouncycastle.jce.provider.BouncyCastleProvider());</span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = <span class="keyword">new</span> Base64().decode(formatPrivateKey(getResourceBytes(<span class="string">"auth.key"</span>)));</span><br><span class="line">        <span class="built_in">return</span> KeyFactory.getInstance(<span class="string">"RSA"</span>).generatePrivate(<span class="keyword">new</span> PKCS8EncodedKeySpec(keyBytes));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">String</span> formatPrivateKey(<span class="keyword">byte</span>[] keyBytes) throws UnsupportedEncodingException &#123;</span><br><span class="line">        <span class="built_in">return</span> <span class="keyword">new</span> <span class="keyword">String</span>(keyBytes, <span class="string">"UTF-8"</span>)</span><br><span class="line">                .replaceAll(<span class="string">"(-+BEGIN RSA PRIVATE KEY-+\\r?\\n|-+END RSA PRIVATE KEY-+\\r?\\n?)"</span>, <span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">String</span> formatPublicKey(<span class="keyword">String</span> resources) throws IOException &#123;</span><br><span class="line">        <span class="built_in">return</span> <span class="keyword">new</span> <span class="keyword">String</span>(getResourceBytes(resources), <span class="string">"UTF-8"</span>)</span><br><span class="line">                .replaceAll(<span class="string">"(-+BEGIN CERTIFICATE-+\\r?\\n|-+END CERTIFICATE-+\\r?\\n?)"</span>, <span class="string">""</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">String</span> getPublicKeyId() &#123;</span><br><span class="line">        <span class="built_in">return</span> <span class="string">"MXNV:KLDD:GEH3:DWME:7CTG:E2HZ:QJDM:LJXI:35NL:FZZ3:LPE2:IOKY"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] getResourceBytes(<span class="keyword">String</span> publicCertKeyFileName) throws IOException &#123;</span><br><span class="line">        ClassPathResource classPathResource = <span class="keyword">new</span> ClassPathResource(publicCertKeyFileName);</span><br><span class="line">        <span class="built_in">File</span> file = classPathResource.getFile();</span><br><span class="line">        FileInputStream in = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = <span class="keyword">new</span> <span class="keyword">byte</span>[in.<span class="built_in">available</span>()];</span><br><span class="line">        in.<span class="built_in">read</span>(keyBytes);</span><br><span class="line">        in.<span class="built_in">close</span>();</span><br><span class="line">        <span class="built_in">return</span> keyBytes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="参考资料">参考资料</span></h2><ul>
+<li><a href="https://docs.docker.com/registry/spec/auth/token/" target="_blank" rel="noopener">https://docs.docker.com/registry/spec/auth/token/</a></li>
+<li><a href="https://github.com/docker/distribution/blob/master/docs/spec/auth/token.md" target="_blank" rel="noopener">https://github.com/docker/distribution/blob/master/docs/spec/auth/token.md</a></li>
+<li><a href="https://docs.docker.com/registry/configuration/" target="_blank" rel="noopener">https://docs.docker.com/registry/configuration/</a></li>
+<li><a href="https://github.com/cesanta/docker_auth" target="_blank" rel="noopener">https://github.com/cesanta/docker_auth</a></li>
+<li><a href="https://github.com/kwk/docker-registry-setup" target="_blank" rel="noopener">https://github.com/kwk/docker-registry-setup</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/startup-es6/" rel="next" title="ES6 10分钟入门">
+                <i class="fa fa-chevron-left"></i> ES6 10分钟入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/29/are-you-ready-for-cd/" rel="prev" title="关于持续交付你准备好了吗？">
+                关于持续交付你准备好了吗？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Docker Registry V2的认证过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">配置并启用Docker Registry启用用户认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">如何生成符合Docker Registry规范的Json Web Token详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">Docker Registry端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">Auth Server端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">代码实现简化版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2016/11/29/docker-registry-details/';
+        this.page.identifier = '2016/11/29/docker-registry-details/';
+        this.page.title = 'Docker Registry V2浅析';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

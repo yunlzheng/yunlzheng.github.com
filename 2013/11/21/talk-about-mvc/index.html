@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="javascript," />
+
+
+<meta name="description" content="记得最早说前端的MVC时，在大学里面教我们HTML老师是这样解释的， 在很早以前制作网页时充斥则诸如dreamware的网页制作（非开发）工具， 大部分的网页中都混杂了大量的嵌套在标签中的样式， css的片段，以及各种javascript脚本的片段。 所以在学校期间时的前端mvc就是html负责数据的展示，关于样式的控制全都交给css来处理，而页面中的逻辑处理，都交给javascript来完成。">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈谈关于前端的MVC">
+<meta property="og:url" content="http://yunlzheng.github.io/2013/11/21/talk-about-mvc/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="记得最早说前端的MVC时，在大学里面教我们HTML老师是这样解释的， 在很早以前制作网页时充斥则诸如dreamware的网页制作（非开发）工具， 大部分的网页中都混杂了大量的嵌套在标签中的样式， css的片段，以及各种javascript脚本的片段。 所以在学校期间时的前端mvc就是html负责数据的展示，关于样式的控制全都交给css来处理，而页面中的逻辑处理，都交给javascript来完成。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="谈谈关于前端的MVC">
+<meta name="twitter:description" content="记得最早说前端的MVC时，在大学里面教我们HTML老师是这样解释的， 在很早以前制作网页时充斥则诸如dreamware的网页制作（非开发）工具， 大部分的网页中都混杂了大量的嵌套在标签中的样式， css的片段，以及各种javascript脚本的片段。 所以在学校期间时的前端mvc就是html负责数据的展示，关于样式的控制全都交给css来处理，而页面中的逻辑处理，都交给javascript来完成。">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2013/11/21/talk-about-mvc/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>谈谈关于前端的MVC | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2013/11/21/talk-about-mvc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">谈谈关于前端的MVC</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-11-21T21:58:17+08:00">2013-11-21</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2013/11/21/talk-about-mvc/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2013/11/21/talk-about-mvc/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>记得最早说前端的MVC时，在大学里面教我们HTML老师是这样解释的， 在很早以前制作网页时充斥则诸如dreamware的网页制作（非开发）工具， 大部分的网页中都混杂了大量的嵌套在标签中的样式， css的片段，以及各种javascript脚本的片段。 所以在学校期间时的前端mvc就是html负责数据的展示，关于样式的控制全都交给css来处理，而页面中的逻辑处理，都交给javascript来完成。 这应该算是最早的关于前端的mvc的解释了。不过其实那个时候大部分web系统的逻辑处理还是交给服务器端程序来处理的。</p>
+<a id="more"></a>
+<p>再过了一段时间，SOA的概念慢慢盛行起来webservice,restful各种关于这些服务的开发框架如apache cxf慢慢入侵到曾经股如磐石的SSH解决方案当中，而随之而来的就是大量的逻辑代码都转移到了前端开发者的手中，记得那个是否领导是这样说的，用SOA的东西，我们可以只做一个后端服务，而客户端的形式可以随着需求不断的改变，不管是浏览器还是移动端都可以得到支持，当然这到现在也是算正确的。</p>
+<p>而真正接触前端MVC是一年前看的那本叫做<a href="http://book.douban.com/subject/10733304/" target="_blank" rel="noopener">《基于MVC的JavaScript Web富应用开发》</a>的书，那时候才发现原来前端开发还可以这样结构化和层次化，当然那个时候也已经有了诸如Backbone和Ember的解决方案，而那时候由于公司也刚成立不久，研发工作还处在极其混乱的过程中，像我这样的年轻程序员和老一辈的程序员在一起工作，由于我自己的开发习惯更加注重前端和用户体验的东西所以开发系统时如上面说的喜欢把后端做的更接口化，而大量工作是放在前端来做的，而稍大的程序员则更喜欢诸如SSH式的解决方案，也更习惯把前端的逻辑控制放在JSP中，所以那时候有一段时间大家都在讨论如何让公司的研发工作更加统一一点，无论是以java为主的后端开发，还是js系的前端开发。 当然java企业级开发的解决方案特别多，无论是自己搭建还是找一套现成的解决方案都是比较容易的， 但是前端开发要找到一个合适的解决方案就不是那么容易的一件事情，可能每一个做web软件开发的人都会写那么点js代码，甚至完全不动javascript的人也能比较轻松的通过在网上copy实现一段js功能，但是由于大量逻辑工作转移到前端，而每个人的前端开发水平有参差不齐，所以每个人写出来的代码基本都只有他自己能看懂。 也就是说一个项目有10个人做前端开发，就有10种完全不同的编码方式， 可以预见随着系统越来越复杂和庞大的情况下，在不久的将来系统将变得越来越不可维护。当然这种情况都是发生在这样的初创公司里， 所以为了能解决这种问题那时候就开始对前端MVC框架有了一些接触，而那个时候是选择的ember.js作为解决方案。 不幸的是由于那个时候大部分做前端开发的都是即做后端也做前端的人， 而ember.js的开发方式又显的过于超前了一点，所以做了一段预研后，公司并没有使用这一解决方案， 而是稍微规范了前端开发的编码风格。</p>
+<p>不过也是由于上面的原因，我开始重新审视过去所做的前端开发工作。</p>
+<ul>
+<li>代码臃肿</li>
+<li>缺乏可测试性</li>
+<li>协同开发能力弱</li>
+<li>可维护性极差</li>
+<li>由于jquery导致的大量事件绑定与回调</li>
+<li>业务逻辑与dom操作混杂….</li>
+</ul>
+<p>所以一句话就感觉就像是一陀狗屎一样。</p>
+<p>  如果是ember.js算是对前端mvc的一次初识，那么Backbone.js算是第一次的实践，这两个前端MVC框架中Backbone感觉更轻量级一点，而且由于和jquery的搭配使用所以更容易上手一点。两个框架都可以通过浏览器的hash实现路由功能，也可以使用html5的pushstate来实现，不过需要后端配合。 两个框架都使用前端模板引擎来绑定视图和数据，不过在这方面感觉ember.js的能力更加牛B一点，它是双向的数据绑定，Backbone则需要自己实现对model的监听来更新视图。例如如下的这种形式的代码片段一样，完整代码<a href="https://github.com/yunlzheng/backbone-sample/blob/master/static/js/views/todos.js" target="_blank" rel="noopener">在这</a></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">initialize: function() &#123;</span><br><span class="line">  <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'change'</span>, <span class="keyword">this</span>.render);</span><br><span class="line">  <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'destroy'</span>, <span class="keyword">this</span>.remove);        <span class="comment">// NEW</span></span><br><span class="line">  <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'visible'</span>, <span class="keyword">this</span>.toggleVisible); <span class="comment">// NEW</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在模板引擎方面两个框架分别使用了第三方的前端模板系统Handlebars和Underscor。其它的如model层两个框架都做了对浏览器本地存储和rest接口的适配。总的来说两个框架大部分东西都大同小异。</p>
+<p>这里我说说我觉得这两个前端MVC框架带来的一些好处， 代码层次更加清晰，协同开发性更好， 代码更加面向对象，当然可维护性也得到的很大的提高， 统一了每一个开发人员的编码风格等等， 但是却并没有解决所有的问题，如可测试性，依然不是很高， 部分代码中依然会混杂部分的dom操作。 不好的方面则在于在一些小的功能块显的有点大才小用了， 反而增加了一些复杂度， 所以说前端的MVC框架也并不是万能的解决方案， 更适合那些CRUD的系统实现同时后端应该是rest风格的接口设计。</p>
+<p>上面部分算是对之前学习Ember和Backbone的一些总结，在学习这两个框架的过程中，学到了许多新的是思想</p>
+<p>下面要说的主题，我们先来看一个例子:</p>
+<iframe width="100%" height="300" src="http://jsfiddle.net/yunlzheng/8N64v/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+<p>这个例子实现了一个简单的购物车。 查看实际运行效果我们大概可以得出一下几个结论：</p>
+<ul>
+<li>模块化命名空间，依赖关系组织</li>
+<li>自动的数据双向绑定， 这该较少多少代码量</li>
+<li>业务逻辑完全不包含dom操作，意味着可测试行</li>
+<li>非侵入的事件绑定</li>
+<li>UI区分与Controller的职责划分</li>
+<li>代码量更少了，因为只关注了业务逻辑</li>
+</ul>
+<p>这就是来自Google的前端JS框架Angular，当然今天写这边博客时，我也只算是对Angular有一个初步的认识， 但是当第一次看到它时，我就深深的被它这种简洁性吸引，同时它的核心特性如：MVC，模块化，依赖注入， 自动化双向数据绑定， 语义化标签等特性都显的那么个性鲜明。 用别人的一句话：编写web的应用的过程应该更像是创作，Angular就给了我这样的感觉。</p>
+<p>而且最重要的一种感觉就像是开篇文章所说的老师在上课时教我们的那样，在“制作网页”中html负责数据展示，CSS控制页面的样式， 而javascript则实现页面的逻辑。 当然现在的网页制作有了一个更专业的名字叫前端开发。 从最初的mvc概念到后面的Ember和Backbone，再到Angular给我的感觉就像是一种 从简单到复杂再到简单的一个过程</p>
+<p>这篇文章算是对我Angular深入学习的一份开篇</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/11/19/begin-hexo/" rel="next" title="迁移到Hexo">
+                <i class="fa fa-chevron-left"></i> 迁移到Hexo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/11/26/cool-vagrant/" rel="prev" title="Vargant一个属于程序员的虚拟机">
+                Vargant一个属于程序员的虚拟机 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2013/11/21/talk-about-mvc/';
+        this.page.identifier = '2013/11/21/talk-about-mvc/';
+        this.page.title = '谈谈关于前端的MVC';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

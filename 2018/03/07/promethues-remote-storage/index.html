@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Prometheus,高可用,InfluxDB," />
+
+
+<meta name="description" content="Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。 为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对">
+<meta name="keywords" content="Prometheus,高可用,InfluxDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus高可用(2)：理解远端存储">
+<meta property="og:url" content="http://yunlzheng.github.io/2018/03/07/promethues-remote-storage/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。 为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/remote-write-path-2.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/remote_read_path-2.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/remote-storage-paths.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/promethues-remote-storage.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prometheus高可用(2)：理解远端存储">
+<meta name="twitter:description" content="Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。 为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对">
+<meta name="twitter:image" content="http://p2n2em8ut.bkt.clouddn.com/remote-write-path-2.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2018/03/07/promethues-remote-storage/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Prometheus高可用(2)：理解远端存储 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2018/03/07/promethues-remote-storage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Prometheus高可用(2)：理解远端存储</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-07T13:49:31+08:00">2018-03-07</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Prometheus/" itemprop="url" rel="index"><span itemprop="name">Prometheus</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/07/promethues-remote-storage/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/03/07/promethues-remote-storage/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Prometheus的本地存储设计可以减少其自身运维和管理的复杂度，同时能够满足大部分用户监控规模的需求。但是本地存储也意味着Prometheus无法持久化数据，无法存储大量历史数据，同时也无法灵活扩展。</p>
+<p>为了保持Prometheus的简单性，Prometheus并没有尝试在自身中解决以上问题，而是通过定义两个标准接口(remote_write/remote_read)，让用户可以基于这两个接口对接任意第三方的存储服务，这种方式在Promthues中成为Remote Storage。</p>
+<a id="more"></a>
+<h2><span id="remote-write">Remote Write</span></h2><p>用户可以在Promtheus配置文件中指定Remote Write(远程写)的URL地址，一旦设置了该配置项，Prometheus将样本数据通过HTTP的形式发送给适配器(Adaptor)。而用户则可以在适配器中对接外部任意的服务。外部服务可以是真正的存储系统，公有云的存储服务，也可以是消息队列等任意形式。</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/remote-write-path-2.png" alt="Remote Write"></p>
+<h2><span id="remote-read">Remote Read</span></h2><p>如下图所示，Promthues的Remote Read(远程读)也通过了一个适配器实现。在远程读的流程当中，当用户发起查询请求后，Promthues将向remote_read中配置的URL发起查询请求(matchers,ranges)，Adaptor根据请求条件从第三方存储服务中获取响应的数据。同时将数据转换为Promthues的原始样本数据返回给Prometheus Server。</p>
+<p>当获取到样本数据后，Promthues在本地使用PromQL对样本数据进行二次处理。</p>
+<blockquote>
+<p>注意：即使使用了远程读，Prometheus中对于规则文件的处理，以及Metadata API的处理都只在本地完成。</p>
+</blockquote>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/remote_read_path-2.png" alt="Remote Read"></p>
+<h3><span id="配置文件">配置文件</span></h3><p>用户需要使用远程读写功能时，主要通过在Prometheus配置文件中添加remote_write和remote_read配置，其中url用于指定远程读/写的HTTP服务地址。如果该URL启动了认证则可以通过basic_auth进行安全认证配置。对于https的支持需要设定tls_concig。proxy_url主要用于Prometheus无法直接访问适配器服务的情况下。</p>
+<p>remote_write和remote_write具体配置如下所示：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">remote_write:</span><br><span class="line">    url: &lt;string&gt;</span><br><span class="line">    [ remote_timeout: &lt;duration&gt; |<span class="built_in"> default </span>= 30s ]</span><br><span class="line">    write_relabel_configs:</span><br><span class="line">    [ - &lt;relabel_config&gt; <span class="built_in">..</span>. ]</span><br><span class="line">    basic_auth:</span><br><span class="line">    [ username: &lt;string&gt; ]</span><br><span class="line">    [ password: &lt;string&gt; ]</span><br><span class="line">    [ bearer_token: &lt;string&gt; ]</span><br><span class="line">    [ bearer_token_file: /path/<span class="keyword">to</span>/bearer/token/file ]</span><br><span class="line">    tls_config:</span><br><span class="line">    [ &lt;tls_config&gt; ]</span><br><span class="line">    [ proxy_url: &lt;string&gt; ]</span><br><span class="line"></span><br><span class="line">remote_read:</span><br><span class="line">    url: &lt;string&gt;</span><br><span class="line">    required_matchers:</span><br><span class="line">    [ &lt;labelname&gt;: &lt;labelvalue&gt; <span class="built_in">..</span>. ]</span><br><span class="line">    [ remote_timeout: &lt;duration&gt; |<span class="built_in"> default </span>= 30s ]</span><br><span class="line">    [ read_recent: &lt;boolean&gt; |<span class="built_in"> default </span>= <span class="literal">false</span> ]</span><br><span class="line">    basic_auth:</span><br><span class="line">    [ username: &lt;string&gt; ]</span><br><span class="line">    [ password: &lt;string&gt; ]</span><br><span class="line">    [ bearer_token: &lt;string&gt; ]</span><br><span class="line">    [ bearer_token_file: /path/<span class="keyword">to</span>/bearer/token/file ]</span><br><span class="line">    [ &lt;tls_config&gt; ]</span><br><span class="line">    [ proxy_url: &lt;string&gt; ]</span><br></pre></td></tr></table></figure>
+<h2><span id="自定义remote-stoarge-adaptor">自定义Remote Stoarge Adaptor</span></h2><p>实现自定义Remote Storage需要用户分别创建用于支持remote_read和remote_write的HTTP服务。</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/remote-storage-paths.png" alt="Remote Storage"></p>
+<p>当前Prometheus中Remote Storage相关的协议主要通过以下proto文件进行定义：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">"proto3"</span>;</span><br><span class="line"><span class="keyword">package</span> prometheus;</span><br><span class="line"></span><br><span class="line"><span class="keyword">option</span> go_package = <span class="string">"prompb"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"types.proto"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">WriteRequest</span> </span>&#123;</span><br><span class="line">  <span class="keyword">repeated</span> prometheus.TimeSeries timeseries = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">ReadRequest</span> </span>&#123;</span><br><span class="line">  <span class="keyword">repeated</span> Query queries = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">ReadResponse</span> </span>&#123;</span><br><span class="line">  <span class="comment">// In same order as the request's queries.</span></span><br><span class="line">  <span class="keyword">repeated</span> QueryResult results = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Query</span> </span>&#123;</span><br><span class="line">  <span class="built_in">int64</span> start_timestamp_ms = <span class="number">1</span>;</span><br><span class="line">  <span class="built_in">int64</span> end_timestamp_ms = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">repeated</span> prometheus.LabelMatcher matchers = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">QueryResult</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Samples within a time series must be ordered by time.</span></span><br><span class="line">  <span class="keyword">repeated</span> prometheus.TimeSeries timeseries = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下代码展示了一个简单的remote_write服务，创建用于接收remote_write的HTTP服务，将请求内容转换成WriteRequest后，用户就可以按照自己的需求进行后续的逻辑处理。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/gogo/protobuf/proto"</span></span><br><span class="line">	<span class="string">"github.com/golang/snappy"</span></span><br><span class="line">	<span class="string">"github.com/prometheus/common/model"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/prometheus/prometheus/prompb"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">"/receive"</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">		compressed, err := ioutil.ReadAll(r.Body)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			http.Error(w, err.Error(), http.StatusInternalServerError)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		reqBuf, err := snappy.Decode(<span class="literal">nil</span>, compressed)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			http.Error(w, err.Error(), http.StatusBadRequest)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">var</span> req prompb.WriteRequest</span><br><span class="line">		<span class="keyword">if</span> err := proto.Unmarshal(reqBuf, &amp;req); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			http.Error(w, err.Error(), http.StatusBadRequest)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> _, ts := <span class="keyword">range</span> req.Timeseries &#123;</span><br><span class="line">			m := <span class="built_in">make</span>(model.Metric, <span class="built_in">len</span>(ts.Labels))</span><br><span class="line">			<span class="keyword">for</span> _, l := <span class="keyword">range</span> ts.Labels &#123;</span><br><span class="line">				m[model.LabelName(l.Name)] = model.LabelValue(l.Value)</span><br><span class="line">			&#125;</span><br><span class="line">			fmt.Println(m)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">for</span> _, s := <span class="keyword">range</span> ts.Samples &#123;</span><br><span class="line">				fmt.Printf(<span class="string">"  %f %d\n"</span>, s.Value, s.Timestamp)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	http.ListenAndServe(<span class="string">":1234"</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="使用influxdb作为remote-stoarge">使用Influxdb作为Remote Stoarge</span></h2><p>目前Prometheus社区也提供了部分对于第三方数据库的Remote Storage支持：</p>
+<table>
+<thead>
+<tr>
+<th>存储服务</th>
+<th>支持模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AppOptics</td>
+<td>write</td>
+</tr>
+<tr>
+<td>Chronix</td>
+<td>write</td>
+</tr>
+<tr>
+<td>Cortex:</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>CrateDB</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>Gnocchi</td>
+<td>write</td>
+</tr>
+<tr>
+<td>Graphite</td>
+<td>write</td>
+</tr>
+<tr>
+<td>InfluxDB</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>OpenTSDB</td>
+<td>write</td>
+</tr>
+<tr>
+<td>PostgreSQL/TimescaleDB:</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>SignalFx</td>
+<td>write</td>
+</tr>
+</tbody>
+</table>
+<p>这里我们演示将如何使用Influxdb作为Prometheus的Remote Storage，从而确保当Prometheus发生宕机或者重启之后能够从Influxdb中恢复和获取历史数据。</p>
+<p>这里使用docker-compose定义并启动Influxdb数据库服务，docker-compose.yml定义如下：</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">version: '2'</span><br><span class="line">services:</span><br><span class="line">  influxdb:</span><br><span class="line">    image: influxdb:1.3.5</span><br><span class="line">    command: -config /etc/influxdb/influxdb.conf</span><br><span class="line">    ports:</span><br><span class="line">      -<span class="ruby"> <span class="string">"8086:8086"</span></span></span><br><span class="line"><span class="ruby">    <span class="symbol">environment:</span></span></span><br><span class="line"><span class="ruby">      - INFLUXDB_DB=prometheus</span></span><br><span class="line"><span class="ruby">      - INFLUXDB_ADMIN_ENABLED=<span class="literal">true</span></span></span><br><span class="line"><span class="ruby">      - INFLUXDB_ADMIN_USER=admin</span></span><br><span class="line"><span class="ruby">      - INFLUXDB_ADMIN_PASSWORD=admin</span></span><br><span class="line"><span class="ruby">      - INFLUXDB_USER=prom</span></span><br><span class="line"><span class="ruby">      - INFLUXDB_USER_PASSWORD=prom</span></span><br></pre></td></tr></table></figure>
+<p>启动influxdb服务</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose <span class="meta">up</span> -d</span><br><span class="line">$ docker ps</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</span><br><span class="line">795d0ead87a1        influxdb:<span class="number">1.3</span><span class="meta">.5</span>      <span class="string">"/entrypoint.sh -c..."</span>   <span class="number">3</span> hours ago         <span class="meta">Up</span> <span class="number">3</span> hours          <span class="number">0.0</span><span class="meta">.0</span><span class="meta">.0</span>:<span class="number">8086</span>-&gt;<span class="number">8086</span>/tcp   localhost_influxdb_1</span><br></pre></td></tr></table></figure>
+<p>获取并启动Prometheus提供的Remote Storage Adapter：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com<span class="regexp">/prometheus/</span>prometheus<span class="regexp">/documentation/</span>examples<span class="regexp">/remote_storage/</span>remote_storage_adapter</span><br></pre></td></tr></table></figure>
+<p>获取remote_storage_adapter源码后，go会自动把相关的源码编译成可执行文件，并且保存在$GOPATH/bin/目录下。</p>
+<p>启动remote_storage_adapter并且设置Influxdb相关的认证信息：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">INFLUXDB_PW</span>=prom <span class="variable">$GOPATH</span>/bin/remote_storage_adapter <span class="attribute">-influxdb-url</span>=http://localhost:8086 -influxdb.<span class="attribute">username</span>=prom -influxdb.<span class="attribute">database</span>=prometheus -influxdb.<span class="attribute">retention-policy</span>=autogen</span><br></pre></td></tr></table></figure>
+<p>修改prometheus.yml添加Remote Storage相关的配置内容：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">remote_write</span>:</span><br><span class="line">  - <span class="attribute">url</span>: <span class="string">"http://localhost:9201/write"</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">remote_read</span>:</span><br><span class="line">  - <span class="attribute">url</span>: <span class="string">"http://localhost:9201/read"</span></span><br></pre></td></tr></table></figure>
+<p>重新启动Prometheus能够获取数据后，登录到influxdb容器，并验证数据写入。如下所示，当数据能够正常写入Influxdb后可以看到Promtheus相关的指标。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">exec</span> <span class="bullet">-it</span> <span class="number">795</span><span class="string">d0ead87a1</span> <span class="string">influx</span></span><br><span class="line"><span class="string">Connected</span> <span class="string">to</span> <span class="attr">http://localhost:8086</span> <span class="string">version</span> <span class="number">1.3</span><span class="number">.5</span></span><br><span class="line"><span class="string">InfluxDB</span> <span class="string">shell</span> <span class="attr">version:</span> <span class="number">1.3</span><span class="number">.5</span></span><br><span class="line"><span class="string">&gt; auth</span></span><br><span class="line"><span class="string"></span><span class="attr">username:</span> <span class="string">prom</span></span><br><span class="line"><span class="attr">password:</span></span><br><span class="line"></span><br><span class="line"><span class="string">&gt; use prometheus</span></span><br><span class="line"><span class="string">&gt; SHOW MEASUREMENTS</span></span><br><span class="line"><span class="string"></span><span class="attr">name:</span> <span class="string">measurements</span></span><br><span class="line"><span class="string">name</span></span><br><span class="line"><span class="bullet">-</span><span class="meta">---</span></span><br><span class="line"><span class="string">go_gc_duration_seconds</span></span><br><span class="line"><span class="string">go_gc_duration_seconds_count</span></span><br><span class="line"><span class="string">go_gc_duration_seconds_sum</span></span><br><span class="line"><span class="string">go_goroutines</span></span><br><span class="line"><span class="string">go_info</span></span><br><span class="line"><span class="string">go_memstats_alloc_bytes</span></span><br><span class="line"><span class="string">go_memstats_alloc_bytes_total</span></span><br><span class="line"><span class="string">go_memstats_buck_hash_sys_bytes</span></span><br><span class="line"><span class="string">go_memstats_frees_total</span></span><br><span class="line"><span class="string">go_memstats_gc_cpu_fraction</span></span><br><span class="line"><span class="string">go_memstats_gc_sys_bytes</span></span><br><span class="line"><span class="string">go_memstats_heap_alloc_bytes</span></span><br><span class="line"><span class="string">go_memstats_heap_idle_bytes</span></span><br></pre></td></tr></table></figure>
+<p>当数据写入成功后，停止Prometheus服务。同时删除Prometheus的data目录，模拟Promthues数据丢失的情况后重启Prometheus。打开Prometheus UI如果配置正常，Prometheus可以正常查询到本地存储以删除的历史数据记录。</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/promethues-remote-storage.png" alt="从Remote Storage获取历史数据"></p>
+<h2><span id="接下来">接下来</span></h2><p>通过Remote Storage特性可以将Promthues中的监控样本数据存储在第三方的存储服务中，从而解决了Promthues的数据持久化问题。同时由于解除了本地存储的限制，Promthues自身也可以进行弹性的扩展，在诸如Kubernetes这样的环境下可以进行动态的调度。</p>
+<p>在解决了数据持久化和弹性的问题之后，接下来笔者将介绍Promthues的另外一个特性联邦集群，使用联邦集群可以进行步实现Promthues的横向扩展以及功能分区。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Prometheus/" rel="tag"># Prometheus</a>
+          
+            <a href="/tags/高可用/" rel="tag"># 高可用</a>
+          
+            <a href="/tags/InfluxDB/" rel="tag"># InfluxDB</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/06/promethus-local-storage/" rel="next" title="Prometheus高可用(1)：理解本地存储">
+                <i class="fa fa-chevron-left"></i> Prometheus高可用(1)：理解本地存储
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/08/prometheus-fedreation/" rel="prev" title="Prometheus高可用(3)：联邦集群">
+                Prometheus高可用(3)：联邦集群 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Remote Write</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Remote Read</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">自定义Remote Stoarge Adaptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">使用Influxdb作为Remote Stoarge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">接下来</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2018/03/07/promethues-remote-storage/';
+        this.page.identifier = '2018/03/07/promethues-remote-storage/';
+        this.page.title = 'Prometheus高可用(2)：理解远端存储';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

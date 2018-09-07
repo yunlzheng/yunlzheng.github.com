@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="jenkins," />
+
+
+<meta name="description" content="Jenkins插件开发简要介绍">
+<meta name="keywords" content="jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jenkins插件开发">
+<meta property="og:url" content="http://yunlzheng.github.io/2012/07/02/jenkins-plugin/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="Jenkins插件开发简要介绍">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.oschina.net/uploads/space/2012/0703/130915_9ows_553747.jpg">
+<meta property="og:image" content="http://static.oschina.net/uploads/space/2012/0703/131122_ZUOx_553747.jpg">
+<meta property="og:image" content="http://static.oschina.net/uploads/space/2012/0703/131152_4jbA_553747.jpg">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jenkins插件开发">
+<meta name="twitter:description" content="Jenkins插件开发简要介绍">
+<meta name="twitter:image" content="http://static.oschina.net/uploads/space/2012/0703/130915_9ows_553747.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2012/07/02/jenkins-plugin/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>jenkins插件开发 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2012/07/02/jenkins-plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">jenkins插件开发</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2012-07-02T17:58:00+08:00">2012-07-02</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2012/07/02/jenkins-plugin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2012/07/02/jenkins-plugin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Jenkins插件开发简要介绍</p>
+<a id="more"></a>
+<h2><span id="环境变量">环境变量</span></h2><p>为了能开发插件，开发环境需安装Maven和JDK 6.0以上版本</p>
+<p>配置maven的settings.xml配置文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">settings</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">pluginGroups</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">pluginGroup</span>&gt;</span>org.jenkins-ci.tools<span class="tag">&lt;/<span class="name">pluginGroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">pluginGroups</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- Give access to Jenkins plugins --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>jenkins<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">activation</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span> <span class="comment">&lt;!-- change this to false, if you don't like to have it on per default --&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span>  </span><br><span class="line">      <span class="tag">&lt;<span class="name">pluginRepositories</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">pluginRepository</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">pluginRepository</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">pluginRepositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2><span id="创建新的插件">创建新的插件</span></h2><p>创建插件之前需运行以下Maven命令:</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">mvn </span>-cpu hpi:create</span><br></pre></td></tr></table></figure>
+<p>该操作需要你输入一些参数，比如说groupid,artifactid。之后会创建一个新的插件模板便于开发者之后的开发工作。确保你可以使用一下命令：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd <span class="keyword">new</span><span class="type">ly</span>-create-directory</span><br><span class="line">mvn <span class="keyword">package</span></span><br></pre></td></tr></table></figure>
+<h2><span id="设置eclipse开发环境">设置Eclipse开发环境</span></h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn <span class="attribute">-DdownloadSources</span>=<span class="literal">true</span> <span class="attribute">-DdownloadJavadocs</span>=<span class="literal">true</span> <span class="attribute">-DoutputDirectory</span>=target/eclipse-classes eclipse:eclipse</span><br></pre></td></tr></table></figure>
+<p>或者 使用m2eclipse插件在Eclipse打开即可</p>
+<h2><span id="插件目录结构">插件目录结构</span></h2><p>pom.xml：Maven的构建配置文件</p>
+<p>src/main/java：Java源文件目录</p>
+<p>src/main/resources：插件Jelly/Grovy视图</p>
+<p>src/main/webapps：插件的静态资源如images和html文件</p>
+<h2><span id="插件调试">插件调试</span></h2><p>插件开发中在使用一下命令对插件进行调试</p>
+<p>Windows</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">set</span> <span class="attribute">MAVEN_OPTS</span>=-Xdebug -Xrunjdwp:<span class="attribute">transport</span>=dt_socket,server=y,address=8000,suspend=n</span><br><span class="line">mvn hpi:run</span><br></pre></td></tr></table></figure>
+<p>Linux</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> MAVEN_OPTS=<span class="string">"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n"</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> mvn hpi:run</span></span><br></pre></td></tr></table></figure>
+<p>改变端口</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn hpi:<span class="builtin-name">run</span> -Djetty.<span class="attribute">port</span>=8090</span><br></pre></td></tr></table></figure>
+<p>设置comtext path</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn hpi:<span class="builtin-name">run</span> -Dhpi.<span class="attribute">prefix</span>=/jenkins</span><br></pre></td></tr></table></figure>
+<p>插件发布</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn <span class="class"><span class="keyword">package</span></span></span><br></pre></td></tr></table></figure>
+<h2><span id="源码分析">源码分析</span></h2><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hudson.Launcher;</span><br><span class="line"><span class="keyword">import</span> hudson.Extension;</span><br><span class="line"><span class="keyword">import</span> hudson.util.FormValidation;</span><br><span class="line"><span class="keyword">import</span> hudson.model.AbstractBuild;</span><br><span class="line"><span class="keyword">import</span> hudson.model.BuildListener;</span><br><span class="line"><span class="keyword">import</span> hudson.model.AbstractProject;</span><br><span class="line"><span class="keyword">import</span> hudson.tasks.Builder;</span><br><span class="line"><span class="keyword">import</span> hudson.tasks.BuildStepDescriptor;</span><br><span class="line"><span class="keyword">import</span> net.sf.json.JSONObject;</span><br><span class="line"><span class="keyword">import</span> org.kohsuke.stapler.DataBoundConstructor;</span><br><span class="line"><span class="keyword">import</span> org.kohsuke.stapler.StaplerRequest;</span><br><span class="line"><span class="keyword">import</span> org.kohsuke.stapler.QueryParameter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Sample &#123;<span class="doctag">@link</span> Builder&#125;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * When the user configures the project and enables this builder,</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@link</span> DescriptorImpl#newInstance(StaplerRequest)&#125; is invoked</span></span><br><span class="line"><span class="comment"> * and a new &#123;<span class="doctag">@link</span> HelloWorldBuilder&#125; is created. The created</span></span><br><span class="line"><span class="comment"> * instance is persisted to the project configuration XML by using</span></span><br><span class="line"><span class="comment"> * XStream, so this allows you to use instance fields (like &#123;<span class="doctag">@link</span> #name&#125;)</span></span><br><span class="line"><span class="comment"> * to remember the configuration.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * When a build is performed, the &#123;<span class="doctag">@link</span> #perform(AbstractBuild, Launcher, BuildListener)&#125;</span></span><br><span class="line"><span class="comment"> * method will be invoked.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldBuilder</span> <span class="keyword">extends</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Fields in config.jelly must match the parameter names in the "DataBoundConstructor"</span></span><br><span class="line">    <span class="meta">@DataBoundConstructor</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HelloWorldBuilder</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * We'll use this from the &lt;tt&gt;config.jelly&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">perform</span><span class="params">(AbstractBuild build, Launcher launcher, BuildListener listener)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// This is where you 'build' the project.</span></span><br><span class="line">        <span class="comment">// Since this is a dummy, we just say 'hello world' and call that a build.</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// This also shows how you can consult the global configuration of the builder</span></span><br><span class="line">        <span class="keyword">if</span> (getDescriptor().getUseFrench())</span><br><span class="line">            listener.getLogger().println(<span class="string">"Bonjour, "</span>+name+<span class="string">"!"</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            listener.getLogger().println(<span class="string">"Hello, "</span>+name+<span class="string">"!"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Overridden for better type safety.</span></span><br><span class="line">    <span class="comment">// If your plugin doesn't really define any property on Descriptor,</span></span><br><span class="line">    <span class="comment">// you don't have to do this.</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function">DescriptorImpl <span class="title">getDescriptor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (DescriptorImpl)<span class="keyword">super</span>.getDescriptor();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Descriptor for &#123;<span class="doctag">@link</span> HelloWorldBuilder&#125;. Used as a singleton.</span></span><br><span class="line"><span class="comment">     * The class is marked as public so that it can be accessed from views.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * See &lt;tt&gt;src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly&lt;/tt&gt;</span></span><br><span class="line"><span class="comment">     * for the actual HTML fragment for the configuration screen.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Extension</span> <span class="comment">// This indicates to Jenkins that this is an implementation of an extension point.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DescriptorImpl</span> <span class="keyword">extends</span> <span class="title">BuildStepDescriptor</span>&lt;<span class="title">Builder</span>&gt; </span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * To persist global configuration information,</span></span><br><span class="line"><span class="comment">         * simply store it in a field and call save().</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * &lt;p&gt;</span></span><br><span class="line"><span class="comment">         * If you don't want fields to be persisted, use &lt;tt&gt;transient&lt;/tt&gt;.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">boolean</span> useFrench;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Performs on-the-fly validation of the form field 'name'.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> value</span></span><br><span class="line"><span class="comment">         *      This parameter receives the value that the user has typed.</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">         *      Indicates the outcome of the validation. This is sent to the browser.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">public</span> FormValidation doCheckName(<span class="meta">@QueryParameter</span> String value)</span><br><span class="line">                <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">            <span class="keyword">if</span> (value.length() == <span class="number">0</span>)</span><br><span class="line">                <span class="function"><span class="keyword">return</span> FormValidation.<span class="title">error</span><span class="params">(<span class="string">"Please set a name"</span>)</span></span>;</span><br><span class="line">            <span class="keyword">if</span> (value.length() &lt; <span class="number">4</span>)</span><br><span class="line">                <span class="function"><span class="keyword">return</span> FormValidation.<span class="title">warning</span><span class="params">(<span class="string">"Isn't the name too short?"</span>)</span></span>;</span><br><span class="line">            <span class="function"><span class="keyword">return</span> FormValidation.<span class="title">ok</span><span class="params">()</span></span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">isApplicable</span><span class="params">(Class&lt;? <span class="keyword">extends</span> AbstractProject&gt; aClass)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// Indicates that this builder can be used with all kinds of project types</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This human readable name is used in the configuration screen.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">public</span> <span class="function">String <span class="title">getDisplayName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"Say hello world"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">configure</span><span class="params">(StaplerRequest req, JSONObject formData)</span> <span class="keyword">throws</span> FormException </span>&#123;</span><br><span class="line">            <span class="comment">// To persist global configuration information,</span></span><br><span class="line">            <span class="comment">// set that to properties and call save().</span></span><br><span class="line">            useFrench = formData.getBoolean(<span class="string">"useFrench"</span>);</span><br><span class="line">            <span class="comment">// ^Can also use req.bindJSON(this, formData);</span></span><br><span class="line">            <span class="comment">//  (easier when there are many fields; need set* methods for this, like setUseFrench)</span></span><br><span class="line">            save();</span><br><span class="line">            <span class="function"><span class="keyword">return</span> <span class="keyword">super</span>.<span class="title">configure</span><span class="params">(req,formData)</span></span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * This method returns true if the global configuration says we should speak French.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * The method name is bit awkward because global.jelly calls this method to determine</span></span><br><span class="line"><span class="comment">         * the initial state of the checkbox by the naming convention.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">getUseFrench</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> useFrench;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里主要使用了jenkins的Builder作为扩展点，通过内部类DescripotorImpl添加@Extension声明，告诉系统该内部类是作为BuildStepDescriptor的扩展出现</p>
+<p>这里基本完成了扩展点的后台代码部分，但是扩展过程中还需要对前端页面进行扩张，这时就需要建立一个pcakage放置该扩展类对应的视图</p>
+<p>视图有三种:1,全局配置(global.jelly)2,Job配置(config.jeely),还有就是使用帮助(help-字段名).html</p>
+<p>global.jeely（对于插件需要使用的全局配置）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">j:jelly</span> <span class="attr">xmlns:j</span>=<span class="string">"jelly:core"</span> <span class="attr">xmlns:st</span>=<span class="string">"jelly:stapler"</span> <span class="attr">xmlns:d</span>=<span class="string">"jelly:define"</span> <span class="attr">xmlns:l</span>=<span class="string">"/lib/layout"</span> <span class="attr">xmlns:t</span>=<span class="string">"/lib/hudson"</span> <span class="attr">xmlns:f</span>=<span class="string">"/lib/form"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    This Jelly script is used to produce the global configuration option.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    Jenkins uses a set of tag libraries to provide uniformity in forms.</span></span><br><span class="line"><span class="comment">    To determine where this tag is defined, first check the namespace URI,</span></span><br><span class="line"><span class="comment">    and then look under $JENKINS/views/. For example, &lt;f:section&gt; is defined</span></span><br><span class="line"><span class="comment">    in $JENKINS/views/lib/form/section.jelly.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    It's also often useful to just check other similar scripts to see what</span></span><br><span class="line"><span class="comment">    tags they use. Views are always organized according to its owner class,</span></span><br><span class="line"><span class="comment">    so it should be straightforward to find them.</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">f:section</span> <span class="attr">title</span>=<span class="string">"Hello World Builder"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">f:entry</span> <span class="attr">title</span>=<span class="string">"French"</span> <span class="attr">field</span>=<span class="string">"useFrench"</span></span></span><br><span class="line"><span class="tag">      <span class="attr">description</span>=<span class="string">"Check if we should say hello in French"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">f:checkbox</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">f:entry</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">f:section</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">j:jelly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将插件部署到Jenkins后实际效果如下图（系统管理-系统设置）<br><img src="http://static.oschina.net/uploads/space/2012/0703/130915_9ows_553747.jpg" alt=""></p>
+<p>config.jeely（正对每个Job而言需要的配置信息）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">j:jelly</span> <span class="attr">xmlns:j</span>=<span class="string">"jelly:core"</span> <span class="attr">xmlns:st</span>=<span class="string">"jelly:stapler"</span> <span class="attr">xmlns:d</span>=<span class="string">"jelly:define"</span> <span class="attr">xmlns:l</span>=<span class="string">"/lib/layout"</span> <span class="attr">xmlns:t</span>=<span class="string">"/lib/hudson"</span> <span class="attr">xmlns:f</span>=<span class="string">"/lib/form"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    This jelly script is used for per-project configuration.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    See global.jelly for a general discussion about jelly script.</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">    Creates a text field that shows the value of the "name" property.</span></span><br><span class="line"><span class="comment">    When submitted, it will be passed to the corresponding constructor parameter.</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">f:entry</span> <span class="attr">title</span>=<span class="string">"Name"</span> <span class="attr">field</span>=<span class="string">"name"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">f:textbox</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">f:entry</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">j:jelly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>部署到jenkins后的实际效果<br><img src="http://static.oschina.net/uploads/space/2012/0703/131122_ZUOx_553747.jpg" alt=""></p>
+<p><img src="http://static.oschina.net/uploads/space/2012/0703/131152_4jbA_553747.jpg" alt=""></p>
+<p>这里细心的人可能已经看出来了，config.jelly中定义的字段实际就是扩展类中构造函数的参数，对于HelloWorldBuilder类而言自成了Builder父类，通过使用@DataBoundConstructor申明，当用户在界面填写配置信息点击保存后将自动初始化该类，同时会在对应的job的配置文件中保存相关信息本机是在.jenkins\jobs\TestJob目录下的config.xml文件中点击查看文件，在publishers节点下即可看见与该插件有关的信息</p>
+<figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;prebuilders&gt;</span><br><span class="line">    &lt;org.wocloud.jenkins.manager.HelloWorldBuilder&gt;</span><br><span class="line">      &lt;name&gt;Hello!!!!!!!!!!&lt;/name&gt;</span><br><span class="line">    &lt;/org.wocloud.jenkins.manager.HelloWorldBuilder&gt;</span><br><span class="line">  &lt;/prebuilders&gt;</span><br></pre></td></tr></table></figure>
+<p>每一次修改配置并保存时都将修改该配置文件。<br>在Job进行构建时，将会激活HelloWorldBuilder类的perform方法，而该方法中就是你插件真正开始完成工作的地方</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">public</span> <span class="keyword">boolean </span>perform(AbstractBuild <span class="keyword">build, </span>Launcher launcher, <span class="keyword">BuildListener </span>listener)</span><br></pre></td></tr></table></figure>
+<p>listener是此次构建工作的监听器</p>
+<p>通过该listener可以输出内容信息到前端jenkins页面</p>
+<p>使用build可以判断当前构建工作的结果</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jenkins/" rel="tag"># jenkins</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2012/07/02/begin-jenkins/" rel="next" title="Jenkins安装与配置">
+                <i class="fa fa-chevron-left"></i> Jenkins安装与配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2012/08/09/rabbitmq-2/" rel="prev" title="RabbitMQ之消息发布订阅与信息持久化技术">
+                RabbitMQ之消息发布订阅与信息持久化技术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">创建新的插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">设置Eclipse开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">插件目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">插件调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">源码分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2012/07/02/jenkins-plugin/';
+        this.page.identifier = '2012/07/02/jenkins-plugin/';
+        this.page.title = 'jenkins插件开发';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

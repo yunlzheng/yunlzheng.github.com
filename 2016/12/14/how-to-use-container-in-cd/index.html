@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="DevOps," />
+
+
+<meta name="description" content="如题，这篇文章里面笔者会和大家一起讨论一下，如果将容器应用于持续集成环境。">
+<meta name="keywords" content="DevOps">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在持续交付中使用容器">
+<meta property="og:url" content="http://yunlzheng.github.io/2016/12/14/how-to-use-container-in-cd/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="如题，这篇文章里面笔者会和大家一起讨论一下，如果将容器应用于持续集成环境。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/image-base-cd-3.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/harbor_in_pratices2.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在持续交付中使用容器">
+<meta name="twitter:description" content="如题，这篇文章里面笔者会和大家一起讨论一下，如果将容器应用于持续集成环境。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2016/12/14/how-to-use-container-in-cd/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>在持续交付中使用容器 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2016/12/14/how-to-use-container-in-cd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">在持续交付中使用容器</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-14T11:31:44+08:00">2016-12-14</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/14/how-to-use-container-in-cd/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/12/14/how-to-use-container-in-cd/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>如题，这篇文章里面笔者会和大家一起讨论一下，如果将容器应用于持续集成环境。</p>
+<a id="more"></a>
+<h2><span id="概述">概述</span></h2><p>在过去的一段时间里容器已经大量的使用到了IT软件生产的各个环节当中：从软件开发，持续集成，持续部署，测试环境到生产环境。</p>
+<p>除了Docker官方的Docker Swarm, Docker Machine以及Docker Compose以外，开源软件社区还涌现了一系列的与容器相关的工具，涵盖了从容器编排，调度，监控，日志等等各个方面的需求。</p>
+<p>本文将从针对软件研发流程，基于容器解决软件的持续交付问题，以及团队协作问题</p>
+<h2><span id="在持续集成中使用容器">在持续集成中使用容器</span></h2><h3><span id="构建环境统一管理">构建环境统一管理</span></h3><p>在传统模式下使用持续集成工具诸如Jenkins，在部署企业持续持续集成平台的第一个问题就是多样化的构建构建环境需求，而通常的做法是将构建Agent（服务器或者虚拟机）分配给团队由团队自己管理构建服务器的环境配置信息，安装相应的构建依赖等</p>
+<ul>
+<li>在持续集成中使用docker</li>
+</ul>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm -v `pwd`:<span class="regexp">/workspace -v /</span>tmp<span class="regexp">/.m2/</span><span class="string">repository:</span><span class="regexp">/root/</span>.m2<span class="regexp">/repository --workdir /</span>workspace  <span class="string">maven:</span><span class="number">3</span>-jdk<span class="number">-8</span> <span class="regexp">/bin/</span>sh -c <span class="string">'mvn clean package'</span></span><br></pre></td></tr></table></figure>
+<p>如上所示，我们可以非常方便的通过容器来完成软件包的构建，其中有几个点需要注意的是：</p>
+<ul>
+<li>[x] –rm 命令可以确保当命令执行完成后能够自动清理构建时产生的容器，我想你应该不太希望需要不定期清理构建服务器磁盘的问题吧</li>
+<li>[x] -v 除了将当前源码挂载到容器当中以外，我们还可以通过挂载磁盘来缓存一些构建所需的依赖，比如maven下载的jar包，从而提高编译效率</li>
+<li>[x] –workerdir 用以指定构建命令执行的工作路径，当然需要和workspace保持一致</li>
+</ul>
+<p>如上，基于容器我们可以快速搭建适应多种构建需求的CI构建环境，所有需要的一起就是你的构建服务器上需要的只有Docker</p>
+<ul>
+<li>在持续集成中使用docker-compose</li>
+</ul>
+<p>在某些情况下，在构建或者集成测试阶段我们可能需要使用到一些真正的第三方依赖，比如数据库或者缓存服务器。在传统的持续集成实践中，通常要么你直接使用已经部署的数据库（记得清理测试数据，并发如何保证），直接使用内存数据库来代替真实数据库，要不使用mock或者stub来进行测试。</p>
+<p>当然在理想情况下我们还是希望能够使用与真实环境一直的真正的数据库或者其他中间件服务。基于docker-compose我们可以非常方便的实现对于复杂构建环境的需求</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">build</span>:</span><br><span class="line">  <span class="attribute">command</span>: sh -c <span class="string">'mvn --help'</span></span><br><span class="line">  <span class="attribute">image</span>: <span class="attribute">maven</span>:<span class="number">3</span>-jdk8</span><br><span class="line">  <span class="attribute">links</span>: [mysql]</span><br><span class="line">  <span class="attribute">volumes</span>:</span><br><span class="line">    - <span class="string">'.:/code'</span></span><br><span class="line">    - <span class="string">'/tmp/.m2/repository:/root/.m2/repository'</span></span><br><span class="line">  <span class="attribute">working_dir</span>: /code</span><br><span class="line"><span class="attribute">mysql</span>:</span><br><span class="line">  <span class="attribute">environment</span>: &#123;<span class="attribute">MYSQL_DATABASE</span>: test, <span class="attribute">MYSQL_PASSWORD</span>: test, <span class="attribute">MYSQL_ROOT_PASSWORD</span>: test, <span class="attribute">MYSQL_USER</span>: test&#125;</span><br><span class="line">  <span class="attribute">image</span>: <span class="attribute">mysql</span>:<span class="number">5.5</span></span><br></pre></td></tr></table></figure>
+<p>同样我们以maven为例，假设我们需要在构建中使用到mysql以支持集成测试的需求</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose <span class="keyword">run</span> --<span class="keyword">rm</span> build <span class="keyword">sh</span> -c 'mvn clean package' &amp;&amp; docker-compose stop &amp;&amp; docker-compose <span class="keyword">rm</span> -<span class="built_in">f</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>[x] –rm 确保在构建命令执行完成后自动清理build所产生的容器</li>
+<li>[x] - docker-compose stop &amp;&amp; docker-compose rm -f 确保依赖的其它服务如mysql能够正常的退出并且清理所产生的容器</li>
+</ul>
+<h2><span id="持续交付是文化自动化是基石垮职能团队协作是根本">持续交付是文化，自动化是基石，垮职能团队协作是根本</span></h2><p>建立基于共同目标的具有跨职能协同的研发团队，是DevOps运动的根本。而自动化则是提高效率的基石。基于以上我们是如何基于容器建立我们的持续交付解决方案？</p>
+<h3><span id="基础设施自动化">基础设施自动化</span></h3><p>使用Rancher理由很简单，Rancher是目前市面上唯一一个能满足开箱即用的容器管理平台，同时能够支持多种编排引擎，如Rancher自己的Cattle，Google的K8S,以及Docker官方的Swarm作为容器编排引擎。同时Rancher提供的Catalog应用商店能够帮助研发团队自主创建所需要的服务实例</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png"></p>
+<h3><span id="创建持续交付流水线">创建持续交付流水线</span></h3><p>建立持续交付流水线的核心问题是如何定义企业的软件交付<strong>价值流动</strong>。</p>
+<p>如下图所示，我们总结了从开发，持续集成，持续交付各个阶段所使用的一些典型工具的使用，以及在各个阶段中的相关团队的相关活动，典型的DevOps相关的活动</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png"></p>
+<h3><span id="在持续交付流水线下的团队协作">在持续交付流水线下的团队协作</span></h3><p>正如上文所说，创建持续交付流水线的本质就是定义软件的交付的价值流动，反应正式的软件交付流程。价值的流动则涉及到团队中各个职能的成员的高度协同</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/image-base-cd-3.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/image-base-cd-3.png"></p>
+<p>基于容器的持续交付实践当中以镜像作为在不同职能人员之间的价值传递物</p>
+<ul>
+<li>开发人员：频繁提交持续集成，通过持续的编译，打包，测试，镜像构建，自动化验收测试等环节产生可测试的候选镜像列表(如：0.1-dev)</li>
+<li>测试人员：从候选测试镜像列表中，选择需要测试的目标镜像，标记为测试版本(将0.1-dev标记为0.1-test)，并且将待测试镜像自动部署到验收测试环境，完成手动探索性测试，对于已测试完成的镜像标记为预发布版本(0.1-test 标记为 0.1-beta)</li>
+<li>运维人员：从预发布镜像列表中选择镜像部署到预发布环境，并且在验证通过后标记为release版本（如将0.1-beta 标记为 0.1-release）,并且发布到生产环境</li>
+</ul>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/harbor_in_pratices2.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/harbor_in_pratices2.png"></p>
+<p>在基于容器的持续交付实现方案当中，我们以镜像为价值传递的单元，通过镜像的持续测试以及验证，完成镜像从开发，测试到可发布的状态转变，完成软件的交付流程</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DevOps/" rel="tag"># DevOps</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/29/are-you-ready-for-cd/" rel="next" title="关于持续交付你准备好了吗？">
+                <i class="fa fa-chevron-left"></i> 关于持续交付你准备好了吗？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/14/the-things-about-api-gateway/" rel="prev" title="API网关那些儿">
+                API网关那些儿 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">在持续集成中使用容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">构建环境统一管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">持续交付是文化，自动化是基石，垮职能团队协作是根本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">基础设施自动化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">创建持续交付流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">在持续交付流水线下的团队协作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2016/12/14/how-to-use-container-in-cd/';
+        this.page.identifier = '2016/12/14/how-to-use-container-in-cd/';
+        this.page.title = '在持续交付中使用容器';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

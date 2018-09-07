@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="code," />
+
+
+<meta name="description" content="Tornado Chat项目地址：https://github.com/yunlzheng/chat 开发时间：1周 开发目的话说程序猿总是喜欢抛各种各样的坑，然后再往里面跳。 简介基于Tornado 和 html5 websocket技术的匿名在线聊天工具">
+<meta name="keywords" content="code">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记最近刨的那些坑之Tornado Chat">
+<meta property="og:url" content="http://yunlzheng.github.io/2013/10/19/code-chat/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="Tornado Chat项目地址：https://github.com/yunlzheng/chat 开发时间：1周 开发目的话说程序猿总是喜欢抛各种各样的坑，然后再往里面跳。 简介基于Tornado 和 html5 websocket技术的匿名在线聊天工具">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.github.com/yunlzheng/chat/master/static/images/login.png">
+<meta property="og:image" content="https://raw.github.com/yunlzheng/chat/master/static/images/chat.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记最近刨的那些坑之Tornado Chat">
+<meta name="twitter:description" content="Tornado Chat项目地址：https://github.com/yunlzheng/chat 开发时间：1周 开发目的话说程序猿总是喜欢抛各种各样的坑，然后再往里面跳。 简介基于Tornado 和 html5 websocket技术的匿名在线聊天工具">
+<meta name="twitter:image" content="https://raw.github.com/yunlzheng/chat/master/static/images/login.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2013/10/19/code-chat/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>记最近刨的那些坑之Tornado Chat | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2013/10/19/code-chat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">记最近刨的那些坑之Tornado Chat</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-10-19T17:00:40+08:00">2013-10-19</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2013/10/19/code-chat/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2013/10/19/code-chat/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1><span id="tornado-chat">Tornado Chat</span></h1><p>项目地址：<a href="https://github.com/yunlzheng/chat" target="_blank" rel="noopener">https://github.com/yunlzheng/chat</a></p>
+<p>开发时间：1周</p>
+<h1><span id="开发目的">开发目的</span></h1><p>话说程序猿总是喜欢抛各种各样的坑，然后再往里面跳。</p>
+<h1><span id="简介">简介</span></h1><p>基于Tornado 和 html5 websocket技术的匿名在线聊天工具</p>
+<a id="more"></a>
+<h1><span id="杂记">杂记</span></h1><h2><span id="前端杂记">前端杂记</span></h2><ul>
+<li>头像服务</li>
+</ul>
+<p>由于是提供的匿名聊天服务，所以系统并不会主动保存用户的信息，实际上这个项目上根本就没用到数据持久化的东西，所以头像的问题如何解决是一个简单但是不可忽视的问题，第一个想到的就是使用<a href="http://en.gravatar.com/" target="_blank" rel="noopener">gavatar全球头像服务</a>，python里面要对支持gavatar服务很简单</p>
+<pre><code># import code for encoding urls and generating md5 hashes
+import urllib, hashlib
+
+# Set your variables here
+email = &quot;someone@somewhere.com&quot;
+default = &quot;http://www.example.com/default.jpg&quot;
+size = 40
+
+# construct the url
+gravatar_url = &quot;http://www.gravatar.com/avatar/&quot; +hashlib.md5(email.lower()).hexdigest() + &quot;?&quot;
+gravatar_url += urllib.urlencode({&apos;d&apos;:default, &apos;s&apos;:str(size)})
+</code></pre><p>这是这里只有两个东西，一个是当前用户的邮箱地址，一个是默认头像。 获取用户邮箱很简单，增加一个登陆流程，虽然是匿名聊天室，但是最起码你应该输入你的昵称吧，输入昵称的时候再顺便多输入一下你的邮箱地址也是很合情合理的吧。</p>
+<p>头像问题就解决了没？ 还没呢，这是你就会发现，如果当前登录的用户没有使用gavatar头像服务的话，所有人的头像都是一样的。。。。 这个就很尴尬了， 到时候说话时连谁和谁都不知道了。</p>
+<p>不知道有木有同学注意到过github的头像，它本身也是使用gavatar头像服务，所以就去捣鼓了一下github发现了一个很有意思的服务<a href="https://github.com/blog/1586-identicons" target="_blank" rel="noopener">identicons</a>，如果想知道它是干嘛的？<a href="https://identicons.github.com/jasonlong.png" target="_blank" rel="noopener">点我</a>，所以把上面的代码简单改进一下，修改一下default的值，就实现了我们的目的</p>
+<p>这就是所谓的不重复造轮子？ 完全是偷懒！</p>
+<ul>
+<li>消息通知</li>
+</ul>
+<p>chat里面消息通知主要从3个方面完成：未读消息数，chrome桌面通知，以及消息提示音；</p>
+<ul>
+<li><p>聊天表情Emoji</p>
+<p>Emoji是前端时间用tower.im时才知道有的那么一个东西，关于Emoji的发展背景也挺好玩的有兴趣的同学可以去Google一把，毕竟是聊天程序所以表情还是应该要有的在chat里面主要使用了前端的javascript库<a href="https://github.com/hassankhan/emojify.js" target="_blank" rel="noopener">emojify.js</a>。简单来说这个库的作用就是匹配当前页面里面有的emoji表情符号，并替换成实现定义好的emoji表情样式图片，用法很简单，导入项目所需的css和js文件。在页面载入时，做一次全局配置</p>
+</li>
+</ul>
+<pre><code>emojify.setConfig({
+    emojify_tag_type: &apos;img&apos;,
+    emoticons_enabled: true,
+    people_enabled: true,
+    nature_enabled: true,
+    objects_enabled: true,
+    places_enabled: true,
+    symbols_enabled: true
+});
+</code></pre><p> 然后当你觉得应该更新一下页面的时候，调用</p>
+<pre><code>emojify.run();
+</code></pre><p>就能将页面中的emoji表情符号替换成响应的图片或者是字符图</p>
+<ul>
+<li>背景图片</li>
+</ul>
+<p>作为一个只会写点css和javascript而又不懂设计的程序猿，在自己刨坑的时候能窃的就窃点，毕竟都是往坑里面填点东西而已，用过微信网页版的的小伙伴一看就知道，这前端，这样式不就是跟微信一样的呀？ 当然不一样，只能算是模仿，而且还是模仿的很拙劣的那一类，完全没有微信网页版UI的那种流畅感觉。tumblr是最近才开始使用的，之前都是在<a href="http://my.oschina.net/fhck/blog" target="_blank" rel="noopener">oschina</a>上写点东西，不过以前写东西和现在写东西的最大的不同就在于，以前老是把博客当做是个笔记之类的，所以老写些纯技术的东西，后面用了印象笔记，好的资料卡卡卡卡的就往印象笔记里面放，所以后面博客就写的少了。刚说了tumblr是最近才开始用的，优点就不说了，跟国内的博客服务相比一个感觉是文艺范的（毕竟是轻博客嘛，想到国内的点点就不免感叹几句）。</p>
+<p>言归正传，tubmlr的登录注册页面每次刷新都是些很漂亮的背景，所以我也一不做二不休，既然无耻了就再无耻一次吧。</p>
+<p>python里面做HTML解析的库倒是很多，这里就不做一一列举，主要怕列举出来就有点装公知的感觉，实际上按最大范围值来计算本人做python到现在也就3个月的时间，连基础都还没学一遍就匆匆开始跟着<a href="http://weibo.com/xuwenbao" target="_blank" rel="noopener">@<strong>左弈</strong></a>做项目了。</p>
+<p>这里主要使用BeautifulSoup来实现的对tumblr登录页面的解析，并获得那张精选的随机大图</p>
+<pre><code>import re
+import tornado.gen
+from tornado.httpclient import AsyncHTTPClient
+from BeautifulSoup import BeautifulSoup
+from chat.handler import BaseHandler
+
+
+class TumblrHandler(BaseHandler):
+
+    @tornado.gen.coroutine
+    def get(self):
+        http_client = AsyncHTTPClient()
+        http_response = yield http_client.fetch(&quot;https://www.tumblr.com/&quot;)
+        content = http_response.body
+        soup = BeautifulSoup(content)
+        img = soup.findAll(&apos;img&apos;)[0]
+        pattern=re.compile(r&quot;&quot;&quot;&lt;img\s.*?\s?src\s*=\s*[&apos;|&quot;]?([^\s&apos;&quot;]+).*?&gt;&quot;&quot;&quot;,re.I)
+        m = pattern.findall(str(img))
+        self.write(m[0])
+</code></pre><p>由于项目使用tornado做的，所以在chat里面就实现了一个RequestHandler异步的去获取tumblr的背景图片，并无耻的被chat使用了（呵呵）</p>
+<h2><span id="后端杂记">后端杂记</span></h2><p>———————————-无耻的待更新————————————-</p>
+<h1><span id="画廊">画廊</span></h1><p><img src="https://raw.github.com/yunlzheng/chat/master/static/images/login.png" alt=""></p>
+<p><img src="https://raw.github.com/yunlzheng/chat/master/static/images/chat.png" alt=""></p>
+<h1><span id="小结">小结</span></h1><p>这算是我开始我python开发道路的第二个作业吧。 第一个作业同样是基于tornado开发的web程序在线图书分享<a href="http://pdflabs.herokuapp.com/" target="_blank" rel="noopener">pdflabs</a>以后有时间再总结</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/code/" rel="tag"># code</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/10/19/chengdu-rock/" rel="next" title="摇滚吧">
+                <i class="fa fa-chevron-left"></i> 摇滚吧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/11/19/begin-hexo/" rel="prev" title="迁移到Hexo">
+                迁移到Hexo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Tornado Chat</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">开发目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">杂记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">前端杂记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">后端杂记</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">画廊</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2013/10/19/code-chat/';
+        this.page.identifier = '2013/10/19/code-chat/';
+        this.page.title = '记最近刨的那些坑之Tornado Chat';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

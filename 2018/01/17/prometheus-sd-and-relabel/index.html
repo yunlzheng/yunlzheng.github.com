@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="prometheus," />
+
+
+<meta name="description" content="在云平台中如果自动发现监控目标？本文将结合Consul向读者介绍Prometheus下的服务发现机制以及relabel机制。">
+<meta name="keywords" content="prometheus">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus中的服务发现和relabel">
+<meta property="og:url" content="http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="在云平台中如果自动发现监控目标？本文将结合Consul向读者介绍Prometheus下的服务发现机制以及relabel机制。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/blog_service_discovery_and_relabel.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/prom_pull_vs_push.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/prometheus_sd.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/blog_service_discovery_and_relabel_consul.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/blog_sd_relabel_consol_target.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/bolg_sd_mutil_cluster.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/blog_sd_target_metedata.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/blog_sd_relabel_replace.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/consul_service_tags.png">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/sd_relabel_keep.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Prometheus中的服务发现和relabel">
+<meta name="twitter:description" content="在云平台中如果自动发现监控目标？本文将结合Consul向读者介绍Prometheus下的服务发现机制以及relabel机制。">
+<meta name="twitter:image" content="http://p2n2em8ut.bkt.clouddn.com/blog_service_discovery_and_relabel.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Prometheus中的服务发现和relabel | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Prometheus中的服务发现和relabel</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-17T15:15:49+08:00">2018-01-17</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Prometheus/" itemprop="url" rel="index"><span itemprop="name">Prometheus</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/17/prometheus-sd-and-relabel/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/17/prometheus-sd-and-relabel/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在云平台中如果自动发现监控目标？本文将结合Consul向读者介绍Prometheus下的服务发现机制以及relabel机制。</p>
+<a id="more"></a>
+<h2><span id="prometheus中的job和instance">Prometheus中的Job和Instance</span></h2><p>Prometheus主要由一下几个部分组成：</p>
+<ul>
+<li>Prometheus Server: 负责采集监控数据，并且对外提供PromQL实现监控数据的查询以及聚合分析；</li>
+<li>Exporters: 用于向Prometheus Server暴露数据采集的endpoint,Prometheus轮训这些Exporter采集并且保存数据；</li>
+<li>AlertManager以及其它组件(…和本文无关就不说这些)</li>
+</ul>
+<p>在Prometheus Server的配置文件中我们使用scrape_configs来定义</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">scrape_configs:</span></span><br><span class="line"><span class="attr">- job_name:</span> <span class="string">prometheus</span></span><br><span class="line"><span class="attr">  metrics_path:</span> <span class="string">/metrics</span></span><br><span class="line"><span class="attr">  scheme:</span> <span class="string">http</span></span><br><span class="line"><span class="attr">  static_configs:</span></span><br><span class="line"><span class="attr">  - targets:</span></span><br><span class="line"><span class="attr">    - localhost:</span><span class="number">9090</span></span><br></pre></td></tr></table></figure>
+<p>其中每一个scrape_config对象对应一个数据采集的Job，每一个Job可以对应多个Instance,即配置文件中的targets. 通过Prometheus UI可以更直观的看到其中的关系。</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/blog_service_discovery_and_relabel.png" alt=""></p>
+<h2><span id="pull-vs-push">Pull vs Push</span></h2><p>对于zabbix以及nagios这类Push系统而言，通常由采集的agent来决定和哪一个监控服务进行通讯。而对于Prometheus这类基于Pull的监控平台而言，则由server侧决定采集的目标有哪些。</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/prom_pull_vs_push.png" alt=""></p>
+<p>相比于Push System而言, Pull System:</p>
+<ul>
+<li>只要Exporter在运行，你可以在任何地方(比如在本地)，搭建你的监控系统</li>
+<li>你可以更容器的去定位Instance实例的健康状态以及故障定位</li>
+</ul>
+<p>当然对于我个人的角度来看，Pull System更利于DevOps的实施。每一个团队可以搭建自己的监控系统，并关注自己关心的监控指标，并构建自己的DevOps Dashboard。</p>
+<p>在小规模监控或者本地测试中<strong>static_configs</strong>是我们最常用的用于配置监控目标服务，但是在IaaS平台(如Openstack)或者CaaS平台(如Kubernetes)中：基础设施，容器，应用程序的创建和销毁会更加频繁。<br>那对于Prometheus这样的Pull System而言，如何动态的发现这些监控目标？ Service Discovery</p>
+<h2><span id="服务发现-service-discovery">服务发现 Service Discovery</span></h2><p><img src="http://p2n2em8ut.bkt.clouddn.com/prometheus_sd.png" alt=""></p>
+<p>Prometheus支持多种服务发现机制：文件，DNS，Consul,Kubernetes,OpenStack,EC2等等。基于服务发现的过程并不复杂，通过第三方提供的接口，Prometheus查询到需要监控的Target列表，然后轮训这些Target获取监控数据。</p>
+<p>这里为了验证Prometheus的服务发现能力，我们使用Docker Compose在本地搭建我们的测试环境。我们使用gliderlabs/registrator监听Docker进程，对于暴露了端口的容器，registrator会自动将该容器暴露的服务地址注册到Consul中。</p>
+<p>这里使用Node Exporter采集当前主机数据，使用cAdvisor采集容器相关数据。</p>
+<p>完整的Docker Compose文件如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">version</span>: '2'</span><br><span class="line"></span><br><span class="line"><span class="attribute">services:</span></span><br><span class="line">  consul:</span><br><span class="line">    <span class="attribute">image</span>: consul</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 8400:8400</span><br><span class="line">      - 8500:8500</span><br><span class="line">      - 8600:53/udp</span><br><span class="line">    <span class="attribute">command</span>: agent -server -client=0.0.0.0 -dev -node=node0 -bootstrap-expect=1 -data-dir=/tmp/consul</span><br><span class="line">    <span class="attribute">labels:</span></span><br><span class="line">      SERVICE_IGNORE: 'true'</span><br><span class="line">  <span class="attribute">registrator:</span></span><br><span class="line">    image: gliderlabs/registrator</span><br><span class="line">    <span class="attribute">depends_on:</span></span><br><span class="line">      - consul</span><br><span class="line">    <span class="attribute">volumes:</span></span><br><span class="line">      - /var/run:/tmp:rw</span><br><span class="line">    <span class="attribute">command</span>: consul://consul:8500</span><br><span class="line">  <span class="attribute">prometheus:</span></span><br><span class="line">    image: quay.io/prometheus/prometheus</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 9090:9090</span><br><span class="line">  <span class="attribute">node_exporter:</span></span><br><span class="line">    image: quay.io/prometheus/node-exporter</span><br><span class="line">    <span class="attribute">pid</span>: "host"</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 9100:9100</span><br><span class="line">  <span class="attribute">cadvisor:</span></span><br><span class="line">    image: google/cadvisor:latest</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 8080:8080</span><br><span class="line">    <span class="attribute">volumes:</span></span><br><span class="line">      - /:/rootfs:ro </span><br><span class="line">      - /var/run:/var/run:rw</span><br><span class="line">      - /var/lib/docker/:/var/lib/docker:ro</span><br></pre></td></tr></table></figure>
+<p>使用docker compose启动该应用堆栈，在consul ui中,我们可以看到如下结果：</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/blog_service_discovery_and_relabel_consul.png" alt=""></p>
+<p>创建Prometheus配置文件</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">global</span>:</span><br><span class="line">  <span class="attribute">scrape_interval</span>: <span class="number">5s</span></span><br><span class="line">  <span class="attribute">scrape_timeout</span>: <span class="number">5s</span></span><br><span class="line">  <span class="attribute">evaluation_interval</span>: <span class="number">15s</span></span><br><span class="line"><span class="attribute">scrape_configs</span>:</span><br><span class="line">  - <span class="attribute">job_name</span>: consul_sd</span><br><span class="line">    <span class="attribute">metrics_path</span>: /metrics</span><br><span class="line">    <span class="attribute">scheme</span>: http</span><br><span class="line">    <span class="attribute">consul_sd_configs</span>:</span><br><span class="line">      - <span class="attribute">server</span>: <span class="attribute">consul</span>:<span class="number">8500</span></span><br><span class="line">        <span class="attribute">scheme</span>: http</span><br><span class="line">        <span class="attribute">services</span>:</span><br><span class="line">          - node_exporter</span><br><span class="line">          - cadvisor</span><br></pre></td></tr></table></figure>
+<p>其中我们创建了一个Job名为consul_sd,并通过consul_sd_configs定义我们需要从consul获取的服务实例，其中：</p>
+<ul>
+<li>server: 指定了consul的访问地址</li>
+<li>services: 为注册到consul中的实例信息</li>
+</ul>
+<p>挂载配置文件到Prometheus Server,并且重新启动docker compose.</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">services:</span></span><br><span class="line"><span class="symbol">  prometheus:</span></span><br><span class="line"><span class="symbol">    volumes:</span></span><br><span class="line">      - .<span class="meta-keyword">/prometheus/</span>prometheus:<span class="meta-keyword">/etc/</span>prometheus/prometheus.yml</span><br></pre></td></tr></table></figure>
+<p>查看Prometheus UI的Target页面，我们可以看到，如下结果：</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/blog_sd_relabel_consol_target.png" alt=""></p>
+<p>我们通过将Exporter注册到Consul，并且配置Prometheus基于Consul动态发现需要采集的目标实例。</p>
+<h2><span id="如何过滤选择target实例relabel">如何过滤选择Target实例？relabel</span></h2><p>目前为止，只要是注册到Consul上的Node Exporter或者cAdvisor实例是可以自动添加到Prometheus的Target当中。现在请考虑下面的场景：</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/bolg_sd_mutil_cluster.png" alt=""></p>
+<p>对于线上环境我们可能会划分为:dev, stage, prod不同的集群。每一个集群运行多个主机节点，每个服务器节点上运行一个Node Exporter实例。Node Exporter实例会自动测试到服务注册中心Consul服务当中，Prometheus会根据Consul返回的Node Exporter实例信息产生Target列表，并且向这些Target轮训数据。</p>
+<p>so far so good.</p>
+<p>然而，如果我们可能还需要：</p>
+<ul>
+<li>需要按照不同的环境dev, stage, prod聚合监控数据？</li>
+<li>对于研发团队而言，我可能只关心dev环境的监控数据？</li>
+<li>为每一个团队单独搭建一个Prometheus Server？ 如何让不同团队的Prometheus Server采集不同的环境监控数据？</li>
+</ul>
+<h3><span id="第一个问题-如何根据环境聚合监控数据replace">第一个问题: 如何根据环境聚合监控数据？replace</span></h3><p>在默认情况下，我们从所有环境的Node Exporter中采集到的主机指标如下：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.3:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"guest"</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>其中instance为target的地址，通过instance我们可以区分主机，但是无法区分环境。</p>
+<p>我们希望采集的指标应该是如下形式：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.3:9100"</span>,dc=<span class="string">"dc1"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"guest"</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>通过metrics中的label dc(数据中心)来在监控数据中添加不同的环境指标。这样我们可以通过dc来聚合数据 sum(node_cpu{dc=”dc1”})。</p>
+<p>为了达到这个目的我们需要使用relabel的replace能力。</p>
+<p>官方文档中是这样解释relabel能力的</p>
+<blockquote>
+<p>Relabeling is a powerful tool to dynamically rewrite the label set of a target before it gets scraped. Multiple relabeling steps can be configured per scrape configuration. They are applied to the label set of each target in order of their appearance in the configuration file.</p>
+</blockquote>
+<p>简单理解的话，就是Relabel可以在Prometheus采集数据之前，通过Target实例的Metadata信息，动态重新写入Label的值。除此之外，我们还能根据Target实例的Metadata信息选择是否采集或者忽略该Target实例。</p>
+<p>基于Consul动态发现的Target实例，具有以下Metadata信息：</p>
+<ul>
+<li>__meta_consul_address: consul地址</li>
+<li>__meta_consul_dc: consul中服务所在的数据中心</li>
+<li>__meta_consul_metadata_<key>: 服务的metadata</key></li>
+<li>__meta_consul_node: 服务所在consul节点的信息</li>
+<li>__meta_consul_service_address: 服务访问地址</li>
+<li>__meta_consul_service_id: 服务ID</li>
+<li>__meta_consul_service_port: 服务端口</li>
+<li>__meta_consul_service: 服务名称</li>
+<li>__meta_consul_tags: 服务包含的标签信息</li>
+</ul>
+<p>在Prometheus UI中，也可以直接查看target的metadata信息</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/blog_sd_target_metedata.png" alt=""></p>
+<p>这里我们使用__meta_consul_dc信息来标记当前target所在的data center。并且通过regex来匹配source_label的值，使用replacement来选择regex表达式匹配到的mach group。通过action来告诉prometheus在采集数据之前，需要将replacement的内容写入到target_label dc当中</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">scrape_configs:</span></span><br><span class="line">  - job_name: consul_sd</span><br><span class="line"><span class="symbol">    relabel_configs:</span></span><br><span class="line">    - source_labels:  [<span class="string">"__meta_consul_dc"</span>]</span><br><span class="line"><span class="symbol">      regex:</span> <span class="string">"(.*)"</span></span><br><span class="line"><span class="symbol">      replacement:</span> $<span class="number">1</span></span><br><span class="line"><span class="symbol">      action:</span> replace</span><br><span class="line"><span class="symbol">      target_label:</span> <span class="string">"dc"</span></span><br></pre></td></tr></table></figure>
+<p>对于直接保留标签的值时，也可以简化为：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- source_label<span class="variable">s:</span>  [<span class="string">"__meta_consul_dc"</span>]</span><br><span class="line">  target_labe<span class="variable">l:</span> <span class="string">"dc"</span></span><br></pre></td></tr></table></figure>
+<p>重启Prometheus，查看通过UI查看Target列表</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/blog_sd_relabel_replace.png" alt=""></p>
+<p>在Target的labels列我们可以看到当前Instance的label标签。</p>
+<p>查询Prometheus查询监控数据,所有metrics都被写入了所在的数据中心标签dc</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"guest"</span>&#125;	<span class="number">0</span></span><br><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"guest_nice"</span>&#125;	<span class="number">0</span></span><br><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"idle"</span>&#125;	<span class="number">91933.77</span></span><br><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"iowait"</span>&#125;	<span class="number">56.8</span></span><br><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"irq"</span>&#125;	<span class="number">0</span></span><br><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"nice"</span>&#125;	<span class="number">0</span></span><br><span class="line">node_cpu&#123;cpu=<span class="string">"cpu0"</span>,dc=<span class="string">"dc1"</span>,<span class="keyword">instance</span>=<span class="string">"172.21.0.6:9100"</span>,job=<span class="string">"consul_sd"</span>,mode=<span class="string">"softirq"</span>&#125;	<span class="number">19.02</span></span><br></pre></td></tr></table></figure>
+<h3><span id="第二个问题如何选择采集目标-keepdrop">第二个问题：如何选择采集目标? keep/drop</span></h3><p>在第一个问题中，我们通过定义relabel_configs的action为replace，告诉Prometheus，需要为当前实例采集的所有metrics写入新的label。当需要过滤target目标时，我们则将action定义为keep或者drop。</p>
+<p>在Job的配置当中使用一下配置，当匹配到target的元数据标签__meta_consul_tags中匹配到”.<em>,development,.</em>“,则keep当前实例</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">relabel_configs</span>:</span><br><span class="line">- <span class="attribute">source_labels</span>: [<span class="string">"__meta_consul_tags"</span>]</span><br><span class="line">  <span class="attribute">regex</span>: <span class="string">".*,development,.*"</span></span><br><span class="line">  <span class="attribute">action</span>: keep</span><br></pre></td></tr></table></figure>
+<p>为了在本地模拟，我们可以使用registor自动注册service tag的能力。 修改docker compose如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">version</span>: '2'</span><br><span class="line"></span><br><span class="line"><span class="attribute">services:</span></span><br><span class="line">  consul:</span><br><span class="line">    <span class="attribute">image</span>: consul</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 8400:8400</span><br><span class="line">      - 8500:8500</span><br><span class="line">      - 8600:53/udp</span><br><span class="line">    <span class="attribute">command</span>: agent -server -client=0.0.0.0 -dev -node=node0 -bootstrap-expect=1 -data-dir=/tmp/consul</span><br><span class="line">    <span class="attribute">labels:</span></span><br><span class="line">      SERVICE_IGNORE: 'true'</span><br><span class="line">  <span class="attribute">registrator:</span></span><br><span class="line">    image: gliderlabs/registrator</span><br><span class="line">    <span class="attribute">depends_on:</span></span><br><span class="line">      - consul</span><br><span class="line">    <span class="attribute">volumes:</span></span><br><span class="line">      - /var/run:/tmp:rw</span><br><span class="line">    <span class="attribute">command</span>: consul://consul:8500</span><br><span class="line">  <span class="attribute">prometheus:</span></span><br><span class="line">    image: quay.io/prometheus/prometheus</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 9090:9090</span><br><span class="line">    <span class="attribute">volumes:</span></span><br><span class="line">      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml</span><br><span class="line">  <span class="attribute">node_exporter:</span></span><br><span class="line">    image: quay.io/prometheus/node-exporter</span><br><span class="line">    <span class="attribute">pid</span>: "host"</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 9100:9100</span><br><span class="line">    <span class="attribute">labels:</span></span><br><span class="line">      SERVICE_TAGS: "development" # 设置该服务向consul注册的TAGS为development</span><br><span class="line">  <span class="attribute">cadvisor:</span></span><br><span class="line">    image: google/cadvisor:latest</span><br><span class="line">    <span class="attribute">ports:</span></span><br><span class="line">      - 8080:8080</span><br><span class="line">    <span class="attribute">volumes:</span></span><br><span class="line">      - /:/rootfs:ro </span><br><span class="line">      - /var/run:/var/run:rw</span><br><span class="line">      - /var/lib/docker/:/var/lib/docker:ro</span><br><span class="line">    <span class="attribute">labels:</span></span><br><span class="line">      SERVICE_TAGS: "production,scraped" # 设置该服务向consul注册的TAGS为development,production</span><br></pre></td></tr></table></figure>
+<p>重启docker-compose如下所示，我们可以在Consul中查看服务的TAGS</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/consul_service_tags.png" alt=""></p>
+<p>查看Prometheus UI Target页面，可以发现，当前target实例当中只存在__meta_consul_tags中包含development的实例，从而过滤了其它注册到Consul中的实例。</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/sd_relabel_keep.png" alt=""></p>
+<h2><span id="小结">小结</span></h2><p>综上：</p>
+<ul>
+<li>在云平台/容器平台中我们可以通过Prometheus的SD能力动态发现监控的目标实例</li>
+<li>通过relabeling可以在写入metrics数据之前，动态修改metrics的label</li>
+<li>通过relabeling可以对target实例进行过滤和选择</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/prometheus/" rel="tag"># prometheus</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/13/about-cncf-cka-exam/" rel="next" title="关于CNCF的CKA认证考试">
+                <i class="fa fa-chevron-left"></i> 关于CNCF的CKA认证考试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/24/use-prometheus-monitor-your-spring-boot-application/" rel="prev" title="自定义Metrics：让Prometheus监控你的应用程序（Spring版）">
+                自定义Metrics：让Prometheus监控你的应用程序（Spring版） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Prometheus中的Job和Instance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Pull vs Push</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">服务发现 Service Discovery</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">如何过滤选择Target实例？relabel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.1.</span> <span class="nav-text">第一个问题: 如何根据环境聚合监控数据？replace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.2.</span> <span class="nav-text">第二个问题：如何选择采集目标? keep/drop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/';
+        this.page.identifier = '2018/01/17/prometheus-sd-and-relabel/';
+        this.page.title = 'Prometheus中的服务发现和relabel';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

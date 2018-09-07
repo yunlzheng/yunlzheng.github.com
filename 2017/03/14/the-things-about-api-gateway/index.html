@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="microservice," />
+
+
+<meta name="description" content="现在越来越多的技术团队开始尝试采纳微服务架构进行产品开发。而基于微服务架构后后端服务通常而言是动态的，为了简化前端的调用逻辑，通常会引入API Gateway作为轻量级网关，同时API Gateway中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度，这边文章我们就来聊聊API Gateway的那些事。">
+<meta name="keywords" content="microservice">
+<meta property="og:type" content="article">
+<meta property="og:title" content="API网关那些儿">
+<meta property="og:url" content="http://yunlzheng.github.io/2017/03/14/the-things-about-api-gateway/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="现在越来越多的技术团队开始尝试采纳微服务架构进行产品开发。而基于微服务架构后后端服务通常而言是动态的，为了简化前端的调用逻辑，通常会引入API Gateway作为轻量级网关，同时API Gateway中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度，这边文章我们就来聊聊API Gateway的那些事。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/bff.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/bff-process.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/nginx-with-zuul.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="API网关那些儿">
+<meta name="twitter:description" content="现在越来越多的技术团队开始尝试采纳微服务架构进行产品开发。而基于微服务架构后后端服务通常而言是动态的，为了简化前端的调用逻辑，通常会引入API Gateway作为轻量级网关，同时API Gateway中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度，这边文章我们就来聊聊API Gateway的那些事。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2017/03/14/the-things-about-api-gateway/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>API网关那些儿 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2017/03/14/the-things-about-api-gateway/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">API网关那些儿</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-14T15:23:58+08:00">2017-03-14</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/14/the-things-about-api-gateway/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/03/14/the-things-about-api-gateway/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现在越来越多的技术团队开始尝试采纳微服务架构进行产品开发。而基于微服务架构后后端服务通常而言是动态的，为了简化前端的调用逻辑，通常会引入API Gateway作为轻量级网关，同时API Gateway中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度，这边文章我们就来聊聊API Gateway的那些事。</p>
+<a id="more"></a>
+<h2><span id="为什么需要api-gateway">为什么需要API Gateway</span></h2><h3><span id="简化客户端调用复杂度">简化客户端调用复杂度</span></h3><p>在微服务架构模式下后端服务的实例数一般是动态的，对于客户端而言如何发现这些动态改变的服务实例的访问地址信息？因此在基于微服务的项目中为了简化前端的调用逻辑，通常会引入API Gateway作为轻量级网关，同时API Gateway中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度。</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png"></p>
+<h3><span id="数据裁剪以及聚合">数据裁剪以及聚合</span></h3><p>通常而言多余不同的客户端对于显示时对于数据的需求是不一致的，比如手机端或者Web端又或者在低延迟的网络环境或者高延迟的网络环境。</p>
+<p>因此为了优化客户端的使用体验，API Gateway可以对通用性的响应数据进行裁剪以适应不同客户端的使用需求。同时还可以将多个API调用逻辑进行聚合，从而减少客户端的请求数，优化客户端用户体验</p>
+<h3><span id="多渠道支持">多渠道支持</span></h3><p>当然我们还可以针对不同的渠道和客户端提供不同的API Gateway,对于该模式的使用由另外一个大家熟知的方式叫<strong>Backend for front-end</strong>, 在Backend for front-end模式当中，我们可以针对不同的客户端分别创建其BFF</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/bff.png" alt="backend for front-end"></p>
+<h3><span id="遗留系统的微服务化改造">遗留系统的微服务化改造</span></h3><p>对于系统系统而言进行微服务改造通常是由于原有的系统存在或多或少的问题，比如技术债务，代码质量，可维护性，可扩展性等等。API Gateway的模式同样适用于这一类遗留系统的改造，通过微服务化的改造逐步实现对原有系统中的问题的修复，从而提升对于原有业务<strong>响应力</strong>的提升。<strong>通过引入抽象层，逐步使用新的实现替换旧的实现。</strong></p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/bff-process.png" alt=""></p>
+<h2><span id="使用zuul实现api网关">使用Zuul实现API网关</span></h2><p>Spring Cloud的Zuul组件提供了轻量级网关的功能支持，通过定义路由规则可以快速实现一个轻量级的API网关</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line"><span class="attr">  ignoredPatterns:</span> <span class="string">/api/auth</span></span><br><span class="line"><span class="attr">  sensitive-headers:</span> <span class="string">"*"</span></span><br><span class="line"><span class="attr">  ignoreLocalService:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  retryable:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  host:</span></span><br><span class="line"><span class="attr">    max-total-connections:</span> <span class="number">500</span></span><br><span class="line"><span class="attr">  routes:</span></span><br><span class="line"><span class="attr">    service01:</span></span><br><span class="line"><span class="attr">      pateh:</span> <span class="string">/service01/**</span></span><br><span class="line"><span class="attr">      serviceId:</span> <span class="string">service01</span></span><br><span class="line"><span class="attr">      stripPrefix:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    thirdpart:</span></span><br><span class="line"><span class="attr">      pateh:</span> <span class="string">/thirdpart/**</span></span><br><span class="line"><span class="attr">      url:</span> <span class="attr">http://thirdpart.api.com</span></span><br></pre></td></tr></table></figure>
+<p>同时除了通过serviceId关联已经注册到Consul的服务实例以外，我们也可以通过zuul直接定义实现对已有服务的直接集成。</p>
+<p>这里我们就不过多介绍Zuul的细节，在实际使用中我们会发现直接使用Zuul会存在诸多问题，包括：</p>
+<ul>
+<li>性能问题：当存在大量请求超时后会造成Zuul阻塞，目前只能通过横向扩展Zuul实例实现对高并发的支持；</li>
+<li>WebSocket的支持问题： Zuul中并不直接提供对WebSocket的支持，需要添加额外的过滤器实现对WebSocket的支持；</li>
+</ul>
+<p>为了解决以上问题，可以通过在Zuul前端部署Nginx实现对Zuul实例的反向代理，同时适当的通过添加Cache以及请求压缩减少对后端Zuul实例的压力。</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/nginx-with-zuul.png" alt=""></p>
+<h2><span id="实现nginx的动态代理">实现Nginx的动态代理</span></h2><p>通过Nginx我们可以实现对多实例Zuul的请求代理，同时通过添加适当的缓存以及请求压缩配置可以提升前端UI的请求响应时间。这里需要解决的问题是Nginx如何动态发现Zuul实例信息并且将请求转发到Zuul当中。</p>
+<p><a href="https://github.com/hashicorp/consul-template" target="_blank" rel="noopener">consul-template</a>可以帮助我们解决以上问题,consul-template是一个命令行工具，结合consul实现配置文件的动态生成并且支持在配置文件发生变化后触发用户自定义命令。</p>
+<p>我们使用了如下的Dockerfile用于构建我们的Nginx服务</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> nginx:<span class="number">1.11</span>.<span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> consul-template /usr/<span class="built_in">local</span>/bin</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">RUN mkdir /etc/consul-templates</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># 模板文件</span></span></span><br><span class="line"><span class="bash">ADD nginx.tpl /etc/consul-templates/nginx.tpl</span></span><br><span class="line"><span class="bash">ENV CT_FILE /etc/consul-templates/nginx.tpl</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ENV NX_FILE /etc/nginx/conf.d/default.conf <span class="comment"># 目标文件</span></span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ENV SERVICE identity <span class="comment"># 注册在Consul的服务名</span></span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">COPY dist /usr/share/nginx/html</span></span><br><span class="line"><span class="bash">RUN mkdir -p /data/cache</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">CMD /usr/sbin/nginx -c /etc/nginx/nginx.conf  \</span></span><br><span class="line"><span class="bash">  &amp; CONSUL_TEMPLATE_LOG=debug \</span></span><br><span class="line"><span class="bash">  consul-template -consul-addr=<span class="variable">$CONSUL</span> -template <span class="string">"<span class="variable">$CT_FILE</span>:<span class="variable">$NX_FILE</span>:/usr/sbin/nginx -s reload"</span>;</span></span><br></pre></td></tr></table></figure>
+<p>Nginx配置模板文件</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># nginx.tpl</span></span><br><span class="line">upstream api_server &#123;</span><br><span class="line">  least_conn;</span><br><span class="line">  &#123;&#123;range service <span class="string">"identity"</span>&#125;&#125;</span><br><span class="line">  <span class="keyword">server</span>  &#123;&#123;.Address&#125;&#125;:&#123;&#123;.Port&#125;&#125;;</span><br><span class="line">  &#123;&#123;<span class="keyword">else</span>&#125;&#125;<span class="keyword">server</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9191</span>;&#123;&#123;end&#125;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">server</span> &#123;</span><br><span class="line">    listen       <span class="number">80</span>;</span><br><span class="line">    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   /usr/share/nginx/html;</span><br><span class="line">        <span class="keyword">index</span>  <span class="keyword">index</span>.html <span class="keyword">index</span>.htm;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /api &#123;</span><br><span class="line">      proxy_pass http:<span class="comment">//api_server;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">upstream api_server &#123;</span><br><span class="line">  least_conn;</span><br><span class="line">  &#123;&#123;range<span class="built_in"> service </span><span class="string">"identity"</span>&#125;&#125;</span><br><span class="line"> <span class="built_in"> server </span> &#123;&#123;.Address&#125;&#125;:&#123;&#123;.Port&#125;&#125;;</span><br><span class="line">  &#123;&#123;<span class="keyword">else</span>&#125;&#125;server 127.0.0.1:9191;&#123;&#123;end&#125;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会根据当前consul中注册的所有identity服务实例进行模板渲染，并且当配置文件内容发生变化后调用nginx -s reload重新加载Nginx配置从而实现对于后端服务实例的动态代理。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CMD /usr/sbin/nginx -c /etc/nginx/nginx.conf  \</span><br><span class="line">  &amp; <span class="attribute">CONSUL_TEMPLATE_LOG</span>=debug \</span><br><span class="line">  consul-template <span class="attribute">-consul-addr</span>=<span class="variable">$CONSUL</span> -template <span class="string">"<span class="variable">$CT_FILE</span>:<span class="variable">$NX_FILE</span>:/usr/sbin/nginx -s reload"</span>;</span><br></pre></td></tr></table></figure>
+<h2><span id="其它的一些优化建议">其它的一些优化建议</span></h2><p>启用Nginx的Gzip可以对服务器端响应内容进行压缩从而减少一定的客户端响应时间</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gzip <span class="keyword">on</span>;</span><br><span class="line">gzip_min_length <span class="number">1</span>k;</span><br><span class="line">gzip_buffers  <span class="number">4</span> <span class="number">32</span>k;</span><br><span class="line">gzip_types    <span class="built_in">text</span>/plain <span class="built_in">application</span>/x-javascript <span class="built_in">application</span>/javascript <span class="built_in">text</span>/xml <span class="built_in">text</span>/css;</span><br><span class="line">gzip_vary <span class="keyword">on</span>;</span><br></pre></td></tr></table></figure>
+<p>缓存图片以及其它静态资源可以减少对Zuul实例的请求量</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">proxy_buffering</span> <span class="literal">on</span>;</span><br><span class="line"><span class="attribute">proxy_cache_valid</span> any <span class="number">10m</span>;</span><br><span class="line"><span class="attribute">proxy_cache_path</span> /data/cache levels=<span class="number">1</span>:<span class="number">2</span> keys_zone=my-cache:<span class="number">8m</span> max_size=<span class="number">1000m</span> inactive=<span class="number">600m</span>;</span><br><span class="line"><span class="attribute">proxy_temp_path</span> /data/temp;</span><br><span class="line"><span class="attribute">proxy_buffer_size</span> <span class="number">4k</span>;</span><br><span class="line"><span class="attribute">proxy_buffers</span> <span class="number">100</span> <span class="number">8k</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> <span class="regexp">~* (images)</span>    &#123;</span><br><span class="line">  <span class="attribute">proxy_pass</span> http://api_server;</span><br><span class="line">  <span class="comment"># cache setting</span></span><br><span class="line">  <span class="attribute">proxy_cache</span> my-cache;</span><br><span class="line">  <span class="attribute">proxy_cache_valid</span> <span class="number">200</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果需要通过Nginx实现对Websocket的代理可以添加一下配置</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /sockjs &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://api_server;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># WebSocket support (nginx 1.4)</span></span><br><span class="line">    <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Connection <span class="string">"upgrade"</span>;</span><br><span class="line">    <span class="attribute">proxy_connect_timeout</span> <span class="number">90</span>;</span><br><span class="line">    <span class="attribute">proxy_send_timeout</span> <span class="number">90</span>;</span><br><span class="line">    <span class="attribute">proxy_read_timeout</span> <span class="number">90</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># !!!Support Spring Boot</span></span><br><span class="line">    <span class="attribute">proxy_pass_header</span> X-XSRF-TOKEN;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Origin <span class="string">"http://localhost:4000"</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/microservice/" rel="tag"># microservice</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/14/how-to-use-container-in-cd/" rel="next" title="在持续交付中使用容器">
+                <i class="fa fa-chevron-left"></i> 在持续交付中使用容器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/16/fluentd-with-rancher-and-es/" rel="prev" title="基于Fluentd实现日志聚合与分析">
+                基于Fluentd实现日志聚合与分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">为什么需要API Gateway</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">简化客户端调用复杂度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">数据裁剪以及聚合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">多渠道支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">遗留系统的微服务化改造</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">使用Zuul实现API网关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">实现Nginx的动态代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">其它的一些优化建议</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2017/03/14/the-things-about-api-gateway/';
+        this.page.identifier = '2017/03/14/the-things-about-api-gateway/';
+        this.page.title = 'API网关那些儿';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

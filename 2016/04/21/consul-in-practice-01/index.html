@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="consul," />
+
+
+<meta name="description" content="我们是如何在项目中使用Consul的。">
+<meta name="keywords" content="consul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Consul In Practice 1 [概述]">
+<meta property="og:url" content="http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="我们是如何在项目中使用Consul的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/multi-data-center.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/consul-multi-center-web-ui.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Consul In Practice 1 [概述]">
+<meta name="twitter:description" content="我们是如何在项目中使用Consul的。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Consul In Practice 1 [概述] | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Consul In Practice 1 [概述]</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-21T10:57:01+08:00">2016-04-21</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/21/consul-in-practice-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2016/04/21/consul-in-practice-01/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们是如何在项目中使用Consul的。</p>
+<a id="more"></a>
+<h2><span id="background-info">Background Info</span></h2><p>项目基本信息：</p>
+<ul>
+<li>MicroServices架构基于Spring Cloud框架实现；</li>
+<li>除了系统自身的4个核心服务外，还包含其他的第三方服务如Mysql, Mongo以及其它开源软件等</li>
+<li>当前系统部署方式基于Docker完成系统核心服务以及第三方服务的部署，配合使用Docker Compose以及Ansible完成应用的自动化部署</li>
+<li>包含3个基本的环境Dev环境，UAT环境，Prod环境</li>
+</ul>
+<h2><span id="consul-in-practice">Consul In Practice</span></h2><h3><span id="1-as-service-discovery">1, As Service Discovery</span></h3><p>使用开发模式我们可以快速验证Consul提供的相关能力</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul agent -dev -config-<span class="keyword">dir</span> /etc/consul.<span class="built_in">d</span></span><br></pre></td></tr></table></figure>
+<p>Consul中我们非常方便的创建和定义服务，例如通过在/etc/consul.d/中创建文件sonarqube.json</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"service"</span>: &#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"sonarqube"</span>,</span><br><span class="line">    <span class="attr">"tags"</span>: [<span class="string">"dev"</span>],</span><br><span class="line">    <span class="attr">"port"</span>: <span class="number">9000</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完成服务定义之后：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">consul reload</span></span><br></pre></td></tr></table></figure>
+<p>可以重新加载服务配置文件，从Consul UI中我们可以查看到我们的服务实例</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png" alt=""></p>
+<p>完成服务注册之后我们便可以通过Consul提供的API去查询服务实例</p>
+<p>例如我们可以通过<strong>HTTP API</strong>查询到sonarqube服务实例的相关信息：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">curl http:<span class="regexp">//</span>localhost:<span class="number">8500</span><span class="regexp">/v1/</span>catalog<span class="regexp">/service/</span>web</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">"Node"</span>:<span class="string">"agent-two"</span>,</span><br><span class="line">    <span class="string">"Address"</span>:<span class="string">"xxx.xxx.xxx"</span>,</span><br><span class="line">    <span class="string">"ServiceID"</span>:<span class="string">"web"</span>,</span><br><span class="line">    <span class="string">"ServiceName"</span>:<span class="string">"web"</span>,</span><br><span class="line">    <span class="string">"ServiceTags"</span>:[<span class="string">"dev"</span>],</span><br><span class="line">    <span class="string">"ServiceAddress"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"ServicePort"</span>:<span class="number">9900</span>,</span><br><span class="line">    <span class="string">"ServiceEnableTagOverride"</span>:false,</span><br><span class="line">    <span class="string">"CreateIndex"</span>:<span class="number">515</span>,</span><br><span class="line">    <span class="string">"ModifyIndex"</span>:<span class="number">516</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>除此之外Consul还提供了内置的DNS服务，DNS服务的默认访问端口为8600，通过DNS服务我们可以通过域名’[serviceName].service.consul’的方式直接访问我们的服务实例:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">dig</span> @<span class="keyword">127</span>.<span class="keyword">0</span>.<span class="keyword">0</span>.<span class="keyword">1</span> -p <span class="number">8600</span> sonarqube.service.consul</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; <span class="selector-tag">DiG</span> 9<span class="selector-class">.9</span><span class="selector-class">.4-RedHat-9</span><span class="selector-class">.9</span><span class="selector-class">.4-29</span><span class="selector-class">.el7_2</span><span class="selector-class">.1</span> &lt;&lt;&gt;&gt; @<span class="keyword">127</span>.<span class="keyword">0</span>.<span class="keyword">0</span>.<span class="keyword">1</span> -p <span class="number">8600</span> sonarqube.service.consul</span><br><span class="line">; (1 <span class="selector-tag">server</span> <span class="selector-tag">found</span>)</span><br><span class="line">;; <span class="selector-tag">global</span> <span class="selector-tag">options</span>: +<span class="selector-tag">cmd</span></span><br><span class="line">;; <span class="selector-tag">Got</span> <span class="selector-tag">answer</span>:</span><br><span class="line">;; <span class="selector-tag">-</span>&gt;&gt;<span class="selector-tag">HEADER</span>&lt;&lt;<span class="selector-tag">-</span> <span class="selector-tag">opcode</span>: <span class="selector-tag">QUERY</span>, <span class="selector-tag">status</span>: <span class="selector-tag">NOERROR</span>, <span class="selector-tag">id</span>: 21563</span><br><span class="line">;; <span class="selector-tag">flags</span>: <span class="selector-tag">qr</span> <span class="selector-tag">aa</span> <span class="selector-tag">rd</span>; <span class="selector-tag">QUERY</span>: 1, <span class="selector-tag">ANSWER</span>: 1, <span class="selector-tag">AUTHORITY</span>: 0, <span class="selector-tag">ADDITIONAL</span>: 0</span><br><span class="line">;; <span class="selector-tag">WARNING</span>: <span class="selector-tag">recursion</span> <span class="selector-tag">requested</span> <span class="selector-tag">but</span> <span class="selector-tag">not</span> <span class="selector-tag">available</span></span><br><span class="line"></span><br><span class="line">;; <span class="selector-tag">QUESTION</span> <span class="selector-tag">SECTION</span>:</span><br><span class="line">;<span class="selector-tag">sonarqube</span><span class="selector-class">.service</span><span class="selector-class">.consul</span>.	<span class="selector-tag">IN</span>	<span class="selector-tag">A</span></span><br><span class="line"></span><br><span class="line">;; <span class="selector-tag">ANSWER</span> <span class="selector-tag">SECTION</span>:</span><br><span class="line"><span class="selector-tag">sonarqube</span><span class="selector-class">.service</span><span class="selector-class">.consul</span>. 0	<span class="selector-tag">IN</span>	<span class="selector-tag">A</span>	10<span class="selector-class">.174</span><span class="selector-class">.231</span><span class="selector-class">.41</span></span><br><span class="line"></span><br><span class="line">;; <span class="selector-tag">Query</span> <span class="selector-tag">time</span>: 0 <span class="selector-tag">msec</span></span><br><span class="line">;; <span class="selector-tag">SERVER</span>: 127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-id">#8600</span>(127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span>)</span><br><span class="line">;; <span class="selector-tag">WHEN</span>: <span class="selector-tag">Thu</span> <span class="selector-tag">Apr</span> 21 12<span class="selector-pseudo">:23</span><span class="selector-pseudo">:26</span> <span class="selector-tag">CST</span> 2016</span><br><span class="line">;; <span class="selector-tag">MSG</span> <span class="selector-tag">SIZE</span>  <span class="selector-tag">rcvd</span>: 82</span><br></pre></td></tr></table></figure>
+<p>或者结合使用服务的tag标签[tagName].[serviceName].service.consul的方式访问服务实例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">dig</span> @<span class="keyword">127</span>.<span class="keyword">0</span>.<span class="keyword">0</span>.<span class="keyword">1</span> -p <span class="number">8600</span> dev.sonarqube.service.consul</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; <span class="selector-tag">DiG</span> 9<span class="selector-class">.9</span><span class="selector-class">.4-RedHat-9</span><span class="selector-class">.9</span><span class="selector-class">.4-29</span><span class="selector-class">.el7_2</span><span class="selector-class">.1</span> &lt;&lt;&gt;&gt; @<span class="keyword">127</span>.<span class="keyword">0</span>.<span class="keyword">0</span>.<span class="keyword">1</span> -p <span class="number">8600</span> dev.sonarqube.service.consul</span><br><span class="line">; (1 <span class="selector-tag">server</span> <span class="selector-tag">found</span>)</span><br><span class="line">;; <span class="selector-tag">global</span> <span class="selector-tag">options</span>: +<span class="selector-tag">cmd</span></span><br><span class="line">;; <span class="selector-tag">Got</span> <span class="selector-tag">answer</span>:</span><br><span class="line">;; <span class="selector-tag">-</span>&gt;&gt;<span class="selector-tag">HEADER</span>&lt;&lt;<span class="selector-tag">-</span> <span class="selector-tag">opcode</span>: <span class="selector-tag">QUERY</span>, <span class="selector-tag">status</span>: <span class="selector-tag">NXDOMAIN</span>, <span class="selector-tag">id</span>: 17333</span><br><span class="line">;; <span class="selector-tag">flags</span>: <span class="selector-tag">qr</span> <span class="selector-tag">aa</span> <span class="selector-tag">rd</span>; <span class="selector-tag">QUERY</span>: 1, <span class="selector-tag">ANSWER</span>: 0, <span class="selector-tag">AUTHORITY</span>: 1, <span class="selector-tag">ADDITIONAL</span>: 0</span><br><span class="line">;; <span class="selector-tag">WARNING</span>: <span class="selector-tag">recursion</span> <span class="selector-tag">requested</span> <span class="selector-tag">but</span> <span class="selector-tag">not</span> <span class="selector-tag">available</span></span><br><span class="line"></span><br><span class="line">;; <span class="selector-tag">QUESTION</span> <span class="selector-tag">SECTION</span>:</span><br><span class="line">;<span class="selector-tag">dev</span><span class="selector-class">.sonarqube</span><span class="selector-class">.service</span><span class="selector-class">.consul</span>. <span class="selector-tag">IN</span>	<span class="selector-tag">A</span></span><br><span class="line"></span><br><span class="line">;; <span class="selector-tag">AUTHORITY</span> <span class="selector-tag">SECTION</span>:</span><br><span class="line"><span class="selector-tag">consul</span>.			0	<span class="selector-tag">IN</span>	<span class="selector-tag">SOA</span>	<span class="selector-tag">ns</span><span class="selector-class">.consul</span>. <span class="selector-tag">postmaster</span><span class="selector-class">.consul</span>. 1461212746 3600 600 86400 0</span><br><span class="line"></span><br><span class="line">;; <span class="selector-tag">Query</span> <span class="selector-tag">time</span>: 0 <span class="selector-tag">msec</span></span><br><span class="line">;; <span class="selector-tag">SERVER</span>: 127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-id">#8600</span>(127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span>)</span><br><span class="line">;; <span class="selector-tag">WHEN</span>: <span class="selector-tag">Thu</span> <span class="selector-tag">Apr</span> 21 12<span class="selector-pseudo">:25</span><span class="selector-pseudo">:46</span> <span class="selector-tag">CST</span> 2016</span><br><span class="line">;; <span class="selector-tag">MSG</span> <span class="selector-tag">SIZE</span>  <span class="selector-tag">rcvd</span>: 119</span><br></pre></td></tr></table></figure>
+<p>你还可以通过在启动consul是使用–domain参数设定域名规则</p>
+<h3><span id="2-as-service-monitor">2, As Service Monitor</span></h3><p>同时当应用以服务为单位向外部暴露接口之后，需要对各个服务的状态进行监控，Consul同样可以非常方便的让我们能够对服务状态进行监控.</p>
+<p>同样以sonarqube为例子，通过check属性我们可以自定义所需要的监控方式。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"service"</span>: &#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"sonarqube"</span>,</span><br><span class="line">    <span class="attr">"tags"</span>: [<span class="string">"server"</span>],</span><br><span class="line">    <span class="attr">"port"</span>: <span class="number">9000</span>,</span><br><span class="line">    <span class="attr">"check"</span>: &#123;<span class="attr">"script"</span>: <span class="string">"curl localhost:9000 &gt;/dev/null 2&gt;&amp;1"</span>, <span class="attr">"interval"</span>: <span class="string">"10s"</span>&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了通过script脚本的形式进行服务的健康检查，Consule还支持一下方式：</p>
+<p>HTTP状态检查:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"check"</span>: &#123;</span><br><span class="line">    <span class="attr">"id"</span>: <span class="string">"api"</span>,</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"HTTP API on port 5000"</span>,</span><br><span class="line">    <span class="attr">"http"</span>: <span class="string">"http://localhost:5000/health"</span>,</span><br><span class="line">    <span class="attr">"interval"</span>: <span class="string">"10s"</span>,</span><br><span class="line">    <span class="attr">"timeout"</span>: <span class="string">"1s"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TCP状态检查：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"check"</span>: &#123;</span><br><span class="line">    <span class="attr">"id"</span>: <span class="string">"ssh"</span>,</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"SSH TCP on port 22"</span>,</span><br><span class="line">    <span class="attr">"tcp"</span>: <span class="string">"localhost:22"</span>,</span><br><span class="line">    <span class="attr">"interval"</span>: <span class="string">"10s"</span>,</span><br><span class="line">    <span class="attr">"timeout"</span>: <span class="string">"1s"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TTL检查:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"check"</span>: &#123;</span><br><span class="line">    <span class="attr">"id"</span>: <span class="string">"web-app"</span>,</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"Web App Status"</span>,</span><br><span class="line">    <span class="attr">"notes"</span>: <span class="string">"Web app does a curl internally every 10 seconds"</span>,</span><br><span class="line">    <span class="attr">"ttl"</span>: <span class="string">"30s"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Docker容器监控：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"check"</span>: &#123;</span><br><span class="line">    <span class="attr">"id"</span>: <span class="string">"mem-util"</span>,</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"Memory utilization"</span>,</span><br><span class="line">    <span class="attr">"docker_container_id"</span>: <span class="string">"f972c95ebf0e"</span>,</span><br><span class="line">    <span class="attr">"shell"</span>: <span class="string">"/bin/bash"</span>,</span><br><span class="line">    <span class="attr">"script"</span>: <span class="string">"/usr/local/bin/check_mem.py"</span>,</span><br><span class="line">    <span class="attr">"interval"</span>: <span class="string">"10s"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="3-keyvale-store">3, Key/Vale Store</span></h3><p>Consul支持开放的K/V存储，你可以用在动态配置，特性开关，调度， 集群等等任何你需要使用的地方，同时Consul提供的HTTP API可以让你非常易于使用</p>
+<blockquote>
+<p>本篇不详细说明该特性，后续会详细讨论在集中式配置管理中的应用</p>
+</blockquote>
+<h3><span id="4-as-datacenters">4, As DataCenters</span></h3><p>在实际软件交付过程中我们会涉及到另外一个问题，多环境的管理，以当前自己所在的项目为例，在交付过程中会涉及到3个基本的环境Dev, UAT以及Prod环境。各个环境独立部署了所有的服务，Cosul的多数据中心能力可以很好的对多个环境进行统一的管理和监控；</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/multi-data-center.png" alt=""></p>
+<p>以下我们假设以Dev和UAT两个DataCenter为例</p>
+<ul>
+<li>DEV DataCenter:</li>
+</ul>
+<p>在Node1上启动Consul Server</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul agent -server  -bootstrap-expect <span class="number">1</span>  -data-dir /tmp/consul -node=agent-one -config-dir /etc/consul.d -bind <span class="number">192.168</span><span class="number">.0</span><span class="number">.2</span>  -client <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> -ui -dc=dev</span><br></pre></td></tr></table></figure>
+<p>在Node2上启动Consul Agent</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul agent -data-dir /tmp/consul <span class="attribute">-node</span>=agent-two -config-dir /etc/consul.d <span class="attribute">-bind</span>=192.168.0.3 <span class="attribute">-dc</span>=dev</span><br></pre></td></tr></table></figure>
+<p>加入到Consul Server</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">consul</span> <span class="selector-tag">join</span> 192<span class="selector-class">.168</span><span class="selector-class">.0</span><span class="selector-class">.2</span></span><br></pre></td></tr></table></figure>
+<p>此时在Node1或者Node2上检查当前集群信息</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">consul members</span><br><span class="line"></span><br><span class="line">agent-one  192.168.0.2:8301  alive  <span class="built_in"> server </span> 0.6.4  2         dev</span><br><span class="line">agent-two  192.168.0.3:8301  alive  <span class="built_in"> client </span> 0.6.4  2         dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UAT DataCenter:</li>
+</ul>
+<p>在Node3上启动Consul Server</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul agent -server  -bootstrap-expect <span class="number">1</span>  -data-dir /tmp/consul -<span class="keyword">node</span><span class="title">=agent-three</span> -config-dir /etc/consul.d -bind <span class="number">192.168</span>.<span class="number">2.2</span> -<span class="attr">dc=</span>uat</span><br></pre></td></tr></table></figure>
+<ul>
+<li>关联Dev和UAT DataCenter</li>
+</ul>
+<p>在Node1上：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">consul members -wan</span><br><span class="line"></span><br><span class="line">agent-one  192.168.0.2:8301  alive  <span class="built_in"> server </span> 0.6.4  2         dev</span><br></pre></td></tr></table></figure>
+<p> 通过命令</p>
+ <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">consul</span> <span class="selector-tag">join</span> <span class="selector-tag">-wan</span> 192<span class="selector-class">.168</span><span class="selector-class">.2</span><span class="selector-class">.2</span></span><br></pre></td></tr></table></figure>
+<p>通过Consul UI集中式管理多个环境的信息</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/consul-multi-center-web-ui.png" alt="/images/consul-multi-center-web-ui.png"></p>
+<h2><span id="summary">Summary</span></h2><p>这篇主要目的是用于介绍一下Consul的基本特性</p>
+<p>在后续还会继续考虑：</p>
+<ul>
+<li>使用Consul替换Spring Cloud作为服务发现和注册平台；</li>
+<li>与Docker集成完成服务的自动发现和注册；</li>
+<li>基于Consul的KV特性完成系统的中心化配置管理</li>
+</ul>
+<p>未完待续……</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/consul/" rel="tag"># consul</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/16/why-ramda-translate/" rel="next" title="（译）Why Ramda">
+                <i class="fa fa-chevron-left"></i> （译）Why Ramda
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/21/basic_python/" rel="prev" title="Python查漏补缺">
+                Python查漏补缺 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Background Info</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Consul In Practice</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">1, As Service Discovery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">2, As Service Monitor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">3, Key/Vale Store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">4, As DataCenters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/';
+        this.page.identifier = '2016/04/21/consul-in-practice-01/';
+        this.page.title = 'Consul In Practice 1 [概述]';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

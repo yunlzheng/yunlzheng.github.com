@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="openstack," />
+
+
+<meta name="description" content="对于使用过OpenStack的用户，我们第一次操作虚拟机都可能是直接通过OpenStack Dashbord管理控制台提供的Web vnc来进行使用。 如图所示，我们可以很方便的使用该功能，对虚拟机进行管理和配置；">
+<meta name="keywords" content="openstack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenStack Console 设计">
+<meta property="og:url" content="http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="对于使用过OpenStack的用户，我们第一次操作虚拟机都可能是直接通过OpenStack Dashbord管理控制台提供的Web vnc来进行使用。 如图所示，我们可以很方便的使用该功能，对虚拟机进行管理和配置；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://filehost.qiniudn.com/dashbord_console.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/vnc_viewer.png">
+<meta property="og:image" content="http://filehost.qiniudn.com/connect_to_vm.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenStack Console 设计">
+<meta name="twitter:description" content="对于使用过OpenStack的用户，我们第一次操作虚拟机都可能是直接通过OpenStack Dashbord管理控制台提供的Web vnc来进行使用。 如图所示，我们可以很方便的使用该功能，对虚拟机进行管理和配置；">
+<meta name="twitter:image" content="http://filehost.qiniudn.com/dashbord_console.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>OpenStack Console 设计 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">OpenStack Console 设计</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-02-01T00:00:34+08:00">2015-02-01</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/02/01/openstack-novnc-architecture/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2015/02/01/openstack-novnc-architecture/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于使用过OpenStack的用户，我们第一次操作虚拟机都可能是直接通过OpenStack Dashbord管理控制台提供的Web vnc来进行使用。</p>
+<p>如图所示，我们可以很方便的使用该功能，对虚拟机进行管理和配置；</p>
+<a id="more"></a>
+<p><img src="http://filehost.qiniudn.com/dashbord_console.png" alt=""></p>
+<h2><span id="openstack虚拟化">OpenStack虚拟化</span></h2><p>对于OpenStack而言，OpenStack并不直接提供虚拟化技术实现，而是直接使用现虚拟化技术如QEMU，KVM，XenServer等。</p>
+<p>对于KVM和QEMU我们可以通过如下命令在操作系统上运行一台虚拟机。</p>
+<p>以在Linux上直接使用kvm创建windows虚拟机为例</p>
+<p>定义虚拟机Disk</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-<span class="selector-tag">img</span> create -f qcow windows7<span class="selector-class">.qcow2</span> <span class="number">20</span>G</span><br></pre></td></tr></table></figure>
+<p>使用kvm导入ISO镜像，并且安装操作系统</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kvm -<span class="keyword">m</span> 2048 -<span class="keyword">no</span>-reboot -<span class="keyword">boot</span> <span class="keyword">order</span>=<span class="keyword">d</span> -drive <span class="keyword">file</span>=windows7.qcow2,<span class="keyword">if</span>=virtio,<span class="keyword">boot</span>=off -drive <span class="keyword">file</span>=windows7.iso,media=cdrom,<span class="keyword">boot</span>=<span class="keyword">on</span> -drive <span class="keyword">file</span>=virtio-<span class="keyword">win</span>-0.1-94.iso,media=cdrom,<span class="keyword">boot</span>=off -<span class="keyword">net</span> nic,model=virtio -nographic -vnc :1</span><br></pre></td></tr></table></figure>
+<p>此时我们指定了虚拟机的模式为-nographic 并且指定了vnc端口，这个时我们就可以通过localhost:1访问到该虚拟机</p>
+<p>而对OpenStack而言，OpenStak更多是作为上层的管理者负责管理和控制地城的虚拟化技术</p>
+<p>当我们使用nova命令创建一台虚拟机之后</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nova list</span><br><span class="line"></span><br><span class="line"><span class="code">+--------------------------------------+</span>---------------------<span class="code">+--------+</span>------------<span class="code">+-------------+</span>---------------------------------------------+</span><br><span class="line">| ID                                   | Name                | Status | Task State | Power State | Networks                                    |</span><br><span class="line"><span class="code">+--------------------------------------+</span>---------------------<span class="code">+--------+</span>------------<span class="code">+-------------+</span>---------------------------------------------+</span><br><span class="line">| c75adb4f-c554-4fa2-962e-35fef3367041 | centos-test         | ACTIVE | -          | Running     | internal-network=192.168.0.50, 10.74.149.23 |</span><br><span class="line"><span class="code">+--------------------------------------+</span>---------------------<span class="code">+--------+</span>------------<span class="code">+-------------+</span>---------------------------------------------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">nova show c75adb4f-c554-4fa2-962e-35fef3367041</span><br><span class="line"></span><br><span class="line">+--------------------------------------+-------------------------------------------------------------+</span><br><span class="line">|<span class="string"> Property                             </span>|<span class="string"> Value                                                       </span>|</span><br><span class="line">+--------------------------------------+-------------------------------------------------------------+</span><br><span class="line">|<span class="string"> OS-DCF:diskConfig                    </span>|<span class="string"> AUTO                                                        </span>|</span><br><span class="line">|<span class="string"> OS-EXT-AZ:availability_zone          </span>|<span class="string"> hp-server                                                   </span>|</span><br><span class="line">|<span class="string"> OS-EXT-SRV-ATTR:host                 </span>|<span class="string"> compute02                                                   </span>|</span><br><span class="line">|<span class="string"> OS-EXT-SRV-ATTR:hypervisor_hostname  </span>|<span class="string"> compute02                                                   </span>|</span><br><span class="line">|<span class="string"> OS-EXT-SRV-ATTR:instance_name        </span>|<span class="string"> instance-00000044                                           </span>|</span><br><span class="line">|<span class="string"> OS-EXT-STS:power_state               </span>|<span class="string"> 1                                                           </span>|</span><br><span class="line">|<span class="string"> OS-EXT-STS:task_state                </span>|<span class="string"> -                                                           </span>|</span><br><span class="line">|<span class="string"> OS-EXT-STS:vm_state                  </span>|<span class="string"> active                                                      </span>|</span><br><span class="line">|<span class="string"> OS-SRV-USG:launched_at               </span>|<span class="string"> 2015-02-06T06:03:24.000000                                  </span>|</span><br><span class="line">|<span class="string"> OS-SRV-USG:terminated_at             </span>|<span class="string"> -                                                           </span>|</span><br><span class="line">|<span class="string"> accessIPv4                           </span>|<span class="string">                                                             </span>|</span><br><span class="line">|<span class="string"> accessIPv6                           </span>|<span class="string">                                                             </span>|</span><br><span class="line">|<span class="string"> config_drive                         </span>|<span class="string">                                                             </span>|</span><br><span class="line">|<span class="string"> created                              </span>|<span class="string"> 2015-02-06T06:02:37Z                                        </span>|</span><br><span class="line">|<span class="string"> flavor                               </span>|<span class="string"> m1.small (2)                                                </span>|</span><br><span class="line">|<span class="string"> hostId                               </span>|<span class="string"> dddad0cc7fcd1cad5eeb87ea7bad2a9f31d690d8955d73b998e2ba5c    </span>|</span><br><span class="line">|<span class="string"> id                                   </span>|<span class="string"> c75adb4f-c554-4fa2-962e-35fef3367041                        </span>|</span><br><span class="line">|<span class="string"> image                                </span>|<span class="string"> centOS_6.5_x86_64_en (d923120e-5a1f-417f-b627-36320215f8be) </span>|</span><br><span class="line">|<span class="string"> internal-network network             </span>|<span class="string"> 192.168.0.50, 10.74.149.23                                  </span>|</span><br><span class="line">|<span class="string"> key_name                             </span>|<span class="string"> -                                                           </span>|</span><br><span class="line">|<span class="string"> metadata                             </span>|<span class="string"> &#123;&#125;                                                          </span>|</span><br><span class="line">  |<span class="string"> name                                 </span>|<span class="string"> centos-test                                                 </span>|</span><br><span class="line">  |<span class="string"> os-extended-volumes:volumes_attached </span>|<span class="string"> []                                                          </span>|</span><br><span class="line">  |<span class="string"> progress                             </span>|<span class="string"> 0                                                           </span>|</span><br><span class="line">  |<span class="string"> security_groups                      </span>|<span class="string"> default                                                     </span>|</span><br><span class="line">  |<span class="string"> status                               </span>|<span class="string"> ACTIVE                                                      </span>|</span><br><span class="line">  |<span class="string"> tenant_id                            </span>|<span class="string"> 52941cb7e81644c1a32fb087b83d83b6                            </span>|</span><br><span class="line">  |<span class="string"> updated                              </span>|<span class="string"> 2015-02-06T06:02:40Z                                        </span>|</span><br><span class="line">  |<span class="string"> user_id                              </span>|<span class="string"> 33aef1cf867d48468fc295ac46296953                            </span>|</span><br><span class="line">  +--------------------------------------+-------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>同样OpenStack调用了libvirt接口利用底层虚拟化技术Provider创建了一台虚拟设备，我们可以在计算节点上查看qemu进程，如下所示，只是参数比起我们自己使用qemu会相对负责许多，因为涉及到诸如网络信息的配置等</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ps -ef|grep qemu</span></span><br><span class="line">libvirt+  2711     1  6 14:01 ?        00:01:02 /usr/bin/qemu-system-x86_64 -name instance-00000043 -S -machine pc-i440fx-trusty,<span class="attribute">accel</span>=kvm,usb=off -cpu Nehalem,+rdtscp,+dca,+pdcm,+xtpr,+tm2,+est,+vmx,+ds_cpl,+monitor,+dtes64,+pbe,+tm,+ht,+ss,+acpi,+ds,+vme -m 512 -realtime <span class="attribute">mlock</span>=off -smp 1,<span class="attribute">sockets</span>=1,cores=1,threads=1 -uuid e6759873-7e62-4341-9a35-39a10d65fb12 -smbios <span class="attribute">type</span>=1,manufacturer=OpenStack Foundation,<span class="attribute">product</span>=OpenStack Nova,<span class="attribute">version</span>=2014.1.3,serial=35383339-3134-434e-4731-323353345756,uuid=e6759873-7e62-4341-9a35-39a10d65fb12 -no-user-config -nodefaults -chardev socket,<span class="attribute">id</span>=charmonitor,path=/var/lib/libvirt/qemu/instance-00000043.monitor,server,nowait -mon <span class="attribute">chardev</span>=charmonitor,id=monitor,mode=control -rtc <span class="attribute">base</span>=utc,driftfix=slew -global kvm-pit.<span class="attribute">lost_tick_policy</span>=discard -no-hpet -no-shutdown -boot <span class="attribute">strict</span>=on -device piix3-usb-uhci,<span class="attribute">id</span>=usb,bus=pci.0,addr=0x1.0x2 -drive <span class="attribute">file</span>=/var/lib/nova/instances/e6759873-7e62-4341-9a35-39a10d65fb12/disk,if=none,id=drive-virtio-disk0,format=qcow2,cache=none -device virtio-blk-pci,<span class="attribute">scsi</span>=off,bus=pci.0,addr=0x4,drive=drive-virtio-disk0,id=virtio-disk0,bootindex=1 -netdev tap,<span class="attribute">fd</span>=25,id=hostnet0,vhost=on,vhostfd=26 -device virtio-net-pci,<span class="attribute">netdev</span>=hostnet0,id=net0,mac=fa:16:3e:59:90:96,bus=pci.0,addr=0x3 -chardev file,<span class="attribute">id</span>=charserial0,path=/var/lib/nova/instances/e6759873-7e62-4341-9a35-39a10d65fb12/console.log -device isa-serial,<span class="attribute">chardev</span>=charserial0,id=serial0 -chardev pty,<span class="attribute">id</span>=charserial1 -device isa-serial,<span class="attribute">chardev</span>=charserial1,id=serial1 -device usb-tablet,<span class="attribute">id</span>=input0 -vnc 0.0.0.0:1 -k en-us -device cirrus-vga,<span class="attribute">id</span>=video0,bus=pci.0,addr=0x2 -device virtio-balloon-pci,<span class="attribute">id</span>=balloon0,bus=pci.0,addr=0x5</span><br></pre></td></tr></table></figure>
+<p>虚拟机的文件保存在/var/lib/nova/instances目录中。</p>
+<p><img src="http://filehost.qiniudn.com/vnc_viewer.png" alt=""></p>
+<p><img src="http://filehost.qiniudn.com/connect_to_vm.png" alt=""></p>
+<h2><span id="nova-console实现">Nova Console实现</span></h2><p>基于Libvirt对虚拟化技术的管控基础上，Nova项目提供了如下主要功能：</p>
+<ul>
+<li>API：提供外部访问Http访问接口</li>
+<li>Compute Core：负责对虚拟化资源的生命周期管理</li>
+<li>Networking for VMS：负责虚拟机的网络访问控制等及Nova-Network模式，适合小型的企业私有云，更多的场景还是考虑使用Neutron</li>
+<li>Image management (EC2 scenario)：与Glance组件通讯负责镜像管理</li>
+<li>Command-line clients and other interfaces： 提供命令行管理接口</li>
+<li>Console interface：提供VNC以及NoVNC功能，方便管理和使用OpenStack虚拟机</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/openstack/" rel="tag"># openstack</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/31/openstack-icehouse-vlan/" rel="next" title="OpenStack之Neutron Vlan">
+                <i class="fa fa-chevron-left"></i> OpenStack之Neutron Vlan
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/10/openstack-create-windows-images/" rel="prev" title="OpenStack创建Windows镜像">
+                OpenStack创建Windows镜像 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">OpenStack虚拟化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Nova Console实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/';
+        this.page.identifier = '2015/02/01/openstack-novnc-architecture/';
+        this.page.title = 'OpenStack Console 设计';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

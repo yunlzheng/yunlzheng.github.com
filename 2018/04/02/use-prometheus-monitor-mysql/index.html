@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Prometheus,MySQL,MySQL Exporter," />
+
+
+<meta name="description" content="MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下的产品。 MySQL是最流行的关系型数据库管理系统之一。数据库的稳定运行时保证业务可用性的关键因素之一。这一小节当中将介绍如何使用Prometheus提供的MySQLD Exporter实现对MySQL数据库性能以及资源利用率的监控和度量。">
+<meta name="keywords" content="Prometheus,MySQL,MySQL Exporter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="监控MySQL运行状态">
+<meta property="og:url" content="http://yunlzheng.github.io/2018/04/02/use-prometheus-monitor-mysql/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下的产品。 MySQL是最流行的关系型数据库管理系统之一。数据库的稳定运行时保证业务可用性的关键因素之一。这一小节当中将介绍如何使用Prometheus提供的MySQLD Exporter实现对MySQL数据库性能以及资源利用率的监控和度量。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p2n2em8ut.bkt.clouddn.com/mysqld_exporter_target_stats.png">
+<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="监控MySQL运行状态">
+<meta name="twitter:description" content="MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下的产品。 MySQL是最流行的关系型数据库管理系统之一。数据库的稳定运行时保证业务可用性的关键因素之一。这一小节当中将介绍如何使用Prometheus提供的MySQLD Exporter实现对MySQL数据库性能以及资源利用率的监控和度量。">
+<meta name="twitter:image" content="http://p2n2em8ut.bkt.clouddn.com/mysqld_exporter_target_stats.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2018/04/02/use-prometheus-monitor-mysql/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>监控MySQL运行状态 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2018/04/02/use-prometheus-monitor-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">监控MySQL运行状态</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-02T09:02:20+08:00">2018-04-02</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Prometheus/" itemprop="url" rel="index"><span itemprop="name">Prometheus</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/04/02/use-prometheus-monitor-mysql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/04/02/use-prometheus-monitor-mysql/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下的产品。 MySQL是最流行的关系型数据库管理系统之一。数据库的稳定运行时保证业务可用性的关键因素之一。这一小节当中将介绍如何使用Prometheus提供的MySQLD Exporter实现对MySQL数据库性能以及资源利用率的监控和度量。</p>
+<a id="more"></a>
+<h2><span id="部署mysqld-exporter">部署MySQLD Exporter</span></h2><p>为了简化测试环境复杂度，这里使用Docker Compose定义并启动MySQL以及MySQLD Exporter：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">version:</span> <span class="string">'3'</span></span><br><span class="line"><span class="symbol">services:</span></span><br><span class="line"><span class="symbol">  mysql:</span></span><br><span class="line"><span class="symbol">    image:</span> mysql:<span class="number">5.7</span></span><br><span class="line"><span class="symbol">    ports:</span></span><br><span class="line">      - <span class="string">"3306:3306"</span></span><br><span class="line"><span class="symbol">    environment:</span></span><br><span class="line">      - MYSQL_ROOT_PASSWORD=password</span><br><span class="line">      - MYSQL_DATABASE=database</span><br><span class="line"><span class="symbol">  mysqlexporter:</span></span><br><span class="line"><span class="symbol">    image:</span> prom/mysqld-exporter</span><br><span class="line"><span class="symbol">    ports:</span></span><br><span class="line">      - <span class="string">"9104:9104"</span></span><br><span class="line"><span class="symbol">    environment:</span></span><br><span class="line">      - DATA_SOURCE_NAME=root:password@(mysql:<span class="number">3306</span>)/database</span><br></pre></td></tr></table></figure>
+<p>这里通过环境变量DATA_SOURCE_NAME方式定义监控目标。使用Docker Compose启动测试用的MySQL实例以及MySQLD Exporter:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker-compose up -d</span></span><br></pre></td></tr></table></figure>
+<p>启动完成后，可以通过以下命令登录到MySQL容器当中，并执行MySQL相关的指令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker <span class="built_in">exec</span> -it &lt;mysql_container_id&gt; mysql -uroot -ppassword</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<p>可以通过<a href="http://localhost:9104" target="_blank" rel="noopener">http://localhost:9104</a>访问MySQLD Exporter暴露的服务：</p>
+<p>可以通过/metrics查看mysql_up指标判断当前MySQLD Exporter是否正常连接到了MySQL实例，当指标值为1时表示能够正常获取监控数据：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HELP mysql_up Whether the MySQL server is up.</span></span><br><span class="line"><span class="comment"># TYPE mysql_up gauge</span></span><br><span class="line"><span class="attribute">mysql_up</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>修改Prometheus配置文件/etc/prometheus/prometheus.yml，增加对MySQLD Exporter实例的采集任务配置:</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby"> <span class="symbol">job_name:</span> mysqld</span></span><br><span class="line"><span class="ruby">  <span class="symbol">static_configs:</span></span></span><br><span class="line"><span class="ruby">  - <span class="symbol">targets:</span></span></span><br><span class="line"><span class="ruby">    - <span class="symbol">localhost:</span><span class="number">9104</span></span></span><br></pre></td></tr></table></figure>
+<p>启动Prometheus:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus --config.file=/etc/prometheus/prometheus<span class="selector-class">.yml</span> --storage<span class="selector-class">.tsdb</span><span class="selector-class">.path</span>=/data/prometheus</span><br></pre></td></tr></table></figure>
+<p>通过Prometheus的状态页，可以查看当前Target的状态：</p>
+<p><img src="http://p2n2em8ut.bkt.clouddn.com/mysqld_exporter_target_stats.png" alt="MySQLD Exporter实例状态"></p>
+<p>为了确保数据库的稳定运行，通常会关注一下四个与性能和资源利用率相关的指标：查询吞吐量、连接情况、缓冲池使用情况以及查询执行性能等。</p>
+<h2><span id="监控数据库吞吐量">监控数据库吞吐量</span></h2><p>对于数据库而言，最重要的工作就是实现对数据的增、删、改、查。为了衡量数据库服务器当前的吞吐量变化情况。在MySQL内部通过一个名为Questions的计数器，当客户端发送一个查询语句后，其值就会+1。可以通过以下MySQL指令查询Questions等服务器状态变量的值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SHOW GLOBAL STATUS LIKE <span class="string">"Questions"</span>;</span></span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Questions     | 1326  |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>MySQLD Exporter中返回的样本数据中通过mysql_global_status_questions反映当前Questions计数器的大小：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># HELP mysql_global_status_questions Generic metric from SHOW GLOBAL STATUS.</span><br><span class="line"># TYPE mysql_global_status_questions untyped</span><br><span class="line">mysql_global_status_questions 1016</span><br></pre></td></tr></table></figure>
+<p>通过以下PromQL可以查看当前MySQL实例查询速率的变化情况，查询数量的突变往往暗示着可能发生了某些严重的问题，因此用于用户应该关注并且设置响应的告警规则，以及时获取该指标的变化情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rate(mysql_global_status_questions[2m])</span><br></pre></td></tr></table></figure>
+<p>一般还可以从监控读操作和写操作的执行情况进行判断。通过MySQL全局状态中的Com_select可以查询到当前服务器执行查询语句的总次数：相应的，也可以通过Com_insert、Com_update以及Com_delete的总量衡量当前服务器写操作的总次数，例如，可以通过以下指令查询当前MySQL实例insert语句的执行次数总量：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SHOW GLOBAL STATUS LIKE <span class="string">"Com_insert"</span>;</span></span><br><span class="line">+---------------+-------+</span><br><span class="line">| Variable_name | Value |</span><br><span class="line">+---------------+-------+</span><br><span class="line">| Com_insert    | 0     |</span><br><span class="line">+---------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>从MySQLD Exporter的/metrics返回的监控样本中，可以通过global_status_commands_total获取当前实例各类指令执行的次数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># HELP mysql_global_status_commands_total Total number of executed MySQL commands.</span><br><span class="line"># TYPE mysql_global_status_commands_total counter</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;admin_commands&quot;&#125; 0</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;alter_db&quot;&#125; 0</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;alter_db_upgrade&quot;&#125; 0</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;select&quot;&#125; 10</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;insert&quot;&#125; 2</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;update&quot;&#125; 2</span><br><span class="line">mysql_global_status_commands_total&#123;command=&quot;delete&quot;&#125; 1</span><br></pre></td></tr></table></figure>
+<p>用户可以通过以下PromQL查看当前MySQL实例写操作速率的变化情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(rate(mysql_global_status_commands_total&#123;command=~&quot;insert|update|delete&quot;&#125;[2m])) without (command)</span><br></pre></td></tr></table></figure>
+<h2><span id="连接情况">连接情况</span></h2><p>在MySQL中通过全局设置max_connections限制了当前服务器允许的最大客户端连接数量。一旦可用连接数被用尽，新的客户端连接都会被直接拒绝。 因此当监控MySQL运行状态时，需要时刻关注MySQL服务器的连接情况。用户可以通过以下指令查看当前MySQL服务的max_connections配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> SHOW VARIABLES LIKE <span class="string">'max_connections'</span>;</span></span><br><span class="line">+-----------------+-------+</span><br><span class="line">| Variable_name   | Value |</span><br><span class="line">+-----------------+-------+</span><br><span class="line">| max_connections | 151   |</span><br><span class="line">+-----------------+-------+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p>MySQL默认的最大链接数为151。临时调整最大连接数，可以通过以下指令进行设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET GLOBAL max_connections = 200;</span><br></pre></td></tr></table></figure>
+<p>如果想永久化设置，则需要通过修改MySQL配置文件my.cnf，添加以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max_connections = 200</span><br></pre></td></tr></table></figure>
+<p>通过Global Status中的Threads_connected、Aborted_connects、Connection_errors_max_connections以及Threads_running可以查看当前MySQL实例的连接情况。</p>
+<p>例如，通过以下指令可以直接当前MySQL实例的连接数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW GLOBAL STATUS LIKE &quot;Threads_connected&quot;;</span><br><span class="line">+-------------------+-------+</span><br><span class="line">| Variable_name     | Value |</span><br><span class="line">+-------------------+-------+</span><br><span class="line">| Threads_connected | 1     |</span><br><span class="line">+-------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>当所有可用连接都被占用时，如果一个客户端尝试连接至MySQL，会出现“Too many connections(连接数过多)”错误，同时Connection_errors_max_connections的值也会增加。为了防止出现此类情况，你应该监控可用连接的数量，并确保其值保持在max_connections限制以内。同时如果Aborted_connects的数量不断增加时，说明客户端尝试连接到MySQL都失败了。这是应该通过Connection_errors_max_connections以及Connection_errors_internal分析连接失败的问题原因。</p>
+<p>下面列举了与MySQL连接相关的监控指标：</p>
+<ul>
+<li>mysql_global_variables_max_connections： 允许的最大连接数；</li>
+<li>mysql_global_status_threads_connected： 当前开放的连接；</li>
+<li>mysql_global_status_threads_running：当前开放的连接；</li>
+<li>mysql_global_status_aborted_connects：当前开放的连接；</li>
+<li>mysql_global_status_connection_errors_total{error=”max_connections”}：由于超出最大连接数导致的错误；</li>
+<li>mysql_global_status_connection_errors_total{error=”internal”}：由于系统内部导致的错误；</li>
+</ul>
+<p>通过PromQL查询当前剩余的可用连接数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql_global_variables_max_connections - mysql_global_status_threads_connected</span><br></pre></td></tr></table></figure>
+<p>使用PromQL查询当前MySQL实例连接拒绝数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql_global_status_aborted_connects</span><br></pre></td></tr></table></figure>
+<h2><span id="缓冲池使用情况">缓冲池使用情况</span></h2><p>MySQL默认的存储引擎InnoDB使用了一篇称为缓冲池的内存区域，用于缓存数据表以及索引的数据。 当缓冲池的资源使用超出限制后，可能会导致数据库性能的下降，同时很多查询命令回直接在磁盘中执行，导致磁盘I/O不断攀升。 因此关注MySQL缓冲池的资源使用情况，并且在合理的时间扩大缓冲池的大小可以优化数据库的性能。</p>
+<p>Innodb_buffer_pool_pages_total反应了当前缓冲池中的内存页的总页数。可以通过以下指令查看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW GLOBAL STATUS LIKE &quot;Innodb_buffer_pool_pages_total&quot;;</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">| Variable_name                  | Value |</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">| Innodb_buffer_pool_pages_total | 8191  |</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">1 row in set (0.02 sec)</span><br></pre></td></tr></table></figure>
+<p>MySQLD Exporter通过以下指标返回缓冲池中各类内存页的数量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># HELP mysql_global_status_buffer_pool_pages Innodb buffer pool pages by state.</span><br><span class="line"># TYPE mysql_global_status_buffer_pool_pages gauge</span><br><span class="line">mysql_global_status_buffer_pool_pages&#123;state=&quot;data&quot;&#125; 516</span><br><span class="line">mysql_global_status_buffer_pool_pages&#123;state=&quot;dirty&quot;&#125; 0</span><br><span class="line">mysql_global_status_buffer_pool_pages&#123;state=&quot;free&quot;&#125; 7675</span><br><span class="line">mysql_global_status_buffer_pool_pages&#123;state=&quot;misc&quot;&#125; 0</span><br></pre></td></tr></table></figure>
+<p>Innodb_buffer_pool_read_requests记录了正常从缓冲池读取数据的请求数量。可以通过以下指令查看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW GLOBAL STATUS LIKE &quot;Innodb_buffer_pool_read_requests&quot;;</span><br><span class="line">+----------------------------------+--------+</span><br><span class="line">| Variable_name                    | Value  |</span><br><span class="line">+----------------------------------+--------+</span><br><span class="line">| Innodb_buffer_pool_read_requests | 797023 |</span><br><span class="line">+----------------------------------+--------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>MySQLD Exporter通过以下指标返回缓冲池中Innodb_buffer_pool_read_requests的值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># HELP mysql_global_status_innodb_buffer_pool_read_requests Generic metric from SHOW GLOBAL STATUS.</span><br><span class="line"># TYPE mysql_global_status_innodb_buffer_pool_read_requests untyped</span><br><span class="line">mysql_global_status_innodb_buffer_pool_read_requests 736711</span><br></pre></td></tr></table></figure>
+<p>当缓冲池无法满足时，MySQL只能从磁盘中读取数据。Innodb_buffer_pool_reads即记录了从磁盘读取数据的请求数量。通常来说从内存中读取数据的速度要比从磁盘中读取快很多，因此，如果Innodb_buffer_pool_reads的值开始增加，可能意味着数据库的性能有问题。 可以通过以下只能查看Innodb_buffer_pool_reads的数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW GLOBAL STATUS LIKE &quot;Innodb_buffer_pool_reads&quot;;</span><br><span class="line">+--------------------------+-------+</span><br><span class="line">| Variable_name            | Value |</span><br><span class="line">+--------------------------+-------+</span><br><span class="line">| Innodb_buffer_pool_reads | 443   |</span><br><span class="line">+--------------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>在MySQLD Exporter中可以通过以下指标查看Innodb_buffer_pool_reads的数量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># HELP mysql_global_status_innodb_buffer_pool_reads Generic metric from SHOW GLOBAL STATUS.</span><br><span class="line"># TYPE mysql_global_status_innodb_buffer_pool_reads untyped</span><br><span class="line">mysql_global_status_innodb_buffer_pool_reads 443</span><br></pre></td></tr></table></figure>
+<p>通过以上监控指标，以及实际监控的场景，我们可以利用PromQL快速建立多个监控项。</p>
+<p>通过以下PromQL可以得到各个MySQL实例的缓冲池利用率。一般来说还需要结合Innodb_buffer_pool_reads的增长率情况来结合判断缓冲池大小是否合理：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">sum</span>(<span class="name">mysql_global_status_buffer_pool_pages</span>) by (<span class="name">instance</span>) - sum(<span class="name">mysql_global_status_buffer_pool_pages</span>&#123;state=<span class="string">"free"</span>&#125;) by (<span class="name">instance</span>)) / sum(<span class="name">mysql_global_status_buffer_pool_pages</span>) by (<span class="name">instance</span>)</span><br></pre></td></tr></table></figure>
+<p>也可以通过以下PromQL计算2分钟内磁盘读取请求次数的增长率的变化情况：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">rate</span><span class="params">(mysql_global_status_innodb_buffer_pool_reads[<span class="number">2</span>m])</span></span></span><br></pre></td></tr></table></figure>
+<h2><span id="查询性能">查询性能</span></h2><p>MySQL还提供了一个Slow_queries的计数器，当查询的执行时间超过long_query_time的值后，计数器就会+1，其默认值为10秒，可以通过以下指令在MySQL中查询当前long_query_time的设置：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE <span class="emphasis">'long_query_time'</span>;</span><br><span class="line"><span class="code">+-----------------+</span>-----------+</span><br><span class="line">| Variable<span class="emphasis">_name   | Value     |</span></span><br><span class="line"><span class="emphasis">+-----------------+-----------+</span></span><br><span class="line"><span class="emphasis">| long_</span>query<span class="emphasis">_time | 10.000000 |</span></span><br><span class="line"><span class="emphasis">+-----------------+-----------+</span></span><br><span class="line"><span class="emphasis">1 row in set (0.00 sec)</span></span><br></pre></td></tr></table></figure>
+<p>通过以下指令可以查看当前MySQL实例中Slow_queries的数量：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW GLOBAL STATUS LIKE "Slow<span class="emphasis">_queries";</span></span><br><span class="line"><span class="emphasis">+---------------+-------+</span></span><br><span class="line"><span class="emphasis">| Variable_</span>name | Value |</span><br><span class="line"><span class="code">+---------------+</span>-------+</span><br><span class="line">| Slow<span class="emphasis">_queries  | 0     |</span></span><br><span class="line"><span class="emphasis">+---------------+-------+</span></span><br><span class="line"><span class="emphasis">1 row in set (0.00 sec)</span></span><br></pre></td></tr></table></figure>
+<p>MySQLD Exporter返回的样本数据中，通过以下指标展示当前的Slow_queries的值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> HELP mysql_global_status_slow_queries Generic metric from SHOW GLOBAL STATUS.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> TYPE mysql_global_status_slow_queries untyped</span></span><br><span class="line">mysql_global_status_slow_queries 0</span><br></pre></td></tr></table></figure>
+<p>通过监控Slow_queries的增长率，可以反映出当前MySQL服务器的性能状态，可以通过以下PromQL查询Slow_queries的增长情况：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">rate</span><span class="params">(mysql_global_status_slow_queries[<span class="number">2</span>m])</span></span></span><br></pre></td></tr></table></figure>
+<p>在MySQL中还可以通过安装response time插件，从而支持记录查询时间区间的统计信息。启动该功能后MySQLD Exporter也会自动获取到相关数据，从而可以细化MySQL查询响应时间的分布情况。 感兴趣的读者可以自行尝试。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Prometheus/" rel="tag"># Prometheus</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/MySQL-Exporter/" rel="tag"># MySQL Exporter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/21/java-concurrency-and-asynchronous/" rel="next" title="Java回炉重造之 - 并发与异步编程[图文]">
+                <i class="fa fa-chevron-left"></i> Java回炉重造之 - 并发与异步编程[图文]
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/25/prometheus-with-mutil-k8s-environment/" rel="prev" title="Promtheus Remote Storage使用案例：多Kubernetes集群监控方案">
+                Promtheus Remote Storage使用案例：多Kubernetes集群监控方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">72</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">部署MySQLD Exporter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">监控数据库吞吐量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">连接情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">缓冲池使用情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">查询性能</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2018/04/02/use-prometheus-monitor-mysql/';
+        this.page.identifier = '2018/04/02/use-prometheus-monitor-mysql/';
+        this.page.title = '监控MySQL运行状态';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>
