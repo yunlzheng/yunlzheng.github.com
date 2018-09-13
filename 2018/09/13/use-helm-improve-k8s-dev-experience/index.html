@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Kubernetes,Helm," />
+
+
+<meta name="description" content="容器即进程，Kubernetes则解决了如何部署和运行应用的问题。对于任何一个部署在Kubernetes得应用而言，通常都可以由几个固定的部分组成：Ingress,Service,Deployment等。直接使用Kubernetes原生的YAML定义服务，虽然能一定程度上简化应用的部署，但是对于大部分研发人员来说编写和使用YAML依然是一件相对痛苦的事情。HELM应允而生，Helm作为Kubern">
+<meta name="keywords" content="Kubernetes,Helm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Helm优化Kubernetes下的研发体验（一）">
+<meta property="og:url" content="http://yunlzheng.github.io/2018/09/13/use-helm-improve-k8s-dev-experience/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="容器即进程，Kubernetes则解决了如何部署和运行应用的问题。对于任何一个部署在Kubernetes得应用而言，通常都可以由几个固定的部分组成：Ingress,Service,Deployment等。直接使用Kubernetes原生的YAML定义服务，虽然能一定程度上简化应用的部署，但是对于大部分研发人员来说编写和使用YAML依然是一件相对痛苦的事情。HELM应允而生，Helm作为Kubern">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-13T04:56:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Helm优化Kubernetes下的研发体验（一）">
+<meta name="twitter:description" content="容器即进程，Kubernetes则解决了如何部署和运行应用的问题。对于任何一个部署在Kubernetes得应用而言，通常都可以由几个固定的部分组成：Ingress,Service,Deployment等。直接使用Kubernetes原生的YAML定义服务，虽然能一定程度上简化应用的部署，但是对于大部分研发人员来说编写和使用YAML依然是一件相对痛苦的事情。HELM应允而生，Helm作为Kubern">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2018/09/13/use-helm-improve-k8s-dev-experience/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>使用Helm优化Kubernetes下的研发体验（一） | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2018/09/13/use-helm-improve-k8s-dev-experience/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">使用Helm优化Kubernetes下的研发体验（一）</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-13T12:00:00+08:00">2018-09-13</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/13/use-helm-improve-k8s-dev-experience/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/13/use-helm-improve-k8s-dev-experience/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>容器即进程，Kubernetes则解决了如何部署和运行应用的问题。对于任何一个部署在Kubernetes得应用而言，通常都可以由几个固定的部分组成：Ingress,Service,Deployment等。直接使用Kubernetes原生的YAML定义服务，虽然能一定程度上简化应用的部署，但是对于大部分研发人员来说编写和使用YAML依然是一件相对痛苦的事情。HELM应允而生，Helm作为Kubernetes下的包管理工具，对原生服务定义过程进行了增强，通过模板化，参数化的形式大大简化用户部署Kubernetes应用的复杂度。</p>
+<p>在本文中笔者，将以一个Spring Boot程序为例，介绍如何在软件研发端到端过程中是使用Helm。本文中所使用的示例代码可以通过<a href="https://github.com/yunlzheng/project-samples/tree/master/containerization-spring-with-helm" target="_blank" rel="noopener">Github</a>下载。</p>
+<a id="more"></a>
+<h2><span id="创建应用程序">创建应用程序</span></h2><p>项目采用Maven作为项目的编译和构建工具，项目目录结构如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">├── <span class="selector-tag">README</span><span class="selector-class">.md</span></span><br><span class="line">├── <span class="selector-tag">chart</span></span><br><span class="line">│   ├── <span class="selector-tag">Chart</span><span class="selector-class">.yaml</span> # <span class="selector-tag">Chart</span>基本信息</span><br><span class="line">│   ├── <span class="selector-tag">charts</span> # 依赖</span><br><span class="line">│   ├── <span class="selector-tag">templates</span> # <span class="selector-tag">Kubernetes</span>模板</span><br><span class="line">│   │   ├── <span class="selector-tag">NOTES</span><span class="selector-class">.txt</span></span><br><span class="line">│   │   ├── _<span class="selector-tag">helpers</span><span class="selector-class">.tpl</span></span><br><span class="line">│   │   ├── <span class="selector-tag">deployment</span><span class="selector-class">.yaml</span></span><br><span class="line">│   │   ├── <span class="selector-tag">ingress</span><span class="selector-class">.yaml</span></span><br><span class="line">│   │   └── <span class="selector-tag">service</span><span class="selector-class">.yaml</span></span><br><span class="line">│   └── <span class="selector-tag">values</span><span class="selector-class">.yaml</span> # 变量</span><br><span class="line">├── <span class="selector-tag">Dockerfile</span> # <span class="selector-tag">Dockerfile</span>定义</span><br><span class="line">├── <span class="selector-tag">entrypoint</span><span class="selector-class">.sh</span> # 容器的<span class="selector-tag">entrypoint</span><span class="selector-class">.sh</span>文件</span><br><span class="line">├── <span class="selector-tag">mvnw</span></span><br><span class="line">├── <span class="selector-tag">mvnw</span><span class="selector-class">.cmd</span></span><br><span class="line">├── <span class="selector-tag">pom</span><span class="selector-class">.xml</span> </span><br><span class="line">├── <span class="selector-tag">src</span> # 应用源码</span><br><span class="line">│   └── <span class="selector-tag">main</span></span><br><span class="line">│       └── <span class="selector-tag">java</span></span><br><span class="line">│           └── <span class="selector-tag">hello</span></span><br><span class="line">│               ├── <span class="selector-tag">Application</span><span class="selector-class">.java</span></span><br><span class="line">│               └── <span class="selector-tag">HelloController</span><span class="selector-class">.java</span></span><br></pre></td></tr></table></figure>
+<p>该项目SCM中通过基础实施即代码的方式，我们定义了应用的3大要素：应用源码，应用是如何构建的（Dockerfile）以及应用是如何部署的(Chart)。</p>
+<h2><span id="构建容器镜像">构建容器镜像</span></h2><p>容器相关内容</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">├── Dockerfile <span class="comment"># Dockerfile定义</span></span><br><span class="line">├── <span class="keyword">entrypoint</span>.<span class="bash">sh <span class="comment"># 容器的entrypoint.sh文件</span></span></span><br></pre></td></tr></table></figure>
+<p>为了简化容器镜像构建过程，在Dockerfile中我们采用了Multi-Stage Builds的方式构建镜像，Dockerfile的具体内容如下：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Build</span></span><br><span class="line"><span class="keyword">FROM</span> maven:<span class="number">3.5</span>.<span class="number">0</span>-jdk-<span class="number">8</span>-alpine AS builder</span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> ./pom.xml pom.xml</span></span><br><span class="line"><span class="bash">ADD ./src src/</span></span><br><span class="line"><span class="bash">RUN mvn clean package</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># Package</span></span></span><br><span class="line"><span class="bash">FROM java:8</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">COPY --from=builder target/gs-spring-boot-0.1.0.jar gs-spring-boot.jar</span></span><br><span class="line"><span class="bash">RUN bash -c <span class="string">'touch /gs-spring-boot.jar'</span></span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash">ADD entrypoint.sh entrypoint.sh</span></span><br><span class="line"><span class="bash">RUN chmod +x entrypoint.sh</span></span><br><span class="line"><span class="bash">ENTRYPOINT [<span class="string">"./entrypoint.sh"</span>]</span></span><br></pre></td></tr></table></figure>
+<p>在第一个阶段中，我们将pom.xml以及源码加载到一个maven基础镜像中，并命名为builder，通过<code>mvn clean package</code>命令实现Java源码的编译打包，产生的jar包会保存到容器的targets目录下。</p>
+<p>在第二个阶段中，我们在java:8基础镜像的基础上直接从builder容器中拷贝jar文件，到当前容器中。为了能够在容器中运行该jar文件，这里我们定义了一个entrypoint.sh作为容器的启动命令，其内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line">ACTIVE_PROFILE=<span class="variable">$&#123;PROFILE:=default&#125;</span></span><br><span class="line">java -Xmx1024m -Djava.security.egd=file:/dev/./urandom -jar gs-spring-boot.jar --spring.profiles.active=<span class="variable">$&#123;ACTIVE_PROFILE&#125;</span> <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是在命令的最后我们添加了一个$@，该语法可以获取命令命令行中的所有参数，这样在后期运行容器时，可以在命令行中使用参数，覆盖应用的默认配置，例如<code>--spring.profiles.active=prod</code></p>
+<p>运行以下命令，编译并打包应用:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t yunlzheng/spring-app . # 修改为自己的镜像仓库</span><br><span class="line">Sending build context <span class="keyword">to</span> Docker daemon  16.38MB</span><br><span class="line"><span class="keyword">Step</span> 1/10 : <span class="keyword">FROM</span> maven:3.5.0-jdk-8-alpine AS builder</span><br><span class="line"> ---&gt; 67d11473f554</span><br><span class="line"><span class="built_in">..</span><span class="built_in">..</span><span class="built_in">..</span></span><br><span class="line">Successfully built e332622092ce</span><br><span class="line">Successfully tagged yunlzheng/spring-app:latest</span><br></pre></td></tr></table></figure>
+<p>上传镜像到镜像仓库中(需要实现注册容器镜像服务)</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">push</span> yunlzheng/spring-app <span class="meta"># 修改为自己的镜像仓库</span></span><br></pre></td></tr></table></figure>
+<h2><span id="构建chart">构建Chart</span></h2><p>通过容器镜像我们为服务定义了一个隔离的运行时环境，而为了能够让我们的应用程序能够运行到Kubernetes集群当中，我们还需要定义Helm相关的内容，来标准化容器的编排和部署信息：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">├── <span class="selector-tag">chart</span></span><br><span class="line">│   ├── <span class="selector-tag">Chart</span><span class="selector-class">.yaml</span> # <span class="selector-tag">Chart</span>基本信息</span><br><span class="line">│   ├── <span class="selector-tag">charts</span> # 依赖</span><br><span class="line">│   ├── <span class="selector-tag">templates</span> # <span class="selector-tag">Kubernetes</span>模板</span><br><span class="line">│   │   ├── <span class="selector-tag">NOTES</span><span class="selector-class">.txt</span></span><br><span class="line">│   │   ├── _<span class="selector-tag">helpers</span><span class="selector-class">.tpl</span></span><br><span class="line">│   │   ├── <span class="selector-tag">deployment</span><span class="selector-class">.yaml</span></span><br><span class="line">│   │   ├── <span class="selector-tag">ingress</span><span class="selector-class">.yaml</span></span><br><span class="line">│   │   └── <span class="selector-tag">service</span><span class="selector-class">.yaml</span></span><br><span class="line">│   └── <span class="selector-tag">values</span><span class="selector-class">.yaml</span> # 变量</span><br></pre></td></tr></table></figure>
+<p>在以上结构中我们定义了该应用是如何在Kubernetes集群中运行的。在初始化应用时，用户可以通过使用helm命令生成以上内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> helm create chart</span></span><br><span class="line">Creating chart</span><br></pre></td></tr></table></figure>
+<p>Chart我们可以理解为一组K8S manifest文件的模板，Chart.yaml中包含了该chart的基本信息,如名称，版本等:</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">apiVersion:</span> v1</span><br><span class="line"><span class="symbol">appVersion:</span> <span class="string">"1.0"</span></span><br><span class="line"><span class="symbol">description:</span> A Spring Boot Application</span><br><span class="line"><span class="symbol">name:</span> chart</span><br><span class="line"><span class="symbol">version:</span> <span class="number">0.1</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
+<p>在values.yaml中，我们定义了当前模板中所有的变量，如下所示：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">replicaCount</span>: 1</span><br><span class="line"></span><br><span class="line"><span class="attribute">image:</span></span><br><span class="line">  repository: yunlzheng/spring-app #修改为自己的镜像</span><br><span class="line">  <span class="attribute">tag</span>: latest</span><br><span class="line">  <span class="attribute">pullPolicy</span>: IfNotPresent</span><br><span class="line"></span><br><span class="line"><span class="attribute">service:</span></span><br><span class="line">  type: ClusterIP</span><br><span class="line">  <span class="attribute">port</span>: 8080 #容器映射的端口</span><br><span class="line">  </span><br><span class="line"><span class="attribute">ingress:</span></span><br><span class="line">  enabled: true # 打开集群ingress</span><br><span class="line">  <span class="attribute">annotations</span>: &#123;&#125;</span><br><span class="line">    # kubernetes.io/ingress.class: nginx</span><br><span class="line">    # kubernetes.io/tls-acme: "true"</span><br><span class="line">  <span class="attribute">path</span>: /</span><br><span class="line">  <span class="attribute">hosts:</span></span><br><span class="line">    - spring-example.local</span><br><span class="line">  <span class="attribute">tls</span>: []</span><br></pre></td></tr></table></figure>
+<p>templates目录下，则是K8S用户熟悉的如deployment.yaml, service.yaml。当然你也可以根据自己的需求添加更多的模板文件。</p>
+<p>以deployment.yaml为例，文件内容如下所示：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># deployment.yaml</span></span><br><span class="line"><span class="symbol">apiVersion:</span> apps/v1beta2</span><br><span class="line"><span class="symbol">kind:</span> Deployment</span><br><span class="line"><span class="symbol">metadata:</span></span><br><span class="line"><span class="symbol">  name:</span> &#123;&#123; template <span class="string">"chart.fullname"</span> . &#125;&#125;</span><br><span class="line"><span class="symbol">  labels:</span></span><br><span class="line"><span class="symbol">    app:</span> &#123;&#123; template <span class="string">"chart.name"</span> . &#125;&#125;</span><br><span class="line"><span class="symbol">    chart:</span> &#123;&#123; template <span class="string">"chart.chart"</span> . &#125;&#125;</span><br><span class="line"><span class="symbol">    release:</span> &#123;&#123; .Release.Name &#125;&#125;</span><br><span class="line"><span class="symbol">    heritage:</span> &#123;&#123; .Release.Service &#125;&#125;</span><br><span class="line"><span class="symbol">spec:</span></span><br><span class="line"><span class="symbol">  replicas:</span> &#123;&#123; .Values.replicaCount &#125;&#125;</span><br><span class="line"><span class="symbol">  selector:</span></span><br><span class="line"><span class="symbol">    matchLabels:</span></span><br><span class="line"><span class="symbol">      app:</span> &#123;&#123; template <span class="string">"chart.name"</span> . &#125;&#125;</span><br><span class="line"><span class="symbol">      release:</span> &#123;&#123; .Release.Name &#125;&#125;</span><br><span class="line"><span class="symbol">  template:</span></span><br><span class="line"><span class="symbol">    metadata:</span></span><br><span class="line"><span class="symbol">      labels:</span></span><br><span class="line"><span class="symbol">        app:</span> &#123;&#123; template <span class="string">"chart.name"</span> . &#125;&#125;</span><br><span class="line"><span class="symbol">        release:</span> &#123;&#123; .Release.Name &#125;&#125;</span><br><span class="line"><span class="symbol">    spec:</span></span><br><span class="line"><span class="symbol">      containers:</span></span><br><span class="line">        - name: &#123;&#123; .Chart.Name &#125;&#125;</span><br><span class="line"><span class="symbol">          image:</span> <span class="string">"&#123;&#123; .Values.image.repository &#125;&#125;:&#123;&#123; .Values.image.tag &#125;&#125;"</span></span><br><span class="line"><span class="symbol">          imagePullPolicy:</span> &#123;&#123; .Values.image.pullPolicy &#125;&#125;</span><br><span class="line"><span class="symbol">          ports:</span></span><br><span class="line">            - name: http</span><br><span class="line"><span class="symbol">              containerPort:</span> <span class="number">8080</span></span><br><span class="line"><span class="symbol">              protocol:</span> TCP</span><br></pre></td></tr></table></figure>
+<p>在文件中使用了了values.yaml中定义的相关变量，如Values.replicaCount，Values.image.repository，Values.image.tag等，使用这些变量的好处是，在部署Chart的时候，我们可以在命令行中动态修改这些变量的值，例如，修改镜像部署的版本等， service.yaml中的内容也是类似的，这里就不做描述。</p>
+<p>完成以上内容后，我们就可以将当前应用打包成一个chart文件，首先我们需要验证一下chart文件的内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> chart</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> helm lint</span></span><br><span class="line">==&gt; Linting .</span><br><span class="line">[INFO] Chart.yaml: icon is recommended</span><br><span class="line"></span><br><span class="line">1 chart(s) linted, no failures</span><br></pre></td></tr></table></figure>
+<p>在确认chart格式没有问题之后，开发人员就可以直接通过helm部署实例到Kubernetes集群：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ cd chart</span><br><span class="line">$ helm <span class="keyword">install</span> .</span><br><span class="line"># 省略其它输出</span><br><span class="line">==&gt; v1/Service</span><br><span class="line"><span class="keyword">NAME</span>                        <span class="keyword">TYPE</span>       CLUSTER-IP    <span class="keyword">EXTERNAL</span>-IP  PORT(S)   AGE</span><br><span class="line">womping-sparrow-spring-app  ClusterIP  <span class="number">172.19</span><span class="number">.11</span><span class="number">.41</span>  &lt;<span class="keyword">none</span>&gt;       <span class="number">8080</span>/TCP  <span class="number">1</span>s</span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line"><span class="number">1.</span> <span class="keyword">Get</span> the application <span class="keyword">URL</span> <span class="keyword">by</span> running these commands:</span><br><span class="line">  <span class="keyword">http</span>://spring-example.local/</span><br></pre></td></tr></table></figure>
+<p>开发人员访问，并验证应用是否按照预期运行：</p>
+<p>[attach]15417[/attach]</p>
+<h2><span id="发布chart">发布Chart</span></h2><p>在确认应用能够正常运行之后，我们就可以对Chart进行打包和发布了。对于运维和测试人员，而言，他们只需要直接使用特定版本的应用chart，并对其进行测试或者是部署：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cd ..</span><br><span class="line">$ helm <span class="keyword">package</span> chart</span><br><span class="line">Successfully packaged chart and saved it to: <span class="regexp">/Users/yu</span>nlong<span class="regexp">/workspace/</span><span class="keyword">project</span>-samples<span class="regexp">/containerization-spring-with-helm/</span>chart-<span class="number">0.1</span>.<span class="number">0</span>.tgz</span><br></pre></td></tr></table></figure>
+<p>在默认情况下，<code>helm package</code>命令会使用Charts.yaml中文件定义的版本。 而如果在持续集成工具中，如果我们希望每次都能动态生成一个新版本的Chart，那在打包时，可以通过–version，动态修改，从而确保每次持续集成过程都能产生一个新的版本，并且能够对该版本进行独立验证。</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ helm package chart <span class="comment">--version 0.0.2</span></span><br><span class="line">Successfully packaged chart <span class="keyword">and</span> saved <span class="keyword">it</span> <span class="keyword">to</span>: /workspace/tmp/spring-sample/chart<span class="number">-0.0</span><span class="number">.2</span>.tgz</span><br></pre></td></tr></table></figure>
+<p>万事具备，当然现在还没有任何人能够使用你构建的chart，为了能够让其他人（测试，运维，or anyone）能够使用Chart我们需要将Chart发布到一个公共的仓库(Repository)当中。</p>
+<p>Helm官方提供了一个名叫<a href="https://github.com/helm/chartmuseum" target="_blank" rel="noopener">Chartmusem</a>的开源项目，支持对接AWS S3，Google Storage，Alibaba OSS等存储服务，用户可通过其API上传Chart,并且自动生成仓库索引文件，有精力的同学可以自行研究。</p>
+<p>这里我们直接使用<a href="https://rdc.aliyun.com/" target="_blank" rel="noopener">阿里云效</a>提供的Helm仓库服务，用户只需要注册账号，并<a href="https://repomanage.rdc.aliyun.com/my/repo" target="_blank" rel="noopener">开通私有仓库服务</a>，即可免费创建自己私有的，无容量限制的Helm仓库。</p>
+<p>由于通过<a href="https://rdc.aliyun.com/" target="_blank" rel="noopener">阿里云效</a>创建的Helm仓库是私有的，因此在添加仓库时需要通过参数<code>--username=kHKvnX</code>和<code>--password=WsCH7zuHH2</code>指定用户名和密码：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm repo add play-helm https:<span class="string">//repomanage.rdc.aliyun.com/helm_repositories/26125-play-helm</span> <span class="params">--username=kHKvnX</span> <span class="params">--password=WsCH7zuHH2</span></span><br></pre></td></tr></table></figure>
+<p>为了更好的Chart发布体验，Helm官方为Chartmusem提供了一个<a href="https://github.com/chartmuseum/helm-push" target="_blank" rel="noopener">Helm Push</a>的插件，<a href="https://rdc.aliyun.com/" target="_blank" rel="noopener">云效</a>Helm仓库服务对该插件进行了完整兼容，因此用户可以直接使用该插件完成chart的发布：</p>
+<p>安装Helm Push插件：</p>
+<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ helm plugin install https://github.com/chartmuseum/helm-<span class="keyword">push</span></span><br><span class="line">Downloading <span class="keyword">and</span> installing helm-<span class="keyword">push</span> v0<span class="meta">.7</span><span class="meta">.1</span> ...</span><br><span class="line"><span class="symbol">https:</span>//github.com/chartmuseum/helm-<span class="keyword">push</span>/releases/download/v0<span class="meta">.7</span><span class="meta">.1</span>/helm-push_0<span class="meta">.7</span>.1_darwin_amd64.tar.gz</span><br><span class="line">Installed plugin: <span class="keyword">push</span></span><br></pre></td></tr></table></figure>
+<p>由于已经将Helm仓库添加到了本地，我们可以直接使用以下命令将chart发布到仓库中：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ helm push chart<span class="number">-0.1</span><span class="number">.0</span>.tgz play-helm </span><br><span class="line">Pushing chart<span class="number">-0.1</span><span class="number">.0</span>.tgz to play-helm...</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+<p>发布完成后重新更新本地仓库索引：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ helm update</span><br><span class="line">...Successfully got <span class="keyword">an</span> update <span class="built_in">from</span> <span class="keyword">the</span> <span class="string">"play-helm"</span> chart repository</span><br><span class="line">...Successfully got <span class="keyword">an</span> update <span class="built_in">from</span> <span class="keyword">the</span> <span class="string">"stable"</span> chart repository</span><br><span class="line">Update Complete. ⎈ Happy Helming!⎈</span><br></pre></td></tr></table></figure>
+<p>搜索play-helm仓库并部署的chart：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ helm <span class="keyword">search</span> play-helm</span><br><span class="line">NAME            CHART <span class="keyword">VERSION</span>   <span class="keyword">APP</span> <span class="keyword">VERSION</span>     DESCRIPTION              </span><br><span class="line">play-helm/chart 0.1.0           1.0             A Spring <span class="keyword">Boot</span> Application</span><br><span class="line"></span><br><span class="line">$ helm install play-helm/chart</span><br></pre></td></tr></table></figure>
+<h2><span id="其它的小技巧">其它的小技巧</span></h2><p>在发布镜像的时候指定版本：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ helm push chart<span class="number">-0.1</span><span class="number">.0</span>.tgz play-helm --version=<span class="number">0.2</span><span class="number">.0</span></span><br><span class="line">Pushing chart<span class="number">-0.2</span><span class="number">.0</span>.tgz to play-helm...</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+<p>直接发布chart目录:</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ helm push chart play-helm --version=<span class="number">0.3</span><span class="number">.0</span></span><br><span class="line">Pushing chart<span class="number">-0.1</span><span class="number">.0</span>.tgz to play-helm...</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+<p>在不添加helm仓库的情况下直接发布chart:</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ helm push chart http<span class="variable">s:</span>//repomanage.rdc.aliyun.<span class="keyword">com</span>/helm_repositories/<span class="number">26125</span>-play-helm --username=kHKvnX --password=WsCH7zuHH2</span><br><span class="line">Pushing chart-<span class="number">0.1</span>.<span class="number">0</span>.tgz <span class="keyword">to</span> http<span class="variable">s:</span>//repomanage.rdc.aliyun.<span class="keyword">com</span>/helm_repositories/<span class="number">26125</span>-play-helm...</span><br><span class="line">Done.</span><br></pre></td></tr></table></figure>
+<h2><span id="小结">小结</span></h2><p>到目前为止，我们展示了如何在软件研发的端到端过程中使用Helm，通过基础设施即代码的模式，开发人员可以直接在源码中通过Chart定义管理应用的部署架构，在完成开发工作后开发人员只需要将Chart发布到Helm仓库中，接下来无论是测试，还是运维都可以直接使用Chart快速在Kubernetes集群中对应用进行测试与发布。</p>
+<p>下一篇文章中，我们将会介绍如何使用Jenkins构建一条基于容器和Helm的持续交付流水线，同时介绍研发团队中的不同角色如何围绕Helm，围绕持续交付流水线实现一个高效，协作的研发流程。</p>
+<h2><span id="参考资料">参考资料</span></h2><ul>
+<li><a href="https://github.com/helm/helm" target="_blank" rel="noopener">Github Helm项目</a></li>
+<li><a href="https://github.com/helm/chartmuseum" target="_blank" rel="noopener">Github Chartmuseum项目</a></li>
+<li><a href="https://github.com/helm/chartmuseum" target="_blank" rel="noopener">Github Chartmuseum项目</a></li>
+<li><a href="https://github.com/chartmuseum/helm-push" target="_blank" rel="noopener">Helm Push插件</a></li>
+<li><a href="https://www.aliyun.com/product/yunxiao?spm=5176.224200.developerService.27.1b776ed6tdwLm5" target="_blank" rel="noopener">云效一站式企业协同研发云</a></li>
+<li><a href="https://repomanage.rdc.aliyun.com/my/repo" target="_blank" rel="noopener">云效私有仓库服务</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/tags/Helm/" rel="tag"># Helm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/07/k8s-flannel-in-alicloud/" rel="next" title="Flannel网络以及在阿里云下的实现解析">
+                <i class="fa fa-chevron-left"></i> Flannel网络以及在阿里云下的实现解析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">73</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">创建应用程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">构建容器镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">构建Chart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">发布Chart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">其它的小技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2018/09/13/use-helm-improve-k8s-dev-experience/';
+        this.page.identifier = '2018/09/13/use-helm-improve-k8s-dev-experience/';
+        this.page.title = '使用Helm优化Kubernetes下的研发体验（一）';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>
