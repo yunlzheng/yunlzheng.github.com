@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.js?v=0.2.0"></script>
+<link rel='stylesheet' href='/lib/nprogress/nprogress.css'/>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="msvalidate.01" content="8C5095B9D37B245F9F8D920A5BD269EB" />
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Kubernetes,Helm," />
+
+
+<meta name="description" content="接着上一篇《使用Helm优化Kubernetes下的研发体验：基础设施即代码》中笔者介绍了如何在项目中使用Helm，在项目源码中，我们通过Dockerfile定义了项目是如何构建的，使用Helm定义了项目是如何部署的。 团队中的任何人员(角色）在获取源码的同时就已经具备了一键构建，一键部署的能力。">
+<meta name="keywords" content="Kubernetes,Helm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Helm优化Kubernetes下的研发体验：实现持续交付流水线">
+<meta property="og:url" content="http://yunlzheng.github.io/2018/09/15/use-helm-improve-k8s-dev-experience2/index.html">
+<meta property="og:site_name" content="I&#39;m Yunlong">
+<meta property="og:description" content="接着上一篇《使用Helm优化Kubernetes下的研发体验：基础设施即代码》中笔者介绍了如何在项目中使用Helm，在项目源码中，我们通过Dockerfile定义了项目是如何构建的，使用Helm定义了项目是如何部署的。 团队中的任何人员(角色）在获取源码的同时就已经具备了一键构建，一键部署的能力。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/pipeline-overview.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/build-and-test.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/publish-docker-and-helm.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-dev.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-staging.png">
+<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/release-version.png">
+<meta property="og:updated_time" content="2018-09-15T15:09:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Helm优化Kubernetes下的研发体验：实现持续交付流水线">
+<meta name="twitter:description" content="接着上一篇《使用Helm优化Kubernetes下的研发体验：基础设施即代码》中笔者介绍了如何在项目中使用Helm，在项目源码中，我们通过Dockerfile定义了项目是如何构建的，使用Helm定义了项目是如何部署的。 团队中的任何人员(角色）在获取源码的同时就已经具备了一键构建，一键部署的能力。">
+<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="I'm Yunlong" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://yunlzheng.github.io/2018/09/15/use-helm-improve-k8s-dev-experience2/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>使用Helm优化Kubernetes下的研发体验：实现持续交付流水线 | I'm Yunlong</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1029886623046434",
+    enable_page_level_ads: true
+  });
+</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <script>
+    NProgress.start();
+  </script>
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">I'm Yunlong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">DevOps, Agile, Learner</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-radar">
+          <a href="/tech-radar/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-Radar"></i> <br />Radar</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yunlzheng.github.io/2018/09/15/use-helm-improve-k8s-dev-experience2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云龙">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="I'm Yunlong">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">使用Helm优化Kubernetes下的研发体验：实现持续交付流水线</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-15T21:33:19+08:00">2018-09-15</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/15/use-helm-improve-k8s-dev-experience2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/15/use-helm-improve-k8s-dev-experience2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>接着上一篇《使用Helm优化Kubernetes下的研发体验：基础设施即代码》中笔者介绍了如何在项目中使用Helm，在项目源码中，我们通过Dockerfile定义了项目是如何构建的，使用Helm定义了项目是如何部署的。 团队中的任何人员(角色）在获取源码的同时就已经具备了一键构建，一键部署的能力。</p>
+<a id="more"></a>
+<h2><span id="整体目标">整体目标</span></h2><p>在这一篇中，我们将使用Jenkins在此基础上构建一条完整的持续交付流水线，并且让团队不同成员能够基于该流水线展开基本的协作。</p>
+<ul>
+<li>开发： 持续提交代码并能够通过持续集成(CI)过程快速获取反馈，在通过CI验证后，能够自动化部署到开发环境，以便后续的进一步功能测试（手动/自动自动化测试）等；</li>
+<li>测试： 在需要对项目功能进行验证时，可以一键部署测试环境，并且在此环境基础上可以完成功能验收(手动)，以及全量的自动化验收测试等；</li>
+<li>运维：一键部署生产环境，同时发布创建版本，以便在发布异常时能够快速回归</li>
+</ul>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png" alt="在端到端中使用Helm"></p>
+<blockquote>
+<p>资料来源： <a href="https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he" target="_blank" rel="noopener">https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he</a></p>
+</blockquote>
+<p>示例项目的代码可以从<a href="https://github.com/yunlzheng/project-samples" target="_blank" rel="noopener">Github</a>下载，示例项目为<code>containerization-spring-with-helm</code>。接下来，我们将分阶段介绍如何通过<a href="https://github.com/yunlzheng/project-samples/blob/master/Jenkinsfile" target="_blank" rel="noopener">Jenkinsfile</a>定义整个过程。</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/pipeline-overview.png" alt="Jenkins Pipeline"></p>
+<h2><span id="项目构建阶段">项目构建阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Build And Test'</span>)</span></span> &#123;</span><br><span class="line">    steps &#123;</span><br><span class="line"></span><br><span class="line">        dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">            sh <span class="string">'docker build -t yunlzheng/spring-sample:$GIT_COMMIT .'</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>Build And Test</code>阶段，我们直接通过源码中的Dockerfile定义了整个持续集成阶段的任务，通过docker的<code>Multi-Stage Builds</code>特性，持续集成的所有任务全部通过Dockerfile进行定义，这样无论是在本地还是持续集成服务器中，我们都可以非常方便的进行运行CI任务。</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/build-and-test.png" alt="Build And Test"></p>
+<h2><span id="发布镜像和helm阶段">发布镜像和Helm阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">'Publish Docker And Helm'</span>) &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line"></span><br><span class="line">    withDockerRegistry([credentialsId: <span class="string">'dockerhub'</span>, ur<span class="variable">l:</span> <span class="string">''</span>]) &#123;</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">'docker push yunlzheng/spring-sample:$GIT_COMMIT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    script &#123;</span><br><span class="line">      def filename = <span class="string">'containerization-spring-with-helm/chart/values.yaml'</span></span><br><span class="line">      def data = readYaml <span class="keyword">file</span>: filename</span><br><span class="line">      data.image.<span class="keyword">tag</span> = env.GIT_COMMIT</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">"rm $filename"</span></span><br><span class="line">      writeYaml <span class="keyword">file</span>: filename, dat<span class="variable">a:</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    script &#123;</span><br><span class="line">      def filename = <span class="string">'containerization-spring-with-helm/chart/Chart.yaml'</span></span><br><span class="line">      def data = readYaml <span class="keyword">file</span>: filename</span><br><span class="line">      data.<span class="keyword">version</span> = env.GIT_COMMIT</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">"rm $filename"</span></span><br><span class="line">      writeYaml <span class="keyword">file</span>: filename, dat<span class="variable">a:</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">'helm push chart https://repomanage.rdc.aliyun.com/helm_repositories/26125-play-helm --username=$HELM_USERNAME --password=$HELM_PASSWORD  --version=$GIT_COMMIT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="push镜像">Push镜像</span></h3><p>通过<code>withDockerRegistry</code>的上下文中，Jenkins会确保docker client首先通过<code>credentials dockerhub</code>中定义的用户名和密码完成登录后，在运行<code>docker push</code>任务。并且我们确保使用当前代码版本的COMMIT_ID作为镜像的Tag，从而将Docker镜像版本与源码版本进行一一对应；</p>
+<h3><span id="重写chart镜像版本">重写Chart镜像版本</span></h3><p>通过<code>readYaml</code>读取chart的values.yaml内容到变量data后，通过<code>writeYaml</code>重写values.yaml中的镜像tag版本与当前构建镜像版本一致；</p>
+<h3><span id="重写chart版本">重写Chart版本</span></h3><p>与镜像一样，我们希望Chart的版本与源码版本能够一一对应；</p>
+<h3><span id="上传chart">上传Chart</span></h3><p>这里我们直接使用<a href="https://rdc.aliyun.com/" target="_blank" rel="noopener">阿里云效</a>提供的Helm仓库服务，<a href="https://repomanage.rdc.aliyun.com/my/repo" target="_blank" rel="noopener">点击开通私有仓库服务</a>。通过Helm Push插件发布Chart到Helm仓库。</p>
+<p>其中环境变量<code>$HELM_USERNAME</code>和<code>$HELM_PASSWORD</code>是通过jenkins的Credentials加载到环境变量中：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">environment</span> &#123;</span><br><span class="line">      <span class="attribute">HELM_USERNAME</span> = credentials(<span class="string">'HELM_USERNAME'</span>)</span><br><span class="line">      HELM_PASSWORD = credentials(<span class="string">'HELM_PASSWORD'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/publish-docker-and-helm.png" alt="Publish Docker And Helm"></p>
+<h2><span id="部署到开发测试环境阶段">部署到开发/测试环境阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Deploy To Dev'</span>)</span></span> &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      dir(<span class="string">'chart'</span>) &#123;</span><br><span class="line">        sh <span class="string">'helm upgrade spring-app-dev --install --namespace=dev --set ingress.host=dev.spring-example.local .'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Deploy To Stageing'</span>)</span></span> &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line">    <span class="selector-tag">input</span> <span class="string">'Do you approve staging?'</span></span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      dir(<span class="string">'chart'</span>) &#123;</span><br><span class="line">        sh <span class="string">'helm upgrade spring-app-staging --install --namespace=staging --set ingress.host=staging.spring-example.local .'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Jenkinsfile中我们分别定义了两个阶段<code>Deploy To Dev</code>和<code>Deploy To Stageing</code>。我们通过Kubernetes的命名空间划分单独的开发环境和测试环境。并且通过覆盖ingress.host确保能够通过ingress域名<code>dev.spring-example.local</code>和<code>staging.spring-example.local</code>访问到不同环境。 对于Staging环境而言，通过<code>input</code>确保该流程一定是通过人工确认的。</p>
+<p>通过<code>helm upgrade</code>命令可以确保在特定命名空间下部署或者升级已有的Chart:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm<span class="built_in"> upgrade </span>spring-app-staging --install <span class="attribute">--namespace</span>=staging --<span class="builtin-name">set</span> ingress.<span class="attribute">host</span>=staging.spring-example.local .</span><br></pre></td></tr></table></figure>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-dev.png" alt="Deploy To Dev"></p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-staging.png" alt="Deploy To Stageing"></p>
+<h2><span id="部署到生产环境阶段">部署到生产环境阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">'Deploy To Production'</span>) &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line">    <span class="built_in">input</span> <span class="string">'Do you approve production?'</span></span><br><span class="line"></span><br><span class="line">    script &#123;                </span><br><span class="line">        env.RELEASE = <span class="built_in">input</span> message: <span class="string">'Please input the release version'</span>,</span><br><span class="line">        ok: <span class="string">'Deploy'</span>,</span><br><span class="line">        parameter<span class="variable">s:</span> [</span><br><span class="line">          [$clas<span class="variable">s:</span> <span class="string">'TextParameterDefinition'</span>, defaultValue: <span class="string">'0.0.1'</span>, description: <span class="string">'Cureent release version'</span>, name: <span class="string">'release'</span>]</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'Deploy and release: $RELEASE'</span></span><br><span class="line"></span><br><span class="line">    script &#123;</span><br><span class="line">      def filename = <span class="string">'containerization-spring-with-helm/chart/Chart.yaml'</span></span><br><span class="line">      def data = readYaml <span class="keyword">file</span>: filename</span><br><span class="line">      data.<span class="keyword">version</span> = env.RELEASE</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">"rm $filename"</span></span><br><span class="line">      writeYaml <span class="keyword">file</span>: filename, dat<span class="variable">a:</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      dir(<span class="string">'chart'</span>) &#123;</span><br><span class="line">        <span class="keyword">sh</span> <span class="string">'helm lint'</span></span><br><span class="line">        <span class="keyword">sh</span> <span class="string">'helm upgrade spring-app-prod --install --namespace=production --set ingress.host=production.spring-example.local .'</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">'helm push chart https://repomanage.rdc.aliyun.com/helm_repositories/26125-play-helm --username=$HELM_USERNAME --password=$HELM_PASSWORD  --version=$RELEASE'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在最后一个<code>Deploy To Production</code>阶段中，与Dev和Stageing的部署不同在于当人工确认部署测试环境之后，我们需要用户手动输入当前发布的版本，以确保对当前发布的Chart版本能完成一个基线的定义：</p>
+<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/release-version.png" alt="Release Version"></p>
+<p>这里，我们需要确保当前定义的版本是符合Sem规范的，因此这里使用了<code>helm lint</code>对Chart定义进行校验。</p>
+<h2><span id="小结">小结</span></h2><p>通过代码提交版本(COMMIT_ID)关联了源码版本，镜像版本以及Chart版本。同时对于正式发布的软件版本而言，单独定义了正式发布的版本号。对于实践持续交付的研发团队而言，我们可以通过上述一条流水线基本实现软件交付的整个生命周期。而对于传统交付模式的团队，则可以通过将上述过程分拆到多条流水线（开发流水线，测试流水线，发布流水线）来适应自己的发布模式。</p>
+<p>回到我们的总体目标而言，通过基础设施及代码的方式，我们定义了一个相对完备且自描述的应用。通过流水线即代码的方式，定义了应用的端到端交付过程。通过Docker定义项目的构建过程，通过Helm实现Kubernetes下应用的发布管理，通过Jenkinsfile定义了软件的整个交付过程，并且不同职能的团队成员，可以方便的在此基础上实现协作。最后借用《持续交付》的话“提前并频繁地做让你感到痛苦的事!“ ，希望大家都能够Happy Coding。</p>
+<h2><span id="参考资料">参考资料</span></h2><ul>
+<li><a href="https://www.aliyun.com/product/yunxiao?spm=5176.224200.developerService.27.1b776ed6tdwLm5" target="_blank" rel="noopener">云效一站式企业协同研发云</a></li>
+<li><a href="https://repomanage.rdc.aliyun.com/my/repo" target="_blank" rel="noopener">云效私有仓库服务</a></li>
+<li><a href="https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he" target="_blank" rel="noopener">Easily Automate Your CI/CD Pipeline With Jenkins, Helm, and Kubernetes</a></li>
+<li><a href="https://jenkins.io/" target="_blank" rel="noopener">Jenkins</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          
+            <a href="/tags/Helm/" rel="tag"># Helm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/13/use-helm-improve-k8s-dev-experience/" rel="next" title="使用Helm优化Kubernetes下的研发体验：基础设施即代码">
+                <i class="fa fa-chevron-left"></i> 使用Helm优化Kubernetes下的研发体验：基础设施即代码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">云龙</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/yunlzheng" target="_blank" title="GitHub" rel="external nofollow"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yunl.zheng@gmail.com" target="_blank" title="E-Mail" rel="external nofollow"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://stackoverflow.com/users/1933809/yunlong" target="_blank" title="StackOverflow" rel="external nofollow"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">整体目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">项目构建阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">发布镜像和Helm阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">Push镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">重写Chart镜像版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">重写Chart版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.</span> <span class="nav-text">上传Chart</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">部署到开发/测试环境阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">部署到生产环境阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云龙</span>
+
+  
+
+  
+</div>
+
+
+  
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" rel="external nofollow" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info"><a class="theme-link" target="_blank" rel="external nofollow" href="http://v2.ta.qq.com">站点统计</a></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=65392864";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  <script>
+    NProgress.set(0.5);
+  </script>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ylnotes.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yunlzheng.github.io/2018/09/15/use-helm-improve-k8s-dev-experience2/';
+        this.page.identifier = '2018/09/15/use-helm-improve-k8s-dev-experience2/';
+        this.page.title = '使用Helm优化Kubernetes下的研发体验：实现持续交付流水线';
+      };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ylnotes.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script>
+    NProgress.done();
+  </script>
+</body>
+</html>

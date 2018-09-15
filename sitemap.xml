@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yunlzheng.github.io/2018/09/15/use-helm-improve-k8s-dev-experience2/</loc>
+    
+    <lastmod>2018-09-15T15:09:01.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2018/09/13/use-helm-improve-k8s-dev-experience/</loc>
     
-    <lastmod>2018-09-13T04:56:56.000Z</lastmod>
+    <lastmod>2018-09-15T15:03:38.000Z</lastmod>
     
   </url>
   
@@ -17,13 +24,6 @@
   
   <url>
     <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/angular-resources/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -51,14 +51,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2013/11/19/begin-hexo/</loc>
+    <loc>http://yunlzheng.github.io/2015/01/01/begin-2015/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/01/01/begin-2015/</loc>
+    <loc>http://yunlzheng.github.io/2013/11/19/begin-hexo/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -79,13 +79,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2013/10/19/chengdu-rock/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2013/10/19/code-chat/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -100,6 +93,13 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2013/10/19/chengdu-rock/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -107,14 +107,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
+    <loc>http://yunlzheng.github.io/2015/06/06/dev-python-with-docker-compose/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/06/06/dev-python-with-docker-compose/</loc>
+    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -149,14 +149,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/flex-file-upload/</loc>
+    <loc>http://yunlzheng.github.io/2017/03/16/fluentd-with-rancher-and-es/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2017/03/16/fluentd-with-rancher-and-es/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/flex-file-upload/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -226,13 +226,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/08/01/linux-shell-part1/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2013/10/08/linux-tmux/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -240,7 +233,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/02/02/monitor-best-praticase4-golden-signals/</loc>
+    <loc>http://yunlzheng.github.io/2014/08/01/linux-shell-part1/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -248,6 +241,13 @@
   
   <url>
     <loc>http://yunlzheng.github.io/2017/10/19/microservice-with-grpc/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2018/02/02/monitor-best-praticase4-golden-signals/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -268,7 +268,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -324,13 +324,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2017/07/07/prometheus-exporter-example-go/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -345,6 +338,20 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2018/04/25/prometheus-with-mutil-k8s-environment/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2017/07/04/prometheus-kubernates/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -353,13 +360,6 @@
   
   <url>
     <loc>http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2018/04/25/prometheus-with-mutil-k8s-environment/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -394,14 +394,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2012/08/09/rabbitmq-2/</loc>
+    <loc>http://yunlzheng.github.io/2015/09/20/residemenu-with-swift/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/09/20/residemenu-with-swift/</loc>
+    <loc>http://yunlzheng.github.io/2012/08/09/rabbitmq-2/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -464,6 +464,13 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2015/09/20/use-cocoapods/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -471,7 +478,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/angular-resources/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -499,14 +506,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/04/16/why-ramda-translate/</loc>
+    <loc>http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/</loc>
+    <loc>http://yunlzheng.github.io/2016/04/16/why-ramda-translate/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
