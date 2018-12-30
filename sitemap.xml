@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yunlzheng.github.io/2018/09/07/k8s-flannel-in-alicloud/</loc>
+    
+    <lastmod>2018-12-30T03:43:04.426Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2018/08/01/kubernetes-pod/</loc>
     
     <lastmod>2018-09-16T08:03:08.000Z</lastmod>
@@ -30,14 +37,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/09/07/k8s-flannel-in-alicloud/</loc>
-    
-    <lastmod>2018-09-07T03:32:37.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/netty-network/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -65,14 +65,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2012/07/02/begin-jenkins/</loc>
+    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/10/08/build-local-develop-env/</loc>
+    <loc>http://yunlzheng.github.io/2012/07/02/begin-jenkins/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -86,13 +86,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2017/12/13/about-cncf-cka-exam/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2015/06/15/code-review-guide/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -100,7 +93,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/</loc>
+    <loc>http://yunlzheng.github.io/2014/10/08/build-local-develop-env/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -114,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
+    <loc>http://yunlzheng.github.io/2016/04/21/consul-in-practice-01/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -122,6 +115,13 @@
   
   <url>
     <loc>http://yunlzheng.github.io/2015/06/06/dev-python-with-docker-compose/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -156,13 +156,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/flex-file-upload/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2017/03/16/fluentd-with-rancher-and-es/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -170,14 +163,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/04/21/functional-programming-with-python/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2016/12/14/how-to-use-container-in-cd/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/flex-file-upload/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -191,7 +177,28 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2016/12/14/how-to-use-container-in-cd/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2016/04/21/functional-programming-with-python/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2018/03/21/java-concurrency-and-asynchronous/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -219,7 +226,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
+    <loc>http://yunlzheng.github.io/2014/08/05/ansible/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -261,13 +268,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/netty-network/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2018/03/15/opensource-microservice-end-to-end-architecture/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -275,7 +275,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
+    <loc>http://yunlzheng.github.io/2017/12/13/about-cncf-cka-exam/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -296,6 +303,13 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2015/01/02/openstack-machine-image-pipelines/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -304,13 +318,6 @@
   
   <url>
     <loc>http://yunlzheng.github.io/2015/01/02/openstack-ntp-server/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -331,13 +338,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2017/07/07/prometheus-exporter-example-go/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -352,6 +352,20 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2018/04/25/prometheus-with-mutil-k8s-environment/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2017/07/04/prometheus-kubernates/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -360,13 +374,6 @@
   
   <url>
     <loc>http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2018/04/25/prometheus-with-mutil-k8s-environment/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -408,21 +415,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/09/20/residemenu-with-swift/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/angular-resources/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2015/06/09/rock-with-react/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2015/09/20/residemenu-with-swift/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -450,14 +450,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/03/17/template-engine-thymeleaf/</loc>
+    <loc>http://yunlzheng.github.io/2016/05/20/the-right-way-to-network/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/05/20/the-right-way-to-network/</loc>
+    <loc>http://yunlzheng.github.io/2015/03/17/template-engine-thymeleaf/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -485,7 +485,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/08/05/ansible/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/angular-resources/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -520,14 +520,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/04/16/why-ramda-translate/</loc>
+    <loc>http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2017/11/28/zuul-timeout-config-with-dns-router/</loc>
+    <loc>http://yunlzheng.github.io/2016/04/16/why-ramda-translate/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
