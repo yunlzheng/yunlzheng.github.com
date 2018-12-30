@@ -16,7 +16,7 @@ tags: docker
 首先我们来了解一下当我们尝试从docker registry拉取镜像时实际的流程是什么样的？如下图所示
 
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/registry_v2_auth_server.png)
+![](/images/registry_v2_auth_server.png)
 
 1. docker daemon尝试从docker registry拉取镜像；
 2. 如果docker registry需要进行授权时，registry将会放回401 Unauthorized响应，同时在返回的头信息中包含了docker client如何进行认证的信息

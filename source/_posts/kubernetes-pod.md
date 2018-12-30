@@ -9,9 +9,9 @@ tags: [Kubernetes]
 
 Pod模型：
 
-![Pod模型](http://7pn5d3.com1.z0.glb.clouddn.com/pod-model.png)
+![Pod模型](/images/pod-model.png)
 
 Pod生命周期：
 
-![Pod生命周期](http://7pn5d3.com1.z0.glb.clouddn.com/pod-lifecycle.png)
+![Pod生命周期](/images/pod-lifecycle.png)
 

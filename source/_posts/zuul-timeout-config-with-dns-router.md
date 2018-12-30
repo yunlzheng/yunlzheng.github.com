@@ -17,7 +17,7 @@ tags: ['Spring Cloud', 'Spring Cloud Zuul', 'Kubernetes']
 
   服务器端服务发现模式主要以DNS为代表，相关的工具包括Consul,以及一些平台如Kubernetes, Rancher等都提供了基于DNS服务发现注册能力。服务请求转发由平台或者工具提供相关的能力(如Health Check)支持，用于维护DNS代理的后端实例信息。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/service-discovery.png](http://7pn5d3.com1.z0.glb.clouddn.com/service-discovery.png)
+![/images/service-discovery.png](/images/service-discovery.png)
 
 
 在**服务无状态的前提下**，基于DNS可以简化在代理过程中的Http请求次数，降低由于网络或者其他不稳定因数导致的服务远程调用失败。

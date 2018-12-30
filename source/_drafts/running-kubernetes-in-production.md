@@ -30,14 +30,14 @@ CoreOS提供的的容器Linux完全符合我们对于集群节点系统的理解
 
 我们自己构建了一个集群注册的REST服务，用于管理所有的Kubernetes集群。另外一个组件（集群生命周期管理器，CLM）定期轮训集群注册表，并且将更新到所需状态。其中所需状态是通过CloudFormation以及Kubernetes配置是存储在[Git当中](https://github.com/zalando-incubator/kubernetes-on-aws)。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/cluster-lifecycle-manager.png](http://7pn5d3.com1.z0.glb.clouddn.com/cluster-lifecycle-manager.png)
+![/images/cluster-lifecycle-manager.png](/images/cluster-lifecycle-manager.png)
 
 不同的集群使用了不同的通道配置（分支）。举例来说，一些非关键性的集群可能使用了具有最新特新的"alpha"通道（分支），而其它集群则使用了“Stable”通道（分支）。
 通道的概念类似于CoreOS管理容器linux发布的方式。
 
 一旦有任何变更被合并对应的分支中，集群就会自动化的更新。配置变更首先会在一个独立的特性分支进行测试，完成验证后则向dev分支发起pull request，并且自动化运行端到端测试（包含官方的kubernetes一致性测试）。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/cluster-updates.png](http://7pn5d3.com1.z0.glb.clouddn.com/cluster-updates.png)
+![/images/cluster-updates.png](/images/cluster-updates.png)
 
 ## AWS集成
 
@@ -50,7 +50,7 @@ CoreOS提供的的容器Linux完全符合我们对于集群节点系统的理解
 * 用ALB中止的SSL：便于使用ACM（亚马逊提供的免费CA服务），以及通过AWS IAM上传证书。
 * 使用新ELBv2应用负载均衡器
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/ingress.png](http://7pn5d3.com1.z0.glb.clouddn.com/ingress.png)
+![/images/ingress.png](/images/ingress.png)
 
 我们使用[Skipper](https://github.com/zalando/skipper)作为我们的HTTP代理，并且基于Http Header以及Path进行路由转发。 Skipper以DaemonSet的方式运行在所有的工作节点，以便于与AWS的ASG(AutoScalling Group)进行集成（新的节点会自动注册到ALB(Auto Load Balance)目标组当中）。Skipper直接与Kubernetes客户端通讯，从而定期自动更新其路由规则。
 

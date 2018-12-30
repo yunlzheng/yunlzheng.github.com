@@ -5,7 +5,7 @@ tags:
 - Prometheus
 ---
 
-![http://p2n2em8ut.bkt.clouddn.com/mutil-k8s-cluster.png](http://p2n2em8ut.bkt.clouddn.com/mutil-k8s-cluster.png)
+![/images/mutil-k8s-cluster.png](/images/mutil-k8s-cluster.png)
 
 <!-- more -->
 

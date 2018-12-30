@@ -8,7 +8,7 @@ Docker提供了容器级别的资源隔离，由于Python的外部依赖管理�
 作为应用程序我们通常需要依赖于多种外部服务比如数据库，缓存服务等等。Docker-compose就是在Docker容器的基础之上，提供了统一的容器编排语言。可以让你更轻松的利用Docker构建你的应用环境
 
 <!-- more -->
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blogoctopus_blocks_die.png)
+![](/images/blogoctopus_blocks_die.png)
 
 
 ## 编写Dockerfile

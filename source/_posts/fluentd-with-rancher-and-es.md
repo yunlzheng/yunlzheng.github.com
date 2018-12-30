@@ -15,7 +15,7 @@ tags: DevOps
 * 对于所有后端服务的请求实际都由API Gateway完成；
 * 后端有4个不同的服务分别提供不同的功能；
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png](http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png)
+![/images/api_gateway.png](/images/api_gateway.png)
 
 基于微服务架构我们可以实现服务的独立部署，独立发布。而一个业务通常会由多个服务进行支撑，这就带来一个问题，当用户的操作分布到了不同的服务当中之后，如果出现了异常开发人员如何才能快速完成问题定位。
 
@@ -68,7 +68,7 @@ $ docker logs
 
 通过对日志文件的收集，在满足中心化收集和处理容器日志的同时，还能支持对于单个容器的本地化操作。
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/efk.png)
+![](/images/efk.png)
 
 ### 日志输出规范
 
@@ -159,4 +159,4 @@ Rancher Catalog中社区已经提供了ElasticSearch以及Kinana的相关Catalog
 
 日志聚合分析是支撑微服务架构应用的重要基础设施之一。同时通过对日志内容进行规范进行约定就可以达到对日志以及问题快速定位的需求，避免从技术层面引入更多的框架所引入的开发的复杂度。
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/kibana-demo.png)
+![](/images/kibana-demo.png)

@@ -97,7 +97,7 @@ spec:
 
 在Service中定义标注prometheus.io/scrape: 'true'，表明该Service需要被prometheus发现并采集数据
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/kubernates_prometheus.png)
+![](/images/kubernates_prometheus.png)
 
 ### 使用RBC创建Cluster Role并设置访问权限
 
@@ -142,7 +142,7 @@ subjects:
 
 通过RBC创建ClusterRole,ServiceAccount以及ClusterRoleBinding从而确保Prometheus可以通过kubernetes API访问到全局资源信息
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_role.png)
+![](/images/prometheus_role.png)
 
 ### 创建Prometheus配置文件ConfigMap
 
@@ -335,7 +335,7 @@ ALERT NodeCPUUsage
 
 则当主机的CPU使用率草果75%后会触发告警，由于告警包含标签severity="email，因此当alertmanager接收到告警信息会会通过stmp协议发送告警邮件
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/alert_email.png)
+![](/images/alert_email.png)
 
 ### 部署自定义kubernetes Exporter获取kubernetes下主要资源对象的健康状态
 
@@ -490,19 +490,19 @@ serviceAccount: prometheus
 
 同时由于promentheus和alertmanager部署在同一个pod当中，因此prometheus可以直接通过127.0.0.1:9073推送告警信息到alertmanager
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_pod.png)
+![](/images/prometheus_pod.png)
 
 访问prometheus网页我们可以查看当前的所有target信息
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/promethues_target.png)
+![](/images/promethues_target.png)
 
 通过表达式查询kubernates的pod健康状态
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_query.png)
+![](/images/prometheus_query.png)
 
 查看告警信息
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/prometheus_alert.png)
+![](/images/prometheus_alert.png)
 
 ## 总结
 

@@ -86,7 +86,7 @@ kubectl expose nginx --port=80 --target-port=8000
 
 在完成CKA考试，后CNCF官方会在36小时以内以邮件的形式通知考试结果，如果正确率能够在75%以上那恭喜你，通过了考试，并且邮件会附带由CNCF基金会颁发的证书。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/kca.png](http://7pn5d3.com1.z0.glb.clouddn.com/kca.png)
+![/images/kca.png](/images/kca.png)
 
 ## 参考资料
 

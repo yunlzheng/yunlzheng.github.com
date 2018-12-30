@@ -13,14 +13,14 @@ tags: DevOps
 
 软件的核心价值是为软件的使用者带来收益，在过去我们经常听到开发人员说这个功能已经开发完成了。 但是在持续交付中我们认为之后将特性真正的发布到用户手上才以为则完成
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/cd.png)
+![image](/images/cd.png)
 > 持续交付
 
 而要想达到持续交付的目标即实现可靠，迅速并且低风险的软件交付需要所有相关人员（需求，开发，测试，运维）的协同工作才能保证这一目标的实现。
 
 在持续交付过程中我们希望一个团队是能够充分自治的，能够完成从软件的需求，设计，开发，部署以及运维的端到端所有工作。
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/team_crop.png)
+![image](/images/team_crop.png)
 > 全功能团队
 
 ## 持续交付的基本原则
@@ -36,7 +36,7 @@ tags: DevOps
 * 测试人员等待“好的”版本构建出来
 * 研发团队可能在新功能发布几周后才收到缺陷报告
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/vms.png)
+![image](/images/vms.png)
 
 最终的结果就是软件产品迟迟不能发布甚至延期，同时由于开发与测试，开发和运维之间的过长的反馈周期直接导致软件产品的质量低下，同时可能并不能真正的为使用者带来价值
 
@@ -44,13 +44,13 @@ tags: DevOps
 
 而持续部署流水线则是解决这一问题的最佳方式，建立持续部署流水线即建立了一套端到端的软件交付流程，同时在持续部署流水线的流程当中参与到软件交付的各个角色都能各司其职，形成一套高效的“拉动系统”
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/pipeline.png)
+![image](/images/pipeline.png)
 
 开发人员持续的查看代码度量数据以及测试失败等问题，测试人员自助部署测试环境，同时运维人员也可以通过一键方式将软件部署到预生产环境以及生产环境。同时对于管理人员也可以通过度量持续部署流水线的各个环境来分析交付问题，通过合理的方式优化软件交付流程当中存在的问题。
 
 而将持续部署流水线中的各个环节可以划分为如下几个不同的阶段
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/stages.png)
+![image](/images/stages.png)
 
 * 提交阶段
 
@@ -104,13 +104,13 @@ tags: DevOps
 
 “如果集成是让你感到痛苦的，那么每一次代码提交都应该进行集成，而且应该从项目一开始就开始这么做；如果发布软件过程前测试是一件痛苦的事情，那么就应该从项目一开始就不断的进行测试；如果软件发布是一件痛苦的事情，那么每一次代码提交在完成自动化验收测试之后都应该进行发布，或者至少发布到类生产环境”
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd.png)
+![image](/images/ci-cd.png)
 
 ### 原则五 内建质量
 
 在持续交付过程中持续交付流水线定义了一套标准的，可重复的软件交付流程；同时借助大量的工具我们可以将这个流程中的机会所有事情都进行自动化。但是另外一个点就是软件质量。
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/test.jpg)
+![image](/images/test.jpg)
 
 根据原则四，其实我们也可以推断出如果对代码进行测试是一件痛苦的事情，那么在编写实现代码之前我们就应该写测试，TDD，ATDD，BDD等软件研发实践正是体现了这一基本原则。
 
@@ -120,7 +120,7 @@ tags: DevOps
 
 其中测试四象限很好的阐述了为了确保软件质量而应该做的各种类型的测试建模
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/test4.png)
+![image](/images/test4.png)
 
 ### 原则六 “Done”意味着“已发布”
 
@@ -138,7 +138,7 @@ tags: DevOps
 
 而通过持续部署流水线，我们将所有参与到软件交付中的角色都联合成了一个整体，并且各个部分之间是能够快速的产生反馈，促成各个成员和角色之间的交流，并且快速的解决问题
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/SHTT-Lead-Image-Costumes.jpg)
+![image](/images/SHTT-Lead-Image-Costumes.jpg)
 
 ### 原则八 持续改进
 
@@ -180,4 +180,4 @@ tags: DevOps
 
 同时对于企业和组织而言通过引入统一的平台化服务，可以完成对所有产品团队的统一管理，和监控。这些关键的平台化服务可能包括：统一的日志管理平台，持续交付平台，以及监控和运营平台等。
 
-![image](http://7pn5d3.com1.z0.glb.clouddn.com/devops_platform.png)
+![image](/images/devops_platform.png)

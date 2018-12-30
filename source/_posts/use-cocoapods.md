@@ -23,15 +23,15 @@ git submodule add https://github.com/Alamofire/Alamofire.git
 
 之后的过程就是手动将Alamofire目录下的Alamofire.xcodeproj文件拖入到项目中
 
-![cocoapods1.png](http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png)
+![cocoapods1.png](/images/cocoapods1.png)
 
 选择项目的Targets
 
-![cocoapods2.png](http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods2.png)
+![cocoapods2.png](/images/cocoapods2.png)
 
 在Embeded Binaries中添加依赖的包
 
-![cocoapods3.png](http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods3.png)
+![cocoapods3.png](/images/cocoapods3.png)
 
 > 这里可以看到有连个Alamofire的包，两个中任意选择一个即可，上面的包是IOS，下面的包是给OSX的，选择即可
 
@@ -150,7 +150,7 @@ Sending stats
 
 Cocoapods会在当前目录下创建应用的xcworkspace，打开生成的workspace即可在项目中使用构建出的第三方项目
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods5.png)
+![](/images/cocoapods5.png)
 
 折腾到这里，基本上能够正常的使用Cocoapods管理并且使用第三方库
 

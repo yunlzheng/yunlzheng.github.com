@@ -15,13 +15,11 @@ tags: [Helm, Kubernetes]
 * 测试： 在需要对项目功能进行验证时，可以一键部署测试环境，并且在此环境基础上可以完成功能验收(手动)，以及全量的自动化验收测试等；
 * 运维：一键部署生产环境，同时发布创建版本，以便在发布异常时能够快速回归
 
-![在端到端中使用Helm](http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png)
-
 > 资料来源： [https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he](https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he)
 
 示例项目的代码可以从[Github](https://github.com/yunlzheng/project-samples)下载，示例项目为`containerization-spring-with-helm`。接下来，我们将分阶段介绍如何通过[Jenkinsfile](https://github.com/yunlzheng/project-samples/blob/master/Jenkinsfile)定义整个过程。
 
-![Jenkins Pipeline](http://7pn5d3.com1.z0.glb.clouddn.com/pipeline-overview.png)
+![在端到端中使用Helm](/images/ci-cd-jenkins-helm-k8s.png)
 
 ## 项目构建阶段
 
@@ -41,7 +39,7 @@ tags: [Helm, Kubernetes]
 
 在`Build And Test`阶段，我们直接通过源码中的Dockerfile定义了整个持续集成阶段的任务，通过docker的`Multi-Stage Builds`特性，持续集成的所有任务全部通过Dockerfile进行定义，这样无论是在本地还是持续集成服务器中，我们都可以非常方便的进行运行CI任务。
 
-![Build And Test](http://7pn5d3.com1.z0.glb.clouddn.com/build-and-test.png)
+![Build And Test](/images/build-and-test.png)
 
 ## 发布镜像和Helm阶段
 
@@ -104,7 +102,7 @@ tags: [Helm, Kubernetes]
   }
 ```
 
-![Publish Docker And Helm](http://7pn5d3.com1.z0.glb.clouddn.com/publish-docker-and-helm.png)
+![Publish Docker And Helm](/images/publish-docker-and-helm.png)
 
 ## 部署到开发/测试环境阶段
 
@@ -141,9 +139,9 @@ tags: [Helm, Kubernetes]
 helm upgrade spring-app-staging --install --namespace=staging --set ingress.host=staging.spring-example.local .
 ```
 
-![Deploy To Dev](http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-dev.png)
+![Deploy To Dev](/images/deploy-to-dev.png)
 
-![Deploy To Stageing](http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-staging.png)
+![Deploy To Stageing](/images/deploy-to-staging.png)
 
 ## 部署到生产环境阶段
 
@@ -186,7 +184,7 @@ helm upgrade spring-app-staging --install --namespace=staging --set ingress.host
 
 在最后一个`Deploy To Production`阶段中，与Dev和Stageing的部署不同在于当人工确认部署测试环境之后，我们需要用户手动输入当前发布的版本，以确保对当前发布的Chart版本能完成一个基线的定义：
 
-![Release Version](http://7pn5d3.com1.z0.glb.clouddn.com/release-version.png)
+![Release Version](/images/release-version.png)
 
 这里，我们需要确保当前定义的版本是符合Sem规范的，因此这里使用了`helm lint`对Chart定义进行校验。
 

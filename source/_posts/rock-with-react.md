@@ -321,7 +321,7 @@ var Component = React.createClass({
 
 ## 3，组件化的开发模式，复用，复用还是复用
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png)
+![](/images/blog_react_cpmponents.png)
 
 以一个简单页面，当我们使用React将页面组件化之后，对于一个新的页面而言我们要做的事情就是进行组装。
 

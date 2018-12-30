@@ -72,7 +72,7 @@ docker-compose run --rm build sh -c 'mvn clean package' && docker-compose stop &
 
 使用Rancher理由很简单，Rancher是目前市面上唯一一个能满足开箱即用的容器管理平台，同时能够支持多种编排引擎，如Rancher自己的Cattle，Google的K8S,以及Docker官方的Swarm作为容器编排引擎。同时Rancher提供的Catalog应用商店能够帮助研发团队自主创建所需要的服务实例
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png](http://7pn5d3.com1.z0.glb.clouddn.com/rancher.png)
+![/images/rancher.png](/images/rancher.png)
 
 ### 创建持续交付流水线
 
@@ -80,13 +80,13 @@ docker-compose run --rm build sh -c 'mvn clean package' && docker-compose stop &
 
 如下图所示，我们总结了从开发，持续集成，持续交付各个阶段所使用的一些典型工具的使用，以及在各个阶段中的相关团队的相关活动，典型的DevOps相关的活动
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png](http://7pn5d3.com1.z0.glb.clouddn.com/devops_and_cd_pipeline.png)
+![/images/devops_and_cd_pipeline.png](/images/devops_and_cd_pipeline.png)
 
 ### 在持续交付流水线下的团队协作
 
 正如上文所说，创建持续交付流水线的本质就是定义软件的交付的价值流动，反应正式的软件交付流程。价值的流动则涉及到团队中各个职能的成员的高度协同
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/image-base-cd-3.png](http://7pn5d3.com1.z0.glb.clouddn.com/image-base-cd-3.png)
+![/images/image-base-cd-3.png](/images/image-base-cd-3.png)
 
 基于容器的持续交付实践当中以镜像作为在不同职能人员之间的价值传递物
 
@@ -94,6 +94,6 @@ docker-compose run --rm build sh -c 'mvn clean package' && docker-compose stop &
 - 测试人员：从候选测试镜像列表中，选择需要测试的目标镜像，标记为测试版本(将0.1-dev标记为0.1-test)，并且将待测试镜像自动部署到验收测试环境，完成手动探索性测试，对于已测试完成的镜像标记为预发布版本(0.1-test 标记为 0.1-beta)
 - 运维人员：从预发布镜像列表中选择镜像部署到预发布环境，并且在验证通过后标记为release版本（如将0.1-beta 标记为 0.1-release）,并且发布到生产环境
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/harbor_in_pratices2.png](http://7pn5d3.com1.z0.glb.clouddn.com/harbor_in_pratices2.png)
+![/images/harbor_in_pratices2.png](/images/harbor_in_pratices2.png)
 
 在基于容器的持续交付实现方案当中，我们以镜像为价值传递的单元，通过镜像的持续测试以及验证，完成镜像从开发，测试到可发布的状态转变，完成软件的交付流程

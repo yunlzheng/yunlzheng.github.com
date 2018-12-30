@@ -46,7 +46,7 @@ consul reload
 
 可以重新加载服务配置文件，从Consul UI中我们可以查看到我们的服务实例
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png)
+![](/images/consul-ui.png)
 
 完成服务注册之后我们便可以通过Consul提供的API去查询服务实例
 
@@ -207,7 +207,7 @@ Consul支持开放的K/V存储，你可以用在动态配置，特性开关，�
 
 在实际软件交付过程中我们会涉及到另外一个问题，多环境的管理，以当前自己所在的项目为例，在交付过程中会涉及到3个基本的环境Dev, UAT以及Prod环境。各个环境独立部署了所有的服务，Cosul的多数据中心能力可以很好的对多个环境进行统一的管理和监控；
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/multi-data-center.png)
+![](/images/multi-data-center.png)
 
 以下我们假设以Dev和UAT两个DataCenter为例
 
@@ -267,7 +267,7 @@ consul join -wan 192.168.2.2
 
 通过Consul UI集中式管理多个环境的信息
 
-![/images/consul-multi-center-web-ui.png](http://7pn5d3.com1.z0.glb.clouddn.com/consul-multi-center-web-ui.png)
+![/images/consul-multi-center-web-ui.png](/images/consul-multi-center-web-ui.png)
 
 ## Summary
 

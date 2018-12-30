@@ -37,7 +37,7 @@ RESideMenu实现方式为，创建了一个父容器。 当中包含了3个子�
 
 在Main.storyboard中添加相应的视图创建3个视图并且命名为Storyboard ID为LeftMenuViewController和ContentViewController
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/residemenu0.png)
+![](/images/residemenu0.png)
 
 创建RootViewController.swift
 
@@ -85,8 +85,8 @@ class RootViewController: RESideMenu, RESideMenuDelegate{
 
 如下图所示，在ContentViewController中添加菜单按钮，并且右键关联点击事件即可
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/1.png](http://7pn5d3.com1.z0.glb.clouddn.com/1.png)
+![/images/1.png](/images/1.png)
 
 运行效果如下
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/residemenu22.png](http://7pn5d3.com1.z0.glb.clouddn.com/residemenu22.png)
+![/images/residemenu22.png](/images/residemenu22.png)

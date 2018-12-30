@@ -13,7 +13,7 @@ tags: ['gRPC', 'gRPC-Gateway']
 
 按照业务领域组织服务并且提供Restful接口，服务与服务之间通过轻量级通讯方式(Restful)进行数据交换和调用，对外使用轻量级网关简化客户端访问复杂度。基于服务发现和注册中心，完成服务之间的相互发现以及实现服务自身的横向扩展。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png](http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png)
+![/images/api_gateway.png](/images/api_gateway.png)
 
 ## gRPC： 通用的，高性能的RPC框架
 
@@ -339,7 +339,7 @@ func main() {
 bee run
 ```
 
-![grpc-example](http://7pn5d3.com1.z0.glb.clouddn.com/grpc-gateway-example.png)
+![grpc-example](/images/grpc-gateway-example.png)
 
 ## 小结
 
@@ -350,7 +350,7 @@ bee run
 * 对于有状态服务，需要添加额外的服务发现和注册中心如Consul或Eureka。实现点对点调用。
 * 对外基于API Gateway对外部客户端（浏览器，H5）提供Rest API。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png](http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png)
+![/images/http-with-grpc.png](/images/http-with-grpc.png)
 
 在诸如Spring Cloud这样的微服务框架当中，每一个服务默认基于HTTP协议对外提供Restful API,从而对外对内的提供服务能力。 而在某些场景下，我们既需要保持Restful的简单性，又想充分提升应用内部的性能以及可靠性，采用gRPC可以帮助我们实现是这样的目的，而使用gRPC-Gateway这样的工具我们可以很快速的基于proto接口定义，在使用RPC的同时对外提供Restful，实现软件架构的小步优化以及应用性能的提升。
 

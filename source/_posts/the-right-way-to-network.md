@@ -13,7 +13,7 @@ tags: [Others]
 
 在Digitalocean创建一台Ubuntu的实例：
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/digitalocean.png)
+![](/images/digitalocean.png)
 
 安装毕竟启动shadowsocks即可
 
@@ -46,13 +46,13 @@ ssserver -c /etc/shadowsocks.json -d stop
 
 完成服务器启动之后，本机安装一个[ShadowsocksX客户端即可](https://shadowsocks.org/en/download/clients.html)
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/local_config.png)
+![](/images/local_config.png)
 
 这里配置你的服务器IP地址，端口，以及密码即可。
 
 完成后ShadowsocksX默认在本地的1080端口建立代理服务，这个时候你就可以使用诸如chrome的SwitchySharp在浏览器中通过代理上网
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/SwitchySharp_config.png)
+![](/images/SwitchySharp_config.png)
 
 另外通过在SwitchySharp配置切换规则我们可以自动完成对不同域名网站的访问方式切换。
 
@@ -60,7 +60,7 @@ ssserver -c /etc/shadowsocks.json -d stop
 
 添加Online Rule List可以避免大部分的手动规则设置
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/SwitchySharp_config2.png)
+![](/images/SwitchySharp_config2.png)
 
 大致如此。
 

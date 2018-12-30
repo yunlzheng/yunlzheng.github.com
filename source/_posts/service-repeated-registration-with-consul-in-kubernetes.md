@@ -8,7 +8,7 @@ tags:
 
 <!-- more -->
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/to-many-instance.png)
+![](/images/to-many-instance.png)
 
 Spring Cloud中每个实例启动时都会产生一个唯一的InstanceID,并且通过InstanceID向Consul中进行注册。不同的InstanceID对于Consul而言就代表着不同的服务实例。但是由于目前将Pod网络方式设置成为了HostNetwork。因此只要是相同主机上启动的服务，其访问地址一定是相同的。 但是反复启动时，Spring Cloud注册会生成不同的InstanceID。 这些对于COnsul而言不同的Instance。 实际指向了一个相同的Pod网络。 在应用反复升级/部署之后，会发现Consul中存在大量的服务实例，而这些服务实例指向的地址都是相同的。对于这些服务Consul会定期调用Health Check去检查服务可用性。 大量的检查项导致Consul性能下降。为此需要一个简单的解决方案，确保在相同主机上运行的Pod实例，在部署/重启/升级后的InstanceID保持一致。
 
