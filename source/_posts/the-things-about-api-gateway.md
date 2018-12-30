@@ -13,7 +13,7 @@ tags: microservice
 
 在微服务架构模式下后端服务的实例数一般是动态的，对于客户端而言如何发现这些动态改变的服务实例的访问地址信息？因此在基于微服务的项目中为了简化前端的调用逻辑，通常会引入API Gateway作为轻量级网关，同时API Gateway中也会实现相关的认证逻辑从而简化内部服务之间相互调用的复杂度。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png](http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png)
+![/images/api_gateway.png](/images/api_gateway.png)
 
 ### 数据裁剪以及聚合
 
@@ -25,13 +25,13 @@ tags: microservice
 
 当然我们还可以针对不同的渠道和客户端提供不同的API Gateway,对于该模式的使用由另外一个大家熟知的方式叫**Backend for front-end**, 在Backend for front-end模式当中，我们可以针对不同的客户端分别创建其BFF
 
-![backend for front-end](http://7pn5d3.com1.z0.glb.clouddn.com/bff.png)
+![backend for front-end](/images/bff.png)
 
 ### 遗留系统的微服务化改造
 
 对于系统系统而言进行微服务改造通常是由于原有的系统存在或多或少的问题，比如技术债务，代码质量，可维护性，可扩展性等等。API Gateway的模式同样适用于这一类遗留系统的改造，通过微服务化的改造逐步实现对原有系统中的问题的修复，从而提升对于原有业务**响应力**的提升。**通过引入抽象层，逐步使用新的实现替换旧的实现。**
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/bff-process.png)
+![](/images/bff-process.png)
 
 ## 使用Zuul实现API网关
 
@@ -64,7 +64,7 @@ zuul:
 
 为了解决以上问题，可以通过在Zuul前端部署Nginx实现对Zuul实例的反向代理，同时适当的通过添加Cache以及请求压缩减少对后端Zuul实例的压力。
 
-![](http://7pn5d3.com1.z0.glb.clouddn.com/nginx-with-zuul.png)
+![](/images/nginx-with-zuul.png)
 
 ## 实现Nginx的动态代理
 
