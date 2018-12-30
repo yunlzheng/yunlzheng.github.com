@@ -9,7 +9,7 @@ tags: kubernetes
 
 对于Kubernetes其网络而言，其实现需要确保集群中每个Pod都有一个唯一的IP地址，并且Pod之间可以直接进行跨主机通讯。在符合这一原则的前提下，Kubernetes允许通过插件的方式，集成不同的容器集群网络实现。其中最常用的应该是Flannel。Flannel是由CoreOS团队针对KUbernetes设计的一个Overlay Network实现，通过隧道协议（udp，vxlan）封装容器之间的通讯报文，实现集群间网络通讯。
 
-![http://7pn5d3.com1.z0.glb.clouddn.com/flannel.png](http://7pn5d3.com1.z0.glb.clouddn.com/flannel.png)
+![../static/flannel.png](../static/flannel.png)
 
 Flannel默认使用UDP作为集群间通讯实现，如上图所示，Flannel通过ETCD管理整个集群中所有节点与子网的映射关系，如上图所示，Flannel分别为节点A和B划分了两个子网：10.1.15.0/16和10.1.20.0/16。同时通过修改docker启动参数，确保Docker启动的容器能够特定的网段中如10.1.15.1/24。
 
