@@ -87,6 +87,10 @@ java ...省略的其他输出... -Djava.rmi.server.hostname=127.0.0.1 -Dspring.l
 
 从而可以在Java程序中直接访问集群资源（ClusterIP和PodIP)。当ktctl退出时，会自动删除.jvmrc。 通过JVM Inject配合KT Connect开发者可以在IDEA按需决定是否直接访问Kubernetes集群。
 
+## 参考资料
+
+* KT Connect: [https://alibaba.github.io/kt-connect](https://alibaba.github.io/kt-connect/#/zh-cn/guide/how-to-use-in-idea)
+* JVM Inject: [https://plugins.jetbrains.com/plugin/13482-jvm-inject](https://plugins.jetbrains.com/plugin/13482-jvm-inject)
 
 
 
