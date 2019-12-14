@@ -52,8 +52,8 @@ Warning: Permanently added '[127.0.0.1]:2222' (ECDSA) to the list of known hosts
 4:31PM DBG KT proxy start successful
 ```
 
-使用ktctl可以快速在本地启动一个基于SOCKS5协议的代理服务，通过该代理服务可以直接访问集群内资源。 
-在CMD中验证网络连通性，新建一个CMD窗口，并根据ktctl中的日志输出设置http_proxy，对于Windows用户需要使用`set`命令
+使用ktctl可以快速在本地启动一个基于`SOCKS5`协议的代理服务，通过该代理服务可以直接访问集群内资源。 
+在CMD中验证网络连通性，新建一个CMD窗口，并`根据ktctl中的日志输`出设置http_proxy，对于Windows用户需要使用`set`命令
 
 ```
 set http_proxy=socks5://127.0.0.1:2223
