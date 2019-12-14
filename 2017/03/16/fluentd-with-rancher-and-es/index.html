@@ -114,14 +114,14 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="微服务是这样一种软件架构模式：独立进程，独立部署，独立发布。而一个业务通常会由多个服务进行支撑，这就带来一个问题，当用户的操作分布到了不同的服务当中之后，如果出现了异常开发人员如何才能快速完成问题定位？这篇文章我们就来聊聊关于日志的那些事儿">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/efk.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/kibana-demo.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/api_gateway.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/efk.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/kibana-demo.png">
+<meta property="og:updated_time" content="2018-12-30T09:22:09.800Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Fluentd实现日志聚合与分析">
 <meta name="twitter:description" content="微服务是这样一种软件架构模式：独立进程，独立部署，独立发布。而一个业务通常会由多个服务进行支撑，这就带来一个问题，当用户的操作分布到了不同的服务当中之后，如果出现了异常开发人员如何才能快速完成问题定位？这篇文章我们就来聊聊关于日志的那些事儿">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/api_gateway.png">
 
 
 
@@ -383,7 +383,7 @@
 <li>对于所有后端服务的请求实际都由API Gateway完成；</li>
 <li>后端有4个不同的服务分别提供不同的功能；</li>
 </ul>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png"></p>
+<p><img src="/images/api_gateway.png" alt="/images/api_gateway.png"></p>
 <p>基于微服务架构我们可以实现服务的独立部署，独立发布。而一个业务通常会由多个服务进行支撑，这就带来一个问题，当用户的操作分布到了不同的服务当中之后，如果出现了异常开发人员如何才能快速完成问题定位。</p>
 <h3><span id="容器日志聚合">容器日志聚合</span></h3><p>对于Docker容器而言，通常有两种方式来进行日志的聚合分析。</p>
 <ul>
@@ -434,7 +434,7 @@
 </ul>
 <p>上文有说docker默认使用json-file作为日志输出，同时所有的日志都会以Json的形式存储于日志文件当中/var/lib/docker/containers/&lt;contaner_id&gt;/&lt;container_id&gt;-json.log</p>
 <p>通过对日志文件的收集，在满足中心化收集和处理容器日志的同时，还能支持对于单个容器的本地化操作。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/efk.png" alt=""></p>
+<p><img src="/images/efk.png" alt=""></p>
 <h3><span id="日志输出规范">日志输出规范</span></h3><p>除了日志收集以外，我们还需要对于用户操作产生的日志做相关性处理，由于在微服务模式下应用程序可能由不同的服务是由不同应用开发框架完成，因此对于日志规范更多是“约定大于实现”。通过在各个服务中添加当前用户信息即可如user-<uuid>即可。由于日志的输出本身是满足时间序列性的，因此可以通过用户标识，时间等维度通过Kibana查询相关的日志输出信息。</uuid></p>
 <h3><span id="基于fluentd搭建日志聚合分析平台">基于Fluentd搭建日志聚合分析平台</span></h3><ul>
 <li>Fluentd是什么？</li>
@@ -463,7 +463,7 @@
 <p>完整Catalog示例可访问:<a href="https://github.com/yunlzheng/rancher-catalog/tree/master/templates/fluentd" target="_blank" rel="noopener">Github</a>获取</p>
 <p>Rancher Catalog中社区已经提供了ElasticSearch以及Kinana的相关Catalog，这里就不在过多说明了。</p>
 <h3><span id="小结">小结</span></h3><p>日志聚合分析是支撑微服务架构应用的重要基础设施之一。同时通过对日志内容进行规范进行约定就可以达到对日志以及问题快速定位的需求，避免从技术层面引入更多的框架所引入的开发的复杂度。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/kibana-demo.png" alt=""></p>
+<p><img src="/images/kibana-demo.png" alt=""></p>
 
       
     </div>
@@ -593,7 +593,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -737,7 +737,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -819,7 +823,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

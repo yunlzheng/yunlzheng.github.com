@@ -114,14 +114,14 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="RESideMenu是github上开源的一个Objective-c实现IOS侧滑菜单的组件库. 本文简单介绍一下如何在Swift中集成并且使用该第三发库">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/residemenu0.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/1.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/residemenu22.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/residemenu0.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/1.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/residemenu22.png">
+<meta property="og:updated_time" content="2018-12-30T09:15:12.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Swift中使用RESideMenu">
 <meta name="twitter:description" content="RESideMenu是github上开源的一个Objective-c实现IOS侧滑菜单的组件库. 本文简单介绍一下如何在Swift中集成并且使用该第三发库">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/residemenu0.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/residemenu0.png">
 
 
 
@@ -386,13 +386,13 @@
 <p>并且提供了两个主要方法presendLeftMenuViewController和presendRightMenuViewController分别用户显示左菜单，以及显示右菜单</p>
 <p>由RESideMenu控制并且实现3个子视图之前的切换</p>
 <p>在Main.storyboard中添加相应的视图创建3个视图并且命名为Storyboard ID为LeftMenuViewController和ContentViewController</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/residemenu0.png" alt=""></p>
+<p><img src="/images/residemenu0.png" alt=""></p>
 <p>创建RootViewController.swift</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"><span class="keyword">import</span> RESideMenu</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RootViewController</span>: <span class="title">RESideMenu</span>, <span class="title">RESideMenuDelegate</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line">        <span class="comment">// Do any additional setup after loading the view.</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">awakeFromNib</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">self</span>.menuPreferredStatusBarStyle = <span class="type">UIStatusBarStyle</span>.<span class="type">LightContent</span></span><br><span class="line">        <span class="keyword">self</span>.contentViewShadowColor = <span class="type">UIColor</span>.blackColor();</span><br><span class="line">        <span class="keyword">self</span>.contentViewShadowOffset = <span class="type">CGSizeMake</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">self</span>.contentViewShadowOpacity = <span class="number">0.6</span>;</span><br><span class="line">        <span class="keyword">self</span>.contentViewShadowRadius = <span class="number">12</span>;</span><br><span class="line">        <span class="keyword">self</span>.contentViewShadowEnabled = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">self</span>.contentViewController = <span class="keyword">self</span>.storyboard?.instantiateViewControllerWithIdentifier(<span class="string">"ContentViewController"</span>) <span class="keyword">as</span>! <span class="type">UIViewController</span></span><br><span class="line">        <span class="keyword">self</span>.leftMenuViewController = <span class="keyword">self</span>.storyboard?.instantiateViewControllerWithIdentifier(<span class="string">"LeftMenuViewController"</span>) <span class="keyword">as</span>! <span class="type">UIViewController</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">self</span>.backgroundImage = <span class="type">UIImage</span>(named: <span class="string">"MenuBackground"</span>)</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    // MARK: - Navigation</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    // In a storyboard-based application, you will often want to do a little preparation before navigation</span></span><br><span class="line"><span class="comment">    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) &#123;</span></span><br><span class="line"><span class="comment">        // Get the new view controller using segue.destinationViewController.</span></span><br><span class="line"><span class="comment">        // Pass the selected object to the new view controller.</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2><span id="关联事件">关联事件</span></h2><p>如下图所示，在ContentViewController中添加菜单按钮，并且右键关联点击事件即可</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/1.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/1.png"></p>
+<p><img src="/images/1.png" alt="/images/1.png"></p>
 <p>运行效果如下</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/residemenu22.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/residemenu22.png"></p>
+<p><img src="/images/residemenu22.png" alt="/images/residemenu22.png"></p>
 
       
     </div>
@@ -526,7 +526,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -670,7 +670,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -752,7 +756,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

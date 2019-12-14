@@ -114,12 +114,12 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="React.js 入坑记：快速上手，组件化，高复用，高性能。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/blog_react_cpmponents.png">
+<meta property="og:updated_time" content="2018-12-30T09:14:45.646Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React入坑指南">
 <meta name="twitter:description" content="React.js 入坑记：快速上手，组件化，高复用，高性能。">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/blog_react_cpmponents.png">
 
 
 
@@ -449,7 +449,7 @@
 </blockquote>
 <h3><span id="25与dom的交互">2.5，与Dom的交互</span></h3><p>除此之外，当组件处于mounted状态时，我们可以通过React.findDOMNode()方法获取实际的DOM对象，此方法特别适用于处理诸如表单提交时，需要获取表单内容的情况。</p>
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Component = React.createClass(&#123;</span><br><span class="line">  handleSubmit: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">    React.findDOMNode(<span class="keyword">this</span>.refs.InputText).value.trim();</span><br><span class="line">  &#125;,</span><br><span class="line">  render: <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        &lt;form&gt;</span><br><span class="line">          &lt;input type=<span class="string">"text"</span> ref=<span class="string">"InputText"</span>/&gt;</span><br><span class="line">          &lt;button type=<span class="string">"submit"</span> value=<span class="string">"提交"</span> onClick=&#123;<span class="keyword">this</span>.handleSubmit&#125;/&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h2><span id="3组件化的开发模式复用复用还是复用">3，组件化的开发模式，复用，复用还是复用</span></h2><p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/blog_react_cpmponents.png" alt=""></p>
+<h2><span id="3组件化的开发模式复用复用还是复用">3，组件化的开发模式，复用，复用还是复用</span></h2><p><img src="/images/blog_react_cpmponents.png" alt=""></p>
 <p>以一个简单页面，当我们使用React将页面组件化之后，对于一个新的页面而言我们要做的事情就是进行组装。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> PageOne = React.createClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;Header&gt;</span><br><span class="line">          &lt;Menus/&gt;</span><br><span class="line">        &lt;<span class="regexp">/Header&gt;</span></span><br><span class="line"><span class="regexp">        &lt;SomeForm/</span>&gt;</span><br><span class="line">        &lt;Footer&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    );</span></span><br><span class="line"><span class="regexp">&#125;);</span></span><br><span class="line"><span class="regexp">React.render(</span></span><br><span class="line"><span class="regexp">    PageOne,</span></span><br><span class="line"><span class="regexp">    document.getElementById('pageOne')</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
 <p>当然如果在另外一个页面我们也可以通过同样的方式，通过组件定义一个新的页面。</p>
@@ -588,7 +588,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -732,7 +732,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -814,7 +818,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

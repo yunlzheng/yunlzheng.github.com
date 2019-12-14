@@ -112,15 +112,15 @@
 <meta property="og:url" content="http://yunlzheng.github.io/2018/03/21/java-concurrency-and-asynchronous/index.html">
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/concurrency-parallel.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/thread_pool.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-1.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-3.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-queue.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/concurrency-parallel.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/thread_pool.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/java-asynchronous-1.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/java-asynchronous-3.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/java-asynchronous-queue.png">
+<meta property="og:updated_time" content="2018-12-30T09:08:35.076Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java回炉重造之 - 并发与异步编程[图文]">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/concurrency-parallel.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/concurrency-parallel.png">
 
 
 
@@ -373,7 +373,7 @@
       
 
       
-        <p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/concurrency-parallel.png" alt="并发与并行"></p>
+        <p><img src="/images/concurrency-parallel.png" alt="并发与并行"></p>
 <a id="more"></a>
 <h2><span id="并发与并行">并发与并行</span></h2><p>对于操作系统而言，一个单核的CPU就像写字楼中一层只有一个马桶一样。 即使有再多的人想要用，也不可能让两个人同时使用。因此只能将时间片段分配个每一个人单独利用。 当CPU被占用时，其他人只能等待。这种方式就叫做并发(concurrency)。</p>
 <p>而多余多核CPU而言，就好多了。可以有不同的人同时使用，这种就叫做并行(Paralle)。 并行强调时间上的同时发生。</p>
@@ -385,7 +385,7 @@
 <p>一般来说我们更推荐使用第二种方式，直接继承Thread，会让实现关注了线程自身的行为。 而实际上我们只需要让这个线程运行点什么东西就行了。下文中的线程池也很好的佐证了这样的思路。</p>
 <p>当然从理论上讲线程越多，抢占到CPU使用时间的可能性就越大，越多的CPU使用时间就等于越快的处理速度。(注意适可而止，线程的创建和销毁都会消耗资源，线程太多系统也会崩溃掉的)。</p>
 <h2><span id="线程池">线程池</span></h2><p>上一部分说了，虽然理论上讲，线程越多程序可能更快，但是在实际使用中我们需要考虑到线程本身的创建以及销毁的资源消耗，以及保护操作系统本身的目的。我们通常需要将线程限制在一定的范围之类，线程池就起到了这样的作用。<br>和所有的池一样，都需要喂养一些东西。线程池中喂养的就是我们的线程，通常来说线程池中会有一定数量的核心线程配比，以及一定的Buffer配比。一定的Buffer比例可以让系统适应并发压力的波动，而固定数量的核心线程，可以确保减少线程创建以及销毁的资源损耗。 这样当有任务需要执行的时候，那就直接把任务丢给线程池就好了。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/thread_pool.png" alt="线程池"></p>
+<p><img src="/images/thread_pool.png" alt="线程池"></p>
 <p>Java提供了以下方式来创建线程池：</p>
 <figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor threadPoolExecutor = <span class="keyword">new</span> <span class="type">ThreadPoolExecutor</span>(<span class="number">0</span>, Integer.MAX_VALUE, <span class="number">60</span>L, TimeUnit.SECONDS, <span class="keyword">new</span> <span class="type">SynchronousQueue</span>&lt;&gt;());</span><br><span class="line"><span class="comment">// 等价于 Executors.newCachedThreadPool();</span></span><br><span class="line">threadPoolExecutor.execute(runable);</span><br></pre></td></tr></table></figure>
 <p>TheadPoolExecutor的构造函数定义如下：</p>
@@ -395,11 +395,11 @@
 <p>例如，可以通过修改Tomcat的配置，修改其线程池的相关配置。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span>     </span></span><br><span class="line"><span class="tag">               <span class="attr">maxThreads</span>=<span class="string">"150"</span> <span class="attr">minSpareThreads</span>=<span class="string">"25"</span> <span class="attr">maxSpareThreads</span>=<span class="string">"75"</span>     </span></span><br><span class="line"><span class="tag">               <span class="attr">enableLookups</span>=<span class="string">"false"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> <span class="attr">acceptCount</span>=<span class="string">"100"</span>     </span></span><br><span class="line"><span class="tag">               <span class="attr">debug</span>=<span class="string">"0"</span> <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span>      </span></span><br><span class="line"><span class="tag">               <span class="attr">disableUploadTimeout</span>=<span class="string">"true"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 <p>但是对于每一个Request而言，假如对应了多个业务操作，特别是在微服务的方式中可能还会远程调用多个其它远程服务，会使得该Request的响应时间过长，降低系统的吞吐量。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-1.png" alt="HttpServer的多线程与请求的单线程"></p>
+<p><img src="/images/java-asynchronous-1.png" alt="HttpServer的多线程与请求的单线程"></p>
 <p>因此为了提升系统的吞吐量(注意，不是并发量，并发量由Webserver的线程池大小决定)。可以使用异步的方式对请求进行处理。将这些远程调用，变成异步的方式，而在外部等待这些异步操作执行完成后，对结果进行汇集后再返回给客户端。 响应时间减少到最长远程调用的时间。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-3.png" alt="异步处理"></p>
+<p><img src="/images/java-asynchronous-3.png" alt="异步处理"></p>
 <p>除了以上的方式以外，如果业务操作时间就非常长，可能就需要结合消息队列的方式对请求进行处理。当客户端发起请求后，理解响应Accepted，告诉客户端，“朕知道了，我会慢慢处理，你先下去吧”。然后由后台任务对业务进行处理即可。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/java-asynchronous-queue.png" alt="使用队列解决异步问题"></p>
+<p><img src="/images/java-asynchronous-queue.png" alt="使用队列解决异步问题"></p>
 <h3><span id="使用future实现并发">使用Future实现并发</span></h3><p>在前面的部分，介绍过在Java中使用Thread和Runnable实现多线程程序，这种模式下调用者并不关心线程的返回状态，直接把线程丢给线程池执行即可。而有些情况下，调用者是需要了解线程中任务的执行结果，然后对结果进行汇集。在还没有Future之前，可以使用CountDownLatch的方式。</p>
 <p>例如，这里有一个远程调用的服务RemoteService:</p>
 <figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.github.concurrent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> class RemoteService &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Random <span class="built_in">random</span> = <span class="keyword">new</span> Random(System.nanoTime());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> call() <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        <span class="built_in">int</span> target = <span class="built_in">random</span>.nextInt(<span class="number">10</span>) + <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">int</span> <span class="built_in">millis</span> = target * <span class="number">10</span>;</span><br><span class="line">        Thread.sleep(<span class="built_in">millis</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">millis</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -545,7 +545,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -689,7 +689,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -771,7 +775,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

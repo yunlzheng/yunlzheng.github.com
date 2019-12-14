@@ -114,14 +114,14 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="我们是如何在项目中使用Consul的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/multi-data-center.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/consul-multi-center-web-ui.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/consul-ui.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/multi-data-center.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/consul-multi-center-web-ui.png">
+<meta property="og:updated_time" content="2018-12-30T09:19:38.077Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Consul In Practice 1 [概述]">
 <meta name="twitter:description" content="我们是如何在项目中使用Consul的。">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/consul-ui.png">
 
 
 
@@ -390,7 +390,7 @@
 <p>完成服务定义之后：</p>
 <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">consul reload</span></span><br></pre></td></tr></table></figure>
 <p>可以重新加载服务配置文件，从Consul UI中我们可以查看到我们的服务实例</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/consul-ui.png" alt=""></p>
+<p><img src="/images/consul-ui.png" alt=""></p>
 <p>完成服务注册之后我们便可以通过Consul提供的API去查询服务实例</p>
 <p>例如我们可以通过<strong>HTTP API</strong>查询到sonarqube服务实例的相关信息：</p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">curl http:<span class="regexp">//</span>localhost:<span class="number">8500</span><span class="regexp">/v1/</span>catalog<span class="regexp">/service/</span>web</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">"Node"</span>:<span class="string">"agent-two"</span>,</span><br><span class="line">    <span class="string">"Address"</span>:<span class="string">"xxx.xxx.xxx"</span>,</span><br><span class="line">    <span class="string">"ServiceID"</span>:<span class="string">"web"</span>,</span><br><span class="line">    <span class="string">"ServiceName"</span>:<span class="string">"web"</span>,</span><br><span class="line">    <span class="string">"ServiceTags"</span>:[<span class="string">"dev"</span>],</span><br><span class="line">    <span class="string">"ServiceAddress"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"ServicePort"</span>:<span class="number">9900</span>,</span><br><span class="line">    <span class="string">"ServiceEnableTagOverride"</span>:false,</span><br><span class="line">    <span class="string">"CreateIndex"</span>:<span class="number">515</span>,</span><br><span class="line">    <span class="string">"ModifyIndex"</span>:<span class="number">516</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
@@ -415,7 +415,7 @@
 <p>本篇不详细说明该特性，后续会详细讨论在集中式配置管理中的应用</p>
 </blockquote>
 <h3><span id="4-as-datacenters">4, As DataCenters</span></h3><p>在实际软件交付过程中我们会涉及到另外一个问题，多环境的管理，以当前自己所在的项目为例，在交付过程中会涉及到3个基本的环境Dev, UAT以及Prod环境。各个环境独立部署了所有的服务，Cosul的多数据中心能力可以很好的对多个环境进行统一的管理和监控；</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/multi-data-center.png" alt=""></p>
+<p><img src="/images/multi-data-center.png" alt=""></p>
 <p>以下我们假设以Dev和UAT两个DataCenter为例</p>
 <ul>
 <li>DEV DataCenter:</li>
@@ -441,7 +441,7 @@
 <p> 通过命令</p>
  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">consul</span> <span class="selector-tag">join</span> <span class="selector-tag">-wan</span> 192<span class="selector-class">.168</span><span class="selector-class">.2</span><span class="selector-class">.2</span></span><br></pre></td></tr></table></figure>
 <p>通过Consul UI集中式管理多个环境的信息</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/consul-multi-center-web-ui.png" alt="/images/consul-multi-center-web-ui.png"></p>
+<p><img src="/images/consul-multi-center-web-ui.png" alt="/images/consul-multi-center-web-ui.png"></p>
 <h2><span id="summary">Summary</span></h2><p>这篇主要目的是用于介绍一下Consul的基本特性</p>
 <p>在后续还会继续考虑：</p>
 <ul>
@@ -579,7 +579,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -723,7 +723,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -805,7 +809,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

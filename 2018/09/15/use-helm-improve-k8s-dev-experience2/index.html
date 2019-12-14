@@ -114,18 +114,17 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="接着上一篇《使用Helm优化Kubernetes下的研发体验：基础设施即代码》中笔者介绍了如何在项目中使用Helm，在项目源码中，我们通过Dockerfile定义了项目是如何构建的，使用Helm定义了项目是如何部署的。 团队中的任何人员(角色）在获取源码的同时就已经具备了一键构建，一键部署的能力。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/pipeline-overview.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/build-and-test.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/publish-docker-and-helm.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-dev.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-staging.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/release-version.png">
-<meta property="og:updated_time" content="2018-09-15T15:09:01.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/ci-cd-jenkins-helm-k8s.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/build-and-test.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/publish-docker-and-helm.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/deploy-to-dev.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/deploy-to-staging.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/release-version.png">
+<meta property="og:updated_time" content="2018-12-30T09:01:37.904Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Helm优化Kubernetes下的研发体验：实现持续交付流水线">
 <meta name="twitter:description" content="接着上一篇《使用Helm优化Kubernetes下的研发体验：基础设施即代码》中笔者介绍了如何在项目中使用Helm，在项目源码中，我们通过Dockerfile定义了项目是如何构建的，使用Helm定义了项目是如何部署的。 团队中的任何人员(角色）在获取源码的同时就已经具备了一键构建，一键部署的能力。">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/ci-cd-jenkins-helm-k8s.png">
 
 
 
@@ -386,16 +385,15 @@
 <li>测试： 在需要对项目功能进行验证时，可以一键部署测试环境，并且在此环境基础上可以完成功能验收(手动)，以及全量的自动化验收测试等；</li>
 <li>运维：一键部署生产环境，同时发布创建版本，以便在发布异常时能够快速回归</li>
 </ul>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd-jenkins-helm-k8s.png" alt="在端到端中使用Helm"></p>
 <blockquote>
 <p>资料来源： <a href="https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he" target="_blank" rel="noopener">https://dzone.com/articles/easily-automate-your-cicd-pipeline-with-jenkins-he</a></p>
 </blockquote>
 <p>示例项目的代码可以从<a href="https://github.com/yunlzheng/project-samples" target="_blank" rel="noopener">Github</a>下载，示例项目为<code>containerization-spring-with-helm</code>。接下来，我们将分阶段介绍如何通过<a href="https://github.com/yunlzheng/project-samples/blob/master/Jenkinsfile" target="_blank" rel="noopener">Jenkinsfile</a>定义整个过程。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/pipeline-overview.png" alt="Jenkins Pipeline"></p>
+<p><img src="/images/ci-cd-jenkins-helm-k8s.png" alt="在端到端中使用Helm"></p>
 <h2><span id="项目构建阶段">项目构建阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Build And Test'</span>)</span></span> &#123;</span><br><span class="line">    steps &#123;</span><br><span class="line"></span><br><span class="line">        dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">            sh <span class="string">'docker build -t yunlzheng/spring-sample:$GIT_COMMIT .'</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在<code>Build And Test</code>阶段，我们直接通过源码中的Dockerfile定义了整个持续集成阶段的任务，通过docker的<code>Multi-Stage Builds</code>特性，持续集成的所有任务全部通过Dockerfile进行定义，这样无论是在本地还是持续集成服务器中，我们都可以非常方便的进行运行CI任务。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/build-and-test.png" alt="Build And Test"></p>
+<p><img src="/images/build-and-test.png" alt="Build And Test"></p>
 <h2><span id="发布镜像和helm阶段">发布镜像和Helm阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">'Publish Docker And Helm'</span>) &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line"></span><br><span class="line">    withDockerRegistry([credentialsId: <span class="string">'dockerhub'</span>, ur<span class="variable">l:</span> <span class="string">''</span>]) &#123;</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">'docker push yunlzheng/spring-sample:$GIT_COMMIT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    script &#123;</span><br><span class="line">      def filename = <span class="string">'containerization-spring-with-helm/chart/values.yaml'</span></span><br><span class="line">      def data = readYaml <span class="keyword">file</span>: filename</span><br><span class="line">      data.image.<span class="keyword">tag</span> = env.GIT_COMMIT</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">"rm $filename"</span></span><br><span class="line">      writeYaml <span class="keyword">file</span>: filename, dat<span class="variable">a:</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    script &#123;</span><br><span class="line">      def filename = <span class="string">'containerization-spring-with-helm/chart/Chart.yaml'</span></span><br><span class="line">      def data = readYaml <span class="keyword">file</span>: filename</span><br><span class="line">      data.<span class="keyword">version</span> = env.GIT_COMMIT</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">"rm $filename"</span></span><br><span class="line">      writeYaml <span class="keyword">file</span>: filename, dat<span class="variable">a:</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">'helm push chart https://repomanage.rdc.aliyun.com/helm_repositories/26125-play-helm --username=$HELM_USERNAME --password=$HELM_PASSWORD  --version=$GIT_COMMIT'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3><span id="push镜像">Push镜像</span></h3><p>通过<code>withDockerRegistry</code>的上下文中，Jenkins会确保docker client首先通过<code>credentials dockerhub</code>中定义的用户名和密码完成登录后，在运行<code>docker push</code>任务。并且我们确保使用当前代码版本的COMMIT_ID作为镜像的Tag，从而将Docker镜像版本与源码版本进行一一对应；</p>
@@ -404,18 +402,18 @@
 <h3><span id="上传chart">上传Chart</span></h3><p>这里我们直接使用<a href="https://rdc.aliyun.com/" target="_blank" rel="noopener">阿里云效</a>提供的Helm仓库服务，<a href="https://repomanage.rdc.aliyun.com/my/repo" target="_blank" rel="noopener">点击开通私有仓库服务</a>。通过Helm Push插件发布Chart到Helm仓库。</p>
 <p>其中环境变量<code>$HELM_USERNAME</code>和<code>$HELM_PASSWORD</code>是通过jenkins的Credentials加载到环境变量中：</p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">environment</span> &#123;</span><br><span class="line">      <span class="attribute">HELM_USERNAME</span> = credentials(<span class="string">'HELM_USERNAME'</span>)</span><br><span class="line">      HELM_PASSWORD = credentials(<span class="string">'HELM_PASSWORD'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/publish-docker-and-helm.png" alt="Publish Docker And Helm"></p>
+<p><img src="/images/publish-docker-and-helm.png" alt="Publish Docker And Helm"></p>
 <h2><span id="部署到开发测试环境阶段">部署到开发/测试环境阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Deploy To Dev'</span>)</span></span> &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      dir(<span class="string">'chart'</span>) &#123;</span><br><span class="line">        sh <span class="string">'helm upgrade spring-app-dev --install --namespace=dev --set ingress.host=dev.spring-example.local .'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stage</span><span class="params">(<span class="string">'Deploy To Stageing'</span>)</span></span> &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line">    <span class="selector-tag">input</span> <span class="string">'Do you approve staging?'</span></span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      dir(<span class="string">'chart'</span>) &#123;</span><br><span class="line">        sh <span class="string">'helm upgrade spring-app-staging --install --namespace=staging --set ingress.host=staging.spring-example.local .'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在Jenkinsfile中我们分别定义了两个阶段<code>Deploy To Dev</code>和<code>Deploy To Stageing</code>。我们通过Kubernetes的命名空间划分单独的开发环境和测试环境。并且通过覆盖ingress.host确保能够通过ingress域名<code>dev.spring-example.local</code>和<code>staging.spring-example.local</code>访问到不同环境。 对于Staging环境而言，通过<code>input</code>确保该流程一定是通过人工确认的。</p>
 <p>通过<code>helm upgrade</code>命令可以确保在特定命名空间下部署或者升级已有的Chart:</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm<span class="built_in"> upgrade </span>spring-app-staging --install <span class="attribute">--namespace</span>=staging --<span class="builtin-name">set</span> ingress.<span class="attribute">host</span>=staging.spring-example.local .</span><br></pre></td></tr></table></figure>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-dev.png" alt="Deploy To Dev"></p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/deploy-to-staging.png" alt="Deploy To Stageing"></p>
+<p><img src="/images/deploy-to-dev.png" alt="Deploy To Dev"></p>
+<p><img src="/images/deploy-to-staging.png" alt="Deploy To Stageing"></p>
 <h2><span id="部署到生产环境阶段">部署到生产环境阶段</span></h2><p>当前阶段Jenkinsfile定义如下：</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">'Deploy To Production'</span>) &#123;</span><br><span class="line">  steps &#123;</span><br><span class="line">    <span class="built_in">input</span> <span class="string">'Do you approve production?'</span></span><br><span class="line"></span><br><span class="line">    script &#123;                </span><br><span class="line">        env.RELEASE = <span class="built_in">input</span> message: <span class="string">'Please input the release version'</span>,</span><br><span class="line">        ok: <span class="string">'Deploy'</span>,</span><br><span class="line">        parameter<span class="variable">s:</span> [</span><br><span class="line">          [$clas<span class="variable">s:</span> <span class="string">'TextParameterDefinition'</span>, defaultValue: <span class="string">'0.0.1'</span>, description: <span class="string">'Cureent release version'</span>, name: <span class="string">'release'</span>]</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'Deploy and release: $RELEASE'</span></span><br><span class="line"></span><br><span class="line">    script &#123;</span><br><span class="line">      def filename = <span class="string">'containerization-spring-with-helm/chart/Chart.yaml'</span></span><br><span class="line">      def data = readYaml <span class="keyword">file</span>: filename</span><br><span class="line">      data.<span class="keyword">version</span> = env.RELEASE</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">"rm $filename"</span></span><br><span class="line">      writeYaml <span class="keyword">file</span>: filename, dat<span class="variable">a:</span> data</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dir(<span class="string">'containerization-spring-with-helm'</span>) &#123;</span><br><span class="line">      dir(<span class="string">'chart'</span>) &#123;</span><br><span class="line">        <span class="keyword">sh</span> <span class="string">'helm lint'</span></span><br><span class="line">        <span class="keyword">sh</span> <span class="string">'helm upgrade spring-app-prod --install --namespace=production --set ingress.host=production.spring-example.local .'</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">sh</span> <span class="string">'helm push chart https://repomanage.rdc.aliyun.com/helm_repositories/26125-play-helm --username=$HELM_USERNAME --password=$HELM_PASSWORD  --version=$RELEASE'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在最后一个<code>Deploy To Production</code>阶段中，与Dev和Stageing的部署不同在于当人工确认部署测试环境之后，我们需要用户手动输入当前发布的版本，以确保对当前发布的Chart版本能完成一个基线的定义：</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/release-version.png" alt="Release Version"></p>
+<p><img src="/images/release-version.png" alt="Release Version"></p>
 <p>这里，我们需要确保当前定义的版本是符合Sem规范的，因此这里使用了<code>helm lint</code>对Chart定义进行校验。</p>
 <h2><span id="小结">小结</span></h2><p>通过代码提交版本(COMMIT_ID)关联了源码版本，镜像版本以及Chart版本。同时对于正式发布的软件版本而言，单独定义了正式发布的版本号。对于实践持续交付的研发团队而言，我们可以通过上述一条流水线基本实现软件交付的整个生命周期。而对于传统交付模式的团队，则可以通过将上述过程分拆到多条流水线（开发流水线，测试流水线，发布流水线）来适应自己的发布模式。</p>
 <p>回到我们的总体目标而言，通过基础设施及代码的方式，我们定义了一个相对完备且自描述的应用。通过流水线即代码的方式，定义了应用的端到端交付过程。通过Docker定义项目的构建过程，通过Helm实现Kubernetes下应用的发布管理，通过Jenkinsfile定义了软件的整个交付过程，并且不同职能的团队成员，可以方便的在此基础上实现协作。最后借用《持续交付》的话“提前并频繁地做让你感到痛苦的事!“ ，希望大家都能够Happy Coding。</p>
@@ -556,7 +554,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -700,7 +698,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -782,7 +784,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

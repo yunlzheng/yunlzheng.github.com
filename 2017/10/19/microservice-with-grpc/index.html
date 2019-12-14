@@ -114,16 +114,16 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="“鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/api_gateway.png">
 <meta property="og:image" content="http://7xj61w.com1.z0.glb.clouddn.com/grpc-logo.png">
 <meta property="og:image" content="https://camo.githubusercontent.com/e75a8b46b078a3c1df0ed9966a16c24add9ccb83/68747470733a2f2f646f63732e676f6f676c652e636f6d2f64726177696e67732f642f3132687034435071724e5046686174744c5f63496f4a707446766c41716d35774c513067677149356d6b43672f7075623f773d37343926683d333730">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/grpc-gateway-example.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/grpc-gateway-example.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/http-with-grpc.png">
+<meta property="og:updated_time" content="2018-12-30T09:18:10.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用gRPC-Gateway快速构建微服务">
 <meta name="twitter:description" content="“鱼和熊掌可兼得”，还在为HTTP和gRPC纠结？ 试试gRPC-Gateway">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/api_gateway.png">
 
 
 
@@ -382,7 +382,7 @@
 <p>独立的，去中心化的，围绕业务组织服务和管理数据，并且使用轻量级通讯机制</p>
 </blockquote>
 <p>按照业务领域组织服务并且提供Restful接口，服务与服务之间通过轻量级通讯方式(Restful)进行数据交换和调用，对外使用轻量级网关简化客户端访问复杂度。基于服务发现和注册中心，完成服务之间的相互发现以及实现服务自身的横向扩展。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/api_gateway.png"></p>
+<p><img src="/images/api_gateway.png" alt="/images/api_gateway.png"></p>
 <h2><span id="grpc-通用的高性能的rpc框架">gRPC： 通用的，高性能的RPC框架</span></h2><p><img src="http://7xj61w.com1.z0.glb.clouddn.com/grpc-logo.png" alt="http://7xj61w.com1.z0.glb.clouddn.com/grpc-logo.png"></p>
 <blockquote>
 <p>Google开发的基于HTTP/2标准设计的一个通用的，高性能的RPC框架</p>
@@ -427,7 +427,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"flag"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line"></span><br><span class="line">	gw <span class="string">"git.wise2c.com/grpc-gateway-example/echo"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/golang/glog"</span></span><br><span class="line">	<span class="string">"github.com/grpc-ecosystem/grpc-gateway/runtime"</span></span><br><span class="line">	<span class="string">"golang.org/x/net/context"</span></span><br><span class="line">	<span class="string">"google.golang.org/grpc"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	echoEndpoint = flag.String(<span class="string">"echo_endpoint"</span>, <span class="string">"localhost:9090"</span>, <span class="string">"endpoint of YourService"</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	ctx := context.Background()</span><br><span class="line">	ctx, cancel := context.WithCancel(ctx)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">	mux := runtime.NewServeMux()</span><br><span class="line">	opts := []grpc.DialOption&#123;grpc.WithInsecure()&#125;</span><br><span class="line">	err := gw.RegisterEchoServiceHandlerFromEndpoint(ctx, mux, *echoEndpoint, opts)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> http.ListenAndServe(<span class="string">":8080"</span>, mux)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	flag.Parse()</span><br><span class="line">	<span class="keyword">defer</span> glog.Flush()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err := run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		glog.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>启动Restful接口</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bee <span class="keyword">run</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/grpc-gateway-example.png" alt="grpc-example"></p>
+<p><img src="/images/grpc-gateway-example.png" alt="grpc-example"></p>
 <h2><span id="小结">小结</span></h2><p>至此，以Kubernetes下部署为例：</p>
 <ul>
 <li>对于每个微服务创建Deployment包含两个容器，该服务的gRPC Server实现以及其对应的反向代理。并且以此为单位进行伸缩（同一Pod内容器共享公网，存储资源，直接使用127.0.0.1访问即可）。</li>
@@ -436,7 +436,7 @@
 <li>对于有状态服务，需要添加额外的服务发现和注册中心如Consul或Eureka。实现点对点调用。</li>
 <li>对外基于API Gateway对外部客户端（浏览器，H5）提供Rest API。</li>
 </ul>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png" alt="http://7pn5d3.com1.z0.glb.clouddn.com/http-with-grpc.png"></p>
+<p><img src="/images/http-with-grpc.png" alt="/images/http-with-grpc.png"></p>
 <p>在诸如Spring Cloud这样的微服务框架当中，每一个服务默认基于HTTP协议对外提供Restful API,从而对外对内的提供服务能力。 而在某些场景下，我们既需要保持Restful的简单性，又想充分提升应用内部的性能以及可靠性，采用gRPC可以帮助我们实现是这样的目的，而使用gRPC-Gateway这样的工具我们可以很快速的基于proto接口定义，在使用RPC的同时对外提供Restful，实现软件架构的小步优化以及应用性能的提升。</p>
 
       
@@ -569,7 +569,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -713,7 +713,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -795,7 +799,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

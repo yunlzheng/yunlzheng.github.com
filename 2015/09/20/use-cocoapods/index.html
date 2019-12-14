@@ -114,15 +114,15 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="笔者断断续续接触IOS开始有小几个月，中间也遇到了许多问题，这里主要记录一下与依赖管理相关的内容。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods2.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods3.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods5.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/cocoapods1.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/cocoapods2.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/cocoapods3.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/cocoapods5.png">
+<meta property="og:updated_time" content="2018-12-30T09:13:54.102Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XCode依赖管理刨坑记">
 <meta name="twitter:description" content="笔者断断续续接触IOS开始有小几个月，中间也遇到了许多问题，这里主要记录一下与依赖管理相关的内容。">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/cocoapods1.png">
 
 
 
@@ -382,11 +382,11 @@
 <p>以Alamofire为例，我们可以使用git submodule来添加依赖</p>
 <figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule <span class="built_in">add</span> http<span class="variable">s:</span>//github.<span class="keyword">com</span>/Alamofire/Alamofire.git</span><br></pre></td></tr></table></figure>
 <p>之后的过程就是手动将Alamofire目录下的Alamofire.xcodeproj文件拖入到项目中</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods1.png" alt="cocoapods1.png"></p>
+<p><img src="/images/cocoapods1.png" alt="cocoapods1.png"></p>
 <p>选择项目的Targets</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods2.png" alt="cocoapods2.png"></p>
+<p><img src="/images/cocoapods2.png" alt="cocoapods2.png"></p>
 <p>在Embeded Binaries中添加依赖的包</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods3.png" alt="cocoapods3.png"></p>
+<p><img src="/images/cocoapods3.png" alt="cocoapods3.png"></p>
 <blockquote>
 <p>这里可以看到有连个Alamofire的包，两个中任意选择一个即可，上面的包是IOS，下面的包是给OSX的，选择即可</p>
 </blockquote>
@@ -417,7 +417,7 @@
 <p>运行pod install即可下载并且编译相关的依赖文件</p>
 <figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Updating <span class="keyword">local</span> specs repositories</span><br><span class="line"></span><br><span class="line">CocoaPods 0.39.0.beta.4 is available.</span><br><span class="line">To <span class="keyword">update</span> <span class="keyword">use</span>: `sudo gem install cocoapods --pre`</span><br><span class="line">[!] This is a <span class="keyword">test</span> <span class="keyword">version</span> we'<span class="keyword">d</span> love you to try.</span><br><span class="line"></span><br><span class="line"><span class="keyword">For</span> <span class="keyword">more</span> information see http:<span class="comment">//blog.cocoapods.org</span></span><br><span class="line">and the CHANGELOG <span class="keyword">for</span> this <span class="keyword">version</span> http:<span class="comment">//git.io/BaH8pQ.</span></span><br><span class="line"></span><br><span class="line">Analyzing dependencies</span><br><span class="line">Downloading dependencies</span><br><span class="line">Installing Alamofire (2.0.1)</span><br><span class="line">Generating Pods project</span><br><span class="line">Integrating client project</span><br><span class="line"></span><br><span class="line">[!] Please <span class="keyword">close</span> any current Xcode sessions and <span class="keyword">use</span> `DemoApplication1.xcworkspace` <span class="keyword">for</span> this project from now <span class="keyword">on</span>.</span><br><span class="line">Sending stats</span><br></pre></td></tr></table></figure>
 <p>Cocoapods会在当前目录下创建应用的xcworkspace，打开生成的workspace即可在项目中使用构建出的第三方项目</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cocoapods5.png" alt=""></p>
+<p><img src="/images/cocoapods5.png" alt=""></p>
 <p>折腾到这里，基本上能够正常的使用Cocoapods管理并且使用第三方库</p>
 <p>需要注意的一点是对于在Swift中使用Objective-c的第三方库，在Podfile文件中我们使用了,这样一个配置</p>
 <figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use_frameworks!</span><br></pre></td></tr></table></figure>
@@ -556,7 +556,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -700,7 +700,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -782,7 +786,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

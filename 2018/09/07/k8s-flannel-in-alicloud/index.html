@@ -114,13 +114,13 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="在Kubernetes中网络中，主要包含两种IP，分别是Pod IP和Cluster IP。 Pod IP是实际存在于网卡之上（如VETH的虚拟网卡），而Cluster IP则是一个虚拟的IP地址，该虚拟机IP由kube-proxy进行维护，kube-proxy目前提供了两种实现方式，包括默认的ip tables实现以及在K8S 1.8之后开始支持的ipvs实现。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yunlzheng.github.io/2018/09/07/static/flannel.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/flannel.png">
 <meta property="og:image" content="https://github.com/yunlzheng/kubernetes-hands-on-workshop/raw/master/02-core-concept/images/aliyun-vpc-route.png">
-<meta property="og:updated_time" content="2018-12-30T03:43:04.426Z">
+<meta property="og:updated_time" content="2018-12-30T08:52:30.471Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flannel网络以及在阿里云下的实现解析">
 <meta name="twitter:description" content="在Kubernetes中网络中，主要包含两种IP，分别是Pod IP和Cluster IP。 Pod IP是实际存在于网卡之上（如VETH的虚拟网卡），而Cluster IP则是一个虚拟的IP地址，该虚拟机IP由kube-proxy进行维护，kube-proxy目前提供了两种实现方式，包括默认的ip tables实现以及在K8S 1.8之后开始支持的ipvs实现。">
-<meta name="twitter:image" content="http://yunlzheng.github.io/2018/09/07/static/flannel.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/flannel.png">
 
 
 
@@ -376,7 +376,7 @@
         <p>在Kubernetes中网络中，主要包含两种IP，分别是Pod IP和Cluster IP。 Pod IP是实际存在于网卡之上（如VETH的虚拟网卡），而Cluster IP则是一个虚拟的IP地址，该虚拟机IP由kube-proxy进行维护，kube-proxy目前提供了两种实现方式，包括默认的ip tables实现以及在K8S 1.8之后开始支持的ipvs实现。</p>
 <a id="more"></a>
 <p>对于Kubernetes其网络而言，其实现需要确保集群中每个Pod都有一个唯一的IP地址，并且Pod之间可以直接进行跨主机通讯。在符合这一原则的前提下，Kubernetes允许通过插件的方式，集成不同的容器集群网络实现。其中最常用的应该是Flannel。Flannel是由CoreOS团队针对KUbernetes设计的一个Overlay Network实现，通过隧道协议（udp，vxlan）封装容器之间的通讯报文，实现集群间网络通讯。</p>
-<p><img src="../static/flannel.png" alt="../static/flannel.png"></p>
+<p><img src="/images/flannel.png" alt="/images/flannel.png"></p>
 <p>Flannel默认使用UDP作为集群间通讯实现，如上图所示，Flannel通过ETCD管理整个集群中所有节点与子网的映射关系，如上图所示，Flannel分别为节点A和B划分了两个子网：10.1.15.0/16和10.1.20.0/16。同时通过修改docker启动参数，确保Docker启动的容器能够特定的网段中如10.1.15.1/24。</p>
 <ul>
 <li><p>同一Pod实例容器间通信：对于Pod而言，其可以包含1~n个容器实例，这些容器实例共享Pod的存储以及网络资源，Pod直接可以直接通过127.0.0.1进行通讯。其通过Linux的Network Namespace为这组容器实现了一个隔离网络。</p>
@@ -540,7 +540,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -684,7 +684,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -766,7 +770,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

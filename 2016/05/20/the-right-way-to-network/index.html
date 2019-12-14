@@ -114,15 +114,15 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="论科学上网的正确性。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/digitalocean.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/local_config.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/SwitchySharp_config.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/SwitchySharp_config2.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/digitalocean.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/local_config.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/SwitchySharp_config.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/SwitchySharp_config2.png">
+<meta property="og:updated_time" content="2018-12-30T09:12:46.847Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="上网的正确姿势">
 <meta name="twitter:description" content="论科学上网的正确性。">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/digitalocean.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/digitalocean.png">
 
 
 
@@ -380,7 +380,7 @@
 <p>最近苦于云梯的各种不稳定，在经历了几天无法正常上网的情况下，还是决定在digitalocean部署一个Shadowsocks的服务实例。</p>
 <p>大致过程很简单：</p>
 <p>在Digitalocean创建一台Ubuntu的实例：</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/digitalocean.png" alt=""></p>
+<p><img src="/images/digitalocean.png" alt=""></p>
 <p>安装毕竟启动shadowsocks即可</p>
 <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get <span class="keyword">install</span> python-pip</span><br><span class="line">pip <span class="keyword">install</span> shadowsocks</span><br></pre></td></tr></table></figure>
 <p>添加配置文件/etc/shadowsocks.json</p>
@@ -388,14 +388,14 @@
 <p>启动服务或停止服务</p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssserver -c <span class="regexp">/etc/</span>shadowsocks.json -d start</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">ssserver -c <span class="regexp">/etc/</span>shadowsocks.json -d stop</span><br></pre></td></tr></table></figure>
 <p>完成服务器启动之后，本机安装一个<a href="https://shadowsocks.org/en/download/clients.html" target="_blank" rel="noopener">ShadowsocksX客户端即可</a></p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/local_config.png" alt=""></p>
+<p><img src="/images/local_config.png" alt=""></p>
 <p>这里配置你的服务器IP地址，端口，以及密码即可。</p>
 <p>完成后ShadowsocksX默认在本地的1080端口建立代理服务，这个时候你就可以使用诸如chrome的SwitchySharp在浏览器中通过代理上网</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/SwitchySharp_config.png" alt=""></p>
+<p><img src="/images/SwitchySharp_config.png" alt=""></p>
 <p>另外通过在SwitchySharp配置切换规则我们可以自动完成对不同域名网站的访问方式切换。</p>
 <p>另外可以使用Github的<a href="https://github.com/gfwlist/gfwlist" target="_blank" rel="noopener">https://github.com/gfwlist/gfwlist</a>项目，该相互维护了一个官方的已被屏蔽的网站列表。</p>
 <p>添加Online Rule List可以避免大部分的手动规则设置</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/SwitchySharp_config2.png" alt=""></p>
+<p><img src="/images/SwitchySharp_config2.png" alt=""></p>
 <p>大致如此。</p>
 <h3><span id="科学上网">科学上网</span></h3><blockquote>
 <p>另外关于DigitalOcean的计费模式</p>
@@ -539,7 +539,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -683,7 +683,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -765,7 +769,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

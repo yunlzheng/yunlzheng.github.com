@@ -114,21 +114,21 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="这里讨论一下关于实现交付过程中的一些原则和实践。大部分观点来自-持续交付(发布可靠软件的系统方法)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cd.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/team_crop.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/vms.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/pipeline.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/stages.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/test.jpg">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/test4.png">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/SHTT-Lead-Image-Costumes.jpg">
-<meta property="og:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/devops_platform.png">
-<meta property="og:updated_time" content="2018-08-09T08:01:16.000Z">
+<meta property="og:image" content="http://yunlzheng.github.io/images/cd.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/team_crop.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/vms.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/pipeline.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/stages.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/ci-cd.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/test.jpg">
+<meta property="og:image" content="http://yunlzheng.github.io/images/test4.png">
+<meta property="og:image" content="http://yunlzheng.github.io/images/SHTT-Lead-Image-Costumes.jpg">
+<meta property="og:image" content="http://yunlzheng.github.io/images/devops_platform.png">
+<meta property="og:updated_time" content="2018-12-30T09:21:27.689Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于持续交付你准备好了吗？">
 <meta name="twitter:description" content="这里讨论一下关于实现交付过程中的一些原则和实践。大部分观点来自-持续交付(发布可靠软件的系统方法)">
-<meta name="twitter:image" content="http://7pn5d3.com1.z0.glb.clouddn.com/cd.png">
+<meta name="twitter:image" content="http://yunlzheng.github.io/images/cd.png">
 
 
 
@@ -386,13 +386,13 @@
 <p>持续交付理论要解决的最重要的问题就是，如何以最快的方式将我们的软件交付到客户手上；如何实现可靠，迅速并且低风险的软件发布</p>
 <p>在传统的软件开发方法中我们更多的关注软件研发环节，而DevOps运动则将软件研发活动的视角从传统的需求，开发，测试等活动延伸到了部署，发布以及运维过程中。</p>
 <p>软件的核心价值是为软件的使用者带来收益，在过去我们经常听到开发人员说这个功能已经开发完成了。 但是在持续交付中我们认为之后将特性真正的发布到用户手上才以为则完成</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/cd.png" alt="image"></p>
+<p><img src="/images/cd.png" alt="image"></p>
 <blockquote>
 <p>持续交付</p>
 </blockquote>
 <p>而要想达到持续交付的目标即实现可靠，迅速并且低风险的软件交付需要所有相关人员（需求，开发，测试，运维）的协同工作才能保证这一目标的实现。</p>
 <p>在持续交付过程中我们希望一个团队是能够充分自治的，能够完成从软件的需求，设计，开发，部署以及运维的端到端所有工作。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/team_crop.png" alt="image"></p>
+<p><img src="/images/team_crop.png" alt="image"></p>
 <blockquote>
 <p>全功能团队</p>
 </blockquote>
@@ -404,14 +404,14 @@
 <li>测试人员等待“好的”版本构建出来</li>
 <li>研发团队可能在新功能发布几周后才收到缺陷报告</li>
 </ul>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/vms.png" alt="image"></p>
+<p><img src="/images/vms.png" alt="image"></p>
 <p>最终的结果就是软件产品迟迟不能发布甚至延期，同时由于开发与测试，开发和运维之间的过长的反馈周期直接导致软件产品的质量低下，同时可能并不能真正的为使用者带来价值</p>
 <p>同时如果管理者想要对整个软件交付过程进行改善将会很容易陷入到局部优化的恶性循环当中，很难真正了解交付的问题瓶颈</p>
 <p>而持续部署流水线则是解决这一问题的最佳方式，建立持续部署流水线即建立了一套端到端的软件交付流程，同时在持续部署流水线的流程当中参与到软件交付的各个角色都能各司其职，形成一套高效的“拉动系统”</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/pipeline.png" alt="image"></p>
+<p><img src="/images/pipeline.png" alt="image"></p>
 <p>开发人员持续的查看代码度量数据以及测试失败等问题，测试人员自助部署测试环境，同时运维人员也可以通过一键方式将软件部署到预生产环境以及生产环境。同时对于管理人员也可以通过度量持续部署流水线的各个环境来分析交付问题，通过合理的方式优化软件交付流程当中存在的问题。</p>
 <p>而将持续部署流水线中的各个环节可以划分为如下几个不同的阶段</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/stages.png" alt="image"></p>
+<p><img src="/images/stages.png" alt="image"></p>
 <ul>
 <li>提交阶段</li>
 </ul>
@@ -451,21 +451,21 @@
 <p>这些相关的“变更集”包括：基础设施描述文件,源代码，测试脚本，自动化测试用例，环境配置脚本，部署脚本，以及数据库的创建，升级，以及回滚脚本等。</p>
 <p>从上面的“变更集”也可以看出，持续交付是一个团队所有人员和角色都应该参与的事情，并且每一个人都对软件交付富有责任</p>
 <h3><span id="原则四-提前并频繁的做让你感到痛苦的事情">原则四 提前并频繁的做让你感到痛苦的事情</span></h3><p>“如果集成是让你感到痛苦的，那么每一次代码提交都应该进行集成，而且应该从项目一开始就开始这么做；如果发布软件过程前测试是一件痛苦的事情，那么就应该从项目一开始就不断的进行测试；如果软件发布是一件痛苦的事情，那么每一次代码提交在完成自动化验收测试之后都应该进行发布，或者至少发布到类生产环境”</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/ci-cd.png" alt="image"></p>
+<p><img src="/images/ci-cd.png" alt="image"></p>
 <h3><span id="原则五-内建质量">原则五 内建质量</span></h3><p>在持续交付过程中持续交付流水线定义了一套标准的，可重复的软件交付流程；同时借助大量的工具我们可以将这个流程中的机会所有事情都进行自动化。但是另外一个点就是软件质量。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/test.jpg" alt="image"></p>
+<p><img src="/images/test.jpg" alt="image"></p>
 <p>根据原则四，其实我们也可以推断出如果对代码进行测试是一件痛苦的事情，那么在编写实现代码之前我们就应该写测试，TDD，ATDD，BDD等软件研发实践正是体现了这一基本原则。</p>
 <p>内建质量是戴明提出的名言之一。越早的发现缺陷，修复它们的成本越低。</p>
 <p>根据内建质量的原则我们可以知道在软件交付过程中，测试并不是一个阶段，所以并不应该在开发介绍之后才开始。同时测试也不应该主要是测试人员的职责，参与交付的所有人都应该对软件的质量负责</p>
 <p>其中测试四象限很好的阐述了为了确保软件质量而应该做的各种类型的测试建模</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/test4.png" alt="image"></p>
+<p><img src="/images/test4.png" alt="image"></p>
 <h3><span id="原则六-done意味着已发布">原则六 “Done”意味着“已发布”</span></h3><p>在持续交付过程中认为一个特性的交付在理想状态下应该是已经发布到用户手中，或者至少已经向用户进行了演示。</p>
 <p>相应的在敏捷开发中，我们每一个迭代结束后都应该想”用户代表”进行演示，并且在“用户代表”试用认为是完成了之后才意味则“Done”</p>
 <p>其中“用户代表”可以是正在的用户，也可以是相关的业务人员</p>
 <h3><span id="原则七-交付过程是每个成员的责任">原则七 交付过程是每个成员的责任</span></h3><p>在现实情况下，测试部门总是抱怨研发交付的软件质量差，运维总是抱怨软件不够稳定，开发总是抱怨缺陷反馈周期太长，解决问题的成本过高。</p>
 <p>而在持续交付当中我们知道，对于交付团队而言最终目标是确保软件能够交付到用户手中，并且产生相应的价值。</p>
 <p>而通过持续部署流水线，我们将所有参与到软件交付中的角色都联合成了一个整体，并且各个部分之间是能够快速的产生反馈，促成各个成员和角色之间的交流，并且快速的解决问题</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/SHTT-Lead-Image-Costumes.jpg" alt="image"></p>
+<p><img src="/images/SHTT-Lead-Image-Costumes.jpg" alt="image"></p>
 <h3><span id="原则八-持续改进">原则八 持续改进</span></h3><p>在任何一个充满生机的组织当中持续改进是这个组织保持活力的基本要素之一。</p>
 <p>参与软件交付的成员需要定期对过去一段时间内的交付工作进行回顾，去发现在这个流程当中的做的好的方面，以及做的不好的方面，并且提出解决方案。</p>
 <h2><span id="持续交付组织应该做好哪些准备">持续交付组织应该做好哪些准备？</span></h2><h3><span id="交付团队而非部门">交付团队而非部门</span></h3><p>根据康威定律“设计系统的组织，其产生的设计和架构等价于组织间的沟通结构”</p>
@@ -487,7 +487,7 @@
 <li>平台化服务</li>
 </ul>
 <p>同时对于企业和组织而言通过引入统一的平台化服务，可以完成对所有产品团队的统一管理，和监控。这些关键的平台化服务可能包括：统一的日志管理平台，持续交付平台，以及监控和运营平台等。</p>
-<p><img src="http://7pn5d3.com1.z0.glb.clouddn.com/devops_platform.png" alt="image"></p>
+<p><img src="/images/devops_platform.png" alt="image"></p>
 
       
     </div>
@@ -617,7 +617,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">76</span>
+                    <span class="site-state-item-count">77</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -761,7 +761,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">54</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -843,7 +847,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
