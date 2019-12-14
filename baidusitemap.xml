@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://yunlzheng.github.io/2019/12/14/how-to-integration-with-kubernetes-from-idea/</loc>
-    <lastmod>2019-12-14T02:48:58.598Z</lastmod>
+    <lastmod>2019-12-14T02:56:11.651Z</lastmod>
     <data>
         <display>
         <title>Windows环境下如何在本地IDEA中联调Kubernetes集群中的服务</title>
@@ -479,23 +479,6 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2016/04/21/basic_python/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>Python查漏补缺</title>
-        <pubTime>2016-04-21T13:28:49.000Z</pubTime>
-        
-        <tag>python</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yunlzheng.github.io/2013/11/19/begin-hexo/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -509,6 +492,7 @@
     </data>
     </url>
 
+    
     
   <url>
     <loc>http://yunlzheng.github.io/2014/10/19/intro-xvfn-ubuntu/</loc>
@@ -528,14 +512,14 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2012/07/02/begin-jenkins/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/java-socket-io/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>Jenkins安装与配置</title>
-        <pubTime>2012-07-02T09:42:00.000Z</pubTime>
+        <title>Java中使用Socket.io</title>
+        <pubTime>2014-07-31T07:28:23.000Z</pubTime>
         
-        <tag>jenkins</tag>
+        <tag>java</tag>
          
          
            
@@ -545,14 +529,14 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/java-socket-io/</loc>
+    <loc>http://yunlzheng.github.io/2012/07/02/begin-jenkins/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>Java中使用Socket.io</title>
-        <pubTime>2014-07-31T07:28:23.000Z</pubTime>
+        <title>Jenkins安装与配置</title>
+        <pubTime>2012-07-02T09:42:00.000Z</pubTime>
         
-        <tag>java</tag>
+        <tag>jenkins</tag>
          
          
            
@@ -613,14 +597,14 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2013/03/26/linux-bind9/</loc>
+    <loc>http://yunlzheng.github.io/2013/10/19/chengdu-rock/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>Ubuntu Bind9泛域名解析配置</title>
-        <pubTime>2013-03-25T17:06:34.000Z</pubTime>
+        <title>摇滚吧</title>
+        <pubTime>2013-10-19T03:39:11.000Z</pubTime>
         
-        <tag>DevOps</tag>
+        <tag>life</tag>
          
          
            
@@ -630,18 +614,14 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
+    <loc>http://yunlzheng.github.io/2013/03/26/linux-bind9/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>使用Webhook扩展Alertmanager(钉钉版)</title>
-        <pubTime>2018-03-01T13:58:33.000Z</pubTime>
+        <title>Ubuntu Bind9泛域名解析配置</title>
+        <pubTime>2013-03-25T17:06:34.000Z</pubTime>
         
         <tag>DevOps</tag>
-         
-        <tag>Prometheus</tag>
-         
-        <tag>Alertmanager</tag>
          
          
            
@@ -661,6 +641,23 @@
         <tag>linux</tag>
          
         <tag>shell</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>Angular 不完全参考手册</title>
+        <pubTime>2014-07-31T07:30:25.000Z</pubTime>
+        
+        <tag>angular</tag>
          
          
            
@@ -708,23 +705,6 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2013/10/19/chengdu-rock/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>摇滚吧</title>
-        <pubTime>2013-10-19T03:39:11.000Z</pubTime>
-        
-        <tag>life</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yunlzheng.github.io/2014/07/31/netty-network/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -742,14 +722,18 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
+    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>Angular 不完全参考手册</title>
-        <pubTime>2014-07-31T07:30:25.000Z</pubTime>
+        <title>使用Webhook扩展Alertmanager(钉钉版)</title>
+        <pubTime>2018-03-01T13:58:33.000Z</pubTime>
         
-        <tag>angular</tag>
+        <tag>DevOps</tag>
+         
+        <tag>Prometheus</tag>
+         
+        <tag>Alertmanager</tag>
          
          
            
@@ -759,26 +743,14 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/15/opensource-microservice-end-to-end-architecture/</loc>
+    <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>面向微服务的持续交付架构</title>
-        <pubTime>2018-03-15T15:05:56.000Z</pubTime>
+        <title>OpenStack创建Windows镜像</title>
+        <pubTime>2015-02-10T02:09:00.000Z</pubTime>
         
-        <tag>DevOps</tag>
-         
-        <tag>Prometheus</tag>
-         
-        <tag>Microservice</tag>
-         
-        <tag>Istio</tag>
-         
-        <tag>Jenkins</tag>
-         
-        <tag>Container</tag>
-         
-        <tag>Harbor</tag>
+        <tag>openstack</tag>
          
          
            
@@ -839,12 +811,12 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/</loc>
+    <loc>http://yunlzheng.github.io/2015/01/02/openstack-ntp-server/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>OpenStack Console 设计</title>
-        <pubTime>2015-01-31T16:00:34.000Z</pubTime>
+        <title>OpenStack之ntp服务</title>
+        <pubTime>2015-01-01T17:51:49.000Z</pubTime>
         
         <tag>openstack</tag>
          
@@ -856,12 +828,12 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2015/01/02/openstack-ntp-server/</loc>
+    <loc>http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>OpenStack之ntp服务</title>
-        <pubTime>2015-01-01T17:51:49.000Z</pubTime>
+        <title>OpenStack Console 设计</title>
+        <pubTime>2015-01-31T16:00:34.000Z</pubTime>
         
         <tag>openstack</tag>
          
@@ -914,6 +886,30 @@
 
     
   <url>
+    <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>Prometheus高可用(4)：Alertmanager高可用</title>
+        <pubTime>2018-03-12T03:26:52.000Z</pubTime>
+        
+        <tag>Prometheus</tag>
+         
+        <tag>Alertmanager</tag>
+         
+        <tag>高可用</tag>
+         
+         
+           
+             
+              <breadCrumb title="Prometheus" url="http://yunlzheng.github.io/categories/Prometheus/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yunlzheng.github.io/2017/07/07/prometheus-exporter-example-go/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -926,6 +922,45 @@
         <tag>Exporter</tag>
          
         <tag>Devops</tag>
+         
+         
+           
+             
+              <breadCrumb title="Prometheus" url="http://yunlzheng.github.io/categories/Prometheus/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yunlzheng.github.io/2013/10/19/code-chat/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>记最近刨的那些坑之Tornado Chat</title>
+        <pubTime>2013-10-19T09:00:40.000Z</pubTime>
+        
+        <tag>code</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yunlzheng.github.io/2018/03/08/prometheus-fedreation/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>Prometheus高可用(3)：联邦集群</title>
+        <pubTime>2018-03-08T04:55:41.000Z</pubTime>
+        
+        <tag>Prometheus</tag>
+         
+        <tag>高可用</tag>
          
          
            
@@ -952,47 +987,6 @@
              
               <breadCrumb title="Prometheus" url="http://yunlzheng.github.io/categories/Prometheus/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>Prometheus高可用(4)：Alertmanager高可用</title>
-        <pubTime>2018-03-12T03:26:52.000Z</pubTime>
-        
-        <tag>Prometheus</tag>
-         
-        <tag>Alertmanager</tag>
-         
-        <tag>高可用</tag>
-         
-         
-           
-             
-              <breadCrumb title="Prometheus" url="http://yunlzheng.github.io/categories/Prometheus/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yunlzheng.github.io/2013/10/19/code-chat/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>记最近刨的那些坑之Tornado Chat</title>
-        <pubTime>2013-10-19T09:00:40.000Z</pubTime>
-        
-        <tag>code</tag>
-         
-         
-           
         </display>
     </data>
     </url>
@@ -1064,6 +1058,23 @@
 
     
   <url>
+    <loc>http://yunlzheng.github.io/2016/05/19/python-with-polymorphism/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>python与鸭子类型</title>
+        <pubTime>2016-05-19T06:44:59.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yunlzheng.github.io/2018/03/06/promethus-local-storage/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -1103,40 +1114,6 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2016/05/19/python-with-polymorphism/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>python与鸭子类型</title>
-        <pubTime>2016-05-19T06:44:59.000Z</pubTime>
-        
-        <tag>python</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>Vargant一个属于程序员的虚拟机</title>
-        <pubTime>2013-11-26T04:30:29.000Z</pubTime>
-        
-        <tag>DevOps</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://yunlzheng.github.io/2014/07/31/angular-resources/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -1154,14 +1131,14 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2016/09/18/startup-es6/</loc>
+    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>ES6 10分钟入门</title>
-        <pubTime>2016-09-18T07:36:15.000Z</pubTime>
+        <title>Vargant一个属于程序员的虚拟机</title>
+        <pubTime>2013-11-26T04:30:29.000Z</pubTime>
         
-        <tag>web</tag>
+        <tag>DevOps</tag>
          
          
            
@@ -1203,6 +1180,23 @@
 
     
   <url>
+    <loc>http://yunlzheng.github.io/2016/09/18/startup-es6/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>ES6 10分钟入门</title>
+        <pubTime>2016-09-18T07:36:15.000Z</pubTime>
+        
+        <tag>web</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yunlzheng.github.io/2015/03/17/template-engine-thymeleaf/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -1219,6 +1213,22 @@
     </url>
 
     
+  <url>
+    <loc>http://yunlzheng.github.io/2016/04/21/basic_python/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>Python查漏补缺</title>
+        <pubTime>2016-04-21T13:28:49.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
     
   <url>
     <loc>http://yunlzheng.github.io/2012/12/23/ember-begin/</loc>
@@ -1306,32 +1316,13 @@
 
     
   <url>
-    <loc>http://yunlzheng.github.io/2015/01/01/begin-2015/</loc>
+    <loc>http://yunlzheng.github.io/2016/04/21/functional-programming-with-python/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>关于2015的期望</title>
-        <pubTime>2015-01-01T15:34:35.000Z</pubTime>
+        <title>Python函数式编程</title>
+        <pubTime>2016-04-21T13:28:49.000Z</pubTime>
         
-        <tag>生活</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yunlzheng.github.io/2014/08/08/vagrant-with-ansible/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>利用Ansible将开发环境纳入版本管理</title>
-        <pubTime>2014-08-08T00:40:59.000Z</pubTime>
-        
-        <tag>DevOps</tag>
-         
          
            
         </display>
@@ -1361,6 +1352,40 @@
 
     
   <url>
+    <loc>http://yunlzheng.github.io/2014/08/08/vagrant-with-ansible/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>利用Ansible将开发环境纳入版本管理</title>
+        <pubTime>2014-08-08T00:40:59.000Z</pubTime>
+        
+        <tag>DevOps</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yunlzheng.github.io/2015/01/01/begin-2015/</loc>
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>关于2015的期望</title>
+        <pubTime>2015-01-01T15:34:35.000Z</pubTime>
+        
+        <tag>生活</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yunlzheng.github.io/2016/04/16/why-ramda-translate/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
@@ -1375,54 +1400,29 @@
     </url>
 
     
-  <url>
-    <loc>http://yunlzheng.github.io/2016/04/21/functional-programming-with-python/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>Python函数式编程</title>
-        <pubTime>2016-04-21T13:28:49.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
+    
     
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/08/prometheus-fedreation/</loc>
+    <loc>http://yunlzheng.github.io/2018/03/15/opensource-microservice-end-to-end-architecture/</loc>
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     <data>
         <display>
-        <title>Prometheus高可用(3)：联邦集群</title>
-        <pubTime>2018-03-08T04:55:41.000Z</pubTime>
+        <title>面向微服务的持续交付架构</title>
+        <pubTime>2018-03-15T15:05:56.000Z</pubTime>
         
+        <tag>DevOps</tag>
+         
         <tag>Prometheus</tag>
          
-        <tag>高可用</tag>
+        <tag>Microservice</tag>
          
+        <tag>Istio</tag>
          
-           
-             
-              <breadCrumb title="Prometheus" url="http://yunlzheng.github.io/categories/Prometheus/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-    
-  <url>
-    <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    <data>
-        <display>
-        <title>OpenStack创建Windows镜像</title>
-        <pubTime>2015-02-10T02:09:00.000Z</pubTime>
-        
-        <tag>openstack</tag>
+        <tag>Jenkins</tag>
+         
+        <tag>Container</tag>
+         
+        <tag>Harbor</tag>
          
          
            

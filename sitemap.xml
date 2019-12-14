@@ -4,7 +4,7 @@
   <url>
     <loc>http://yunlzheng.github.io/2019/12/14/how-to-integration-with-kubernetes-from-idea/</loc>
     
-    <lastmod>2019-12-14T02:48:58.598Z</lastmod>
+    <lastmod>2019-12-14T02:56:11.651Z</lastmod>
     
   </url>
   
@@ -177,14 +177,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/04/21/basic_python/</loc>
+    <loc>http://yunlzheng.github.io/2013/11/19/begin-hexo/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2013/11/19/begin-hexo/</loc>
+    <loc>http://yunlzheng.github.io/tags/index.html</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -198,14 +198,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2012/07/02/begin-jenkins/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/java-socket-io/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/java-socket-io/</loc>
+    <loc>http://yunlzheng.github.io/2012/07/02/begin-jenkins/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -233,6 +233,13 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2013/10/19/chengdu-rock/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2013/03/26/linux-bind9/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -240,14 +247,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
+    <loc>http://yunlzheng.github.io/2014/08/01/linux-shell-part1/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/08/01/linux-shell-part1/</loc>
+    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -268,13 +275,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2013/10/19/chengdu-rock/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2014/07/31/netty-network/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -282,14 +282,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2014/07/31/angular-directive/</loc>
+    <loc>http://yunlzheng.github.io/2018/03/01/alertmanager-webhook-dingtalk/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2018/03/15/opensource-microservice-end-to-end-architecture/</loc>
+    <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -317,14 +317,14 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/</loc>
+    <loc>http://yunlzheng.github.io/2015/01/02/openstack-ntp-server/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/01/02/openstack-ntp-server/</loc>
+    <loc>http://yunlzheng.github.io/2015/02/01/openstack-novnc-architecture/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -345,20 +345,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2017/07/07/prometheus-exporter-example-go/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2018/03/12/prometheus-alertmanager-ha/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -366,7 +352,28 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2017/07/07/prometheus-exporter-example-go/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2013/10/19/code-chat/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2018/03/08/prometheus-fedreation/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2018/01/17/prometheus-sd-and-relabel/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -394,6 +401,13 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2016/05/19/python-with-polymorphism/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2018/03/06/promethus-local-storage/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -408,20 +422,6 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/05/19/python-with-polymorphism/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://yunlzheng.github.io/2014/07/31/angular-resources/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -429,7 +429,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2016/09/18/startup-es6/</loc>
+    <loc>http://yunlzheng.github.io/2013/11/26/cool-vagrant/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -450,6 +450,13 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2016/09/18/startup-es6/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2015/03/17/template-engine-thymeleaf/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
@@ -457,7 +464,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/tags/index.html</loc>
+    <loc>http://yunlzheng.github.io/2016/04/21/basic_python/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -499,14 +506,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/01/01/begin-2015/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2014/08/08/vagrant-with-ansible/</loc>
+    <loc>http://yunlzheng.github.io/2016/04/21/functional-programming-with-python/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -520,21 +520,21 @@
   </url>
   
   <url>
+    <loc>http://yunlzheng.github.io/2014/08/08/vagrant-with-ansible/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yunlzheng.github.io/2015/01/01/begin-2015/</loc>
+    
+    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yunlzheng.github.io/2016/04/16/why-ramda-translate/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2016/04/21/functional-programming-with-python/</loc>
-    
-    <lastmod>2018-08-09T08:01:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yunlzheng.github.io/2018/03/08/prometheus-fedreation/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
@@ -555,7 +555,7 @@
   </url>
   
   <url>
-    <loc>http://yunlzheng.github.io/2015/02/10/openstack-create-windows-images/</loc>
+    <loc>http://yunlzheng.github.io/2018/03/15/opensource-microservice-end-to-end-architecture/</loc>
     
     <lastmod>2018-08-09T08:01:16.000Z</lastmod>
     
