@@ -75,7 +75,17 @@ curl http://<ClusterIP>:<Port>
 
 为了能够让IDEA在启动时自动使用该文件作为Java启动参数，我们需要在IDEA中安装插件[JVM Inject](https://plugins.jetbrains.com/plugin/13482-jvm-inject), 用户可以在IDEA的Plugin管理中搜索并安装该插件。
 
-在IDEA中启动Java程序时，该插件会自动加载当前项目根路径下的.jvmrc并追加到Java的启动参数中，从而可以在Java程序中直接访问集群资源（ClusterIP和PodIP)。当ktctl退出时，会自动删除.jvmrc。 通过JVM Inject配合KT Connect开发者可以在IDEA按需决定是否直接访问Kubernetes集群。
+![/images/install_jvm_inject_idea_plugin.png](/images/install_jvm_inject_idea_plugin.png)
+
+在IDEA中启动Java程序时，该插件会自动加载当前项目根路径下的.jvmrc并追加到Java的启动参数中。
+
+![/images/idea_run_application.png](/images/idea_run_application.png)
+
+```
+java ...省略的其他输出... -Djava.rmi.server.hostname=127.0.0.1 -Dspring.liveBeansView.mbeanDomain -Dspring.application.admin.enabled=true -Dhttp.proxyHost=127.0.0.1 -Dhttp.proxyPort=2223 ...其它输出...
+```
+
+从而可以在Java程序中直接访问集群资源（ClusterIP和PodIP)。当ktctl退出时，会自动删除.jvmrc。 通过JVM Inject配合KT Connect开发者可以在IDEA按需决定是否直接访问Kubernetes集群。
 
 
 
