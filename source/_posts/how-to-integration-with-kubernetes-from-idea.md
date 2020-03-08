@@ -3,6 +3,10 @@ date: 2019-12-14 09:18:35
 tags: [Kubernetes, IDEA, Windows]
 ---
 
+本地将介绍如何在Idea中使用KT Connect: https://github.com/alibaba/kt-connect 项目实现本地与集群中服务的联调开发
+
+<!--more-->
+
 ## 本文适用于
 
 * 使用Windows的Java开发者
