@@ -68,4 +68,4 @@ ktctl run localservice --port=5701 --expose
 
 想了解更多关于KT Connect相关的问题，欢迎加入钉钉群：
 
-[kt-dev](/images/dingtalk-group-v2.png)
+![kt-dev](/images/dingtalk-group-v2.png)
