@@ -114,7 +114,7 @@
 <meta property="og:site_name" content="I&#39;m Yunlong">
 <meta property="og:description" content="在Dockone微信分享（二三一）中，我分享了如何基于KT Connect实现本地与Kubernetes集群内之间的各种联调测试的场景。 之后我们继续迭代了10+小版本后带来了一些新的变化。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-08T03:37:01.114Z">
+<meta property="og:updated_time" content="2020-03-08T09:19:33.953Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="KT Connect项目在迭代了10个小版本后变化">
 <meta name="twitter:description" content="在Dockone微信分享（二三一）中，我分享了如何基于KT Connect实现本地与Kubernetes集群内之间的各种联调测试的场景。 之后我们继续迭代了10+小版本后带来了一些新的变化。">
@@ -388,6 +388,7 @@
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ktctl <span class="builtin-name">run</span> localservice <span class="attribute">--port</span>=5701 --expose</span><br></pre></td></tr></table></figure>
 <p>其中localservice是注册到Kubernetes集群中的服务名，通过在集群中访问localservice:5701可以直接访问到本地服务。</p>
 <h3><span id="新增dashboard以及check命令">新增dashboard以及check命令</span></h3><p>为了简化用户对当前本地环境无法正常使用ktctl相关命令的问题，新增<code>check</code>命令用于检查本地环境依赖。通过<code>ktctl dashboard init</code>以及<code>ktctl dashboard open</code>可以帮助用户快速安装以及使用KT Connect的Dashboard支持。</p>
+<h3><span id="新的项目kt-virtualenvironment">新的项目：Kt VirtualEnvironment</span></h3><p><a href="https://github.com/alibaba/kt-connect" target="_blank" rel="noopener">KT Connect</a>在本地通过双向网络互通让用户可以在本地和集群之间双向连通。而在集群侧我们引入<a href="https://github.com/alibaba/virtual-environment" target="_blank" rel="noopener">KT VirtualEnvironment</a>基于Service Mesh实现隔离的测试环境，本地服务可以直接通过KT Connect加入到特定的隔离测试环境中。更多详情请查看<a href="https://alibaba.github.io/virtual-environment/#/zh-cn/ve/quickstart" target="_blank" rel="noopener">KT VirtualEnvironment Quick Start</a></p>
 <h3><span id="特别感谢">特别感谢</span></h3><p>在这10多个版本迭代过程中除了云效团队以外，还有以下用户一起参与了KT Connect的建设中排名不分先后：</p>
 <ul>
 <li><a href="https://github.com/linfan" target="_blank" rel="noopener">linfan</a></li>
@@ -400,6 +401,8 @@
 <li>root2wf(dingtalk)</li>
 </ul>
 <p>也希望有更多的用户和开发者能够参与到KT Connect的项目中，一起从Cloud Native到Cloud To Native，打造面向Kubernetes的高效的本地开发测试体验。</p>
+<p>想了解更多关于KT Connect相关的问题，欢迎加入钉钉群：</p>
+<p><a href="/images/dingtalk-group-v2.png">kt-dev</a></p>
 
       
     </div>
@@ -739,7 +742,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">特性介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Windows的原生支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">DNS域名解析增强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">新增run命令：暴露本地服务到集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">新增dashboard以及check命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">特别感谢</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">特性介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Windows的原生支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">DNS域名解析增强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">新增run命令：暴露本地服务到集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">新增dashboard以及check命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">新的项目：Kt VirtualEnvironment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">特别感谢</span></a></li></ol></div>
             
 
           </div>
