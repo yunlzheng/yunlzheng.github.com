@@ -47,6 +47,10 @@ ktctl run localservice --port=5701 --expose
 
 为了简化用户对当前本地环境无法正常使用ktctl相关命令的问题，新增`check`命令用于检查本地环境依赖。通过`ktctl dashboard init`以及`ktctl dashboard open`可以帮助用户快速安装以及使用KT Connect的Dashboard支持。
 
+### 新的项目：Kt VirtualEnvironment
+
+[KT Connect](https://github.com/alibaba/kt-connect)在本地通过双向网络互通让用户可以在本地和集群之间双向连通。而在集群侧我们引入[KT VirtualEnvironment](https://github.com/alibaba/virtual-environment)基于Service Mesh实现隔离的测试环境，本地服务可以直接通过KT Connect加入到特定的隔离测试环境中。更多详情请查看[KT VirtualEnvironment Quick Start](https://alibaba.github.io/virtual-environment/#/zh-cn/ve/quickstart)
+
 ### 特别感谢
 
 在这10多个版本迭代过程中除了云效团队以外，还有以下用户一起参与了KT Connect的建设中排名不分先后：
@@ -61,3 +65,7 @@ ktctl run localservice --port=5701 --expose
 * root2wf(dingtalk)
 
 也希望有更多的用户和开发者能够参与到KT Connect的项目中，一起从Cloud Native到Cloud To Native，打造面向Kubernetes的高效的本地开发测试体验。
+
+想了解更多关于KT Connect相关的问题，欢迎加入钉钉群：
+
+[kt-dev](/images/dingtalk-group-v2.png)
