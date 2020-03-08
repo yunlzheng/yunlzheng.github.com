@@ -3,7 +3,7 @@ date: 2020-03-08 10:23:47
 tags: [kubernetes, kt connect]
 ---
 
-在Dockone微信分享（二三一）中，我分享了如何基于[KT Connect](https://github.com/alibaba/kt-connect)实现本地与Kubernetes集群内之间的各种联调测试的场景。 之后我们继续迭代了10+小版本后带来了一些新的变化。
+在Dockone在线分享二三一期中，我分享了如何使用[KT Connect](https://github.com/alibaba/kt-connect)实现本地与Kubernetes集群内服务的双向联调，以实现面向Kubernetes的高效的本地开发测试体验。之后我们继续迭代了10+小版本后为KT Connect带来了一些新的变化。
 
 <!--more-->
 
@@ -17,21 +17,27 @@ tags: [kubernetes, kt connect]
 
 ### Windows的原生支持
 
-在新版本中全新引入socks5代理模式，解决了由于依赖sshuttle导致Windows用户无法使用connect功能的问题。 在全新的版本中，Windows用户可以使用如下命令：
+在新版本中全新引入socks5代理模式，解决了由于依赖sshuttle导致Windows用户无法使用connect功能的问题。 在全新的版本中，Windows用户可以直接使用如下命令：
 
 ```
 ktctl -d connect --method socks5
 ```
 
-在命令执行成功后，通过设置http_proxy和https_proxy环境变量就可以直接在本地访问集群的PodIP以及ClusterIP。 同时为了解决socks5模式下无法使用DNS域名解析的问题新增加参数`--dump2hosts`可以自动同步service dns解析规则到系统的hosts文件，并且在退出后自动清理。
+在命令执行成功后，通过设置http_proxy和https_proxy环境变量就可以直接在本地访问集群的PodIP以及ClusterIP。 
 
-同时还新增了IDEA插件[JVM Inject](https://plugins.jetbrains.com/plugin/13482-jvm-inject/versions)可以自动加载http_proxy以及https_proxy参数到Java启动命令从，从而自动使用socks5代理模式，[点击这里](https://alibaba.github.io/kt-connect/#/en-us/guide/how-to-use-in-idea)查看详细介绍
+同时为了解决socks5模式下无法使用DNS域名解析的问题新增加参数`--dump2hosts`可以自动同步service dns解析规则到系统的hosts文件，并且在退出后自动清理。
+
+```
+ktctl -d connect --method socks5 --dump2hosts
+```
+
+配合新增的IDEA插件[JVM Inject](https://plugins.jetbrains.com/plugin/13482-jvm-inject/versions)可以自动加载http_proxy以及https_proxy参数到Java启动命令中，从而可以在IDEA中无缝与集群内服务进行联调，[点击这里](https://alibaba.github.io/kt-connect/#/en-us/guide/how-to-use-in-idea)查看详细介绍
 
 ### DNS域名解析增强
 
-在旧版的KT Connect中本地访问Kubernetes集群中的服务只能使用类似于`<svc>.<namespace>.svc.cluster.local`这样的完整域名，在新版本中为了保持本地与集群的一致性。 目前已经支持本地直接使用`<svc>`以及`<svc>.<namespace>`的完整支持。
+在旧版的KT Connect中本地如果要使用域名访问Kubernetes集群中的服务，只能使用类似于`<svc>.<namespace>.svc.cluster.local`这样的完整域名，在新版本中为了保持本地与集群的一致性。 新增了对`<svc>`以及`<svc>.<namespace>`DNS解析的完整支持。
 
-### 新增`run`命令：暴露本地服务到集群
+### 新增*run*命令：暴露本地服务到集群
 
 在kubectl中我们可以使用`kubectl run`命令在集群中快速使用镜像创建deployment并暴露svc.
 
@@ -41,15 +47,15 @@ ktctl -d connect --method socks5
 ktctl run localservice --port=5701 --expose
 ```
 
-其中localservice是注册到Kubernetes集群中的服务名，通过在集群中访问localservice:5701可以直接访问到本地服务。
+其中localservice是注册到Kubernetes集群中的服务名，通过在集群中访问`localservice:5701`可以直接访问到本地运行的服务。
 
-### 新增dashboard以及check命令
+### 新增*dashboard*以及*check*命令
 
 为了简化用户对当前本地环境无法正常使用ktctl相关命令的问题，新增`check`命令用于检查本地环境依赖。通过`ktctl dashboard init`以及`ktctl dashboard open`可以帮助用户快速安装以及使用KT Connect的Dashboard支持。
 
 ### 新的项目：Kt VirtualEnvironment
 
-[KT Connect](https://github.com/alibaba/kt-connect)在本地通过双向网络互通让用户可以在本地和集群之间双向连通。而在集群侧我们引入[KT VirtualEnvironment](https://github.com/alibaba/virtual-environment)基于Service Mesh实现隔离的测试环境，本地服务可以直接通过KT Connect加入到特定的隔离测试环境中。更多详情请查看[KT VirtualEnvironment Quick Start](https://alibaba.github.io/virtual-environment/#/zh-cn/ve/quickstart)
+[KT Connect](https://github.com/alibaba/kt-connect)在本地通过双向网络互通让用户可以在本地和集群之间双向连通。而在集群侧我们引入[KT VirtualEnvironment]，(https://github.com/alibaba/virtual-environment)基于Service Mesh实现隔离的测试环境，本地服务可以通过ktctl命令直接加入到特定的隔离测试环境中。更多详情请查看[KT VirtualEnvironment Quick Start](https://alibaba.github.io/virtual-environment/#/zh-cn/ve/quickstart)
 
 ### 特别感谢
 
