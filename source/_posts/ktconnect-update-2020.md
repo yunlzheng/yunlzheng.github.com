@@ -3,7 +3,7 @@ date: 2020-03-08 10:23:47
 tags: [kubernetes, kt connect]
 ---
 
-在Dockone微信分享（二三一）中，分享了如何基于[KT Connect](https://github.com/alibaba/kt-connect)实现本地与Kubernetes集群内之间的各种联调测试的场景。 之后我们继续迭代了10+小版本后带来了一些新的变化。
+在Dockone微信分享（二三一）中，我分享了如何基于[KT Connect](https://github.com/alibaba/kt-connect)实现本地与Kubernetes集群内之间的各种联调测试的场景。 之后我们继续迭代了10+小版本后带来了一些新的变化。
 
 <!--more-->
 
